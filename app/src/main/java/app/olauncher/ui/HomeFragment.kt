@@ -325,10 +325,12 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     private fun refreshHomeSlotText(slot: Int) {
         val textView = homeSlotView(slot)
-        textView.text = if (prefs.isFolder(slot))
-            prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
-        else
-            prefs.getAppName(slot)
+        if (prefs.isFolder(slot)) {
+            val name = prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
+            textView.text = "\u25B8 $name"
+        } else {
+            textView.text = prefs.getAppName(slot)
+        }
     }
 
     private fun setHomeAlignment(horizontalGravity: Int = prefs.homeAlignment) {
