@@ -108,7 +108,6 @@
     <string name="unable_to_open_app">Kunde inte öppna appinfon</string>
     <string name="copied">Kopierad</string>
     <string name="system_app_cannot_delete">Systemapp, kan inte raderas</string>
-    <string name="type_a_new_app_name_first">Skriv ett nytt appnamn först</string>
     <string name="app_not_found">Appen hittades inte</string>
     <string name="unable_to_launch_app">Kunde inte starta appen</string>
     <string name="search_for_Launcher_or_home_app">Sök efter startskärmsapp</string>
@@ -150,4 +149,6 @@
     <string name="folder_name_hint">Mappnamn</string>
     <string name="empty_folder_tip">Tryck länge för att lägga till appar</string>
     <string name="cancel">Avbryt</string>
+    <string name="rename_app">Byt namn på app</string>
+    <string name="app_name_hint">App-namn</string>
 </resources><!-- Swedish -->

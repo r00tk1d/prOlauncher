@@ -110,7 +110,6 @@
     <string name="unable_to_open_app">Kan app-info niet openen</string>
     <string name="copied">Gekopieerd</string>
     <string name="system_app_cannot_delete">Systeem-app, kan niet worden verwijderd</string>
-    <string name="type_a_new_app_name_first">Typ eerst een nieuwe app-naam</string>
     <string name="app_not_found">App niet gevonden</string>
     <string name="unable_to_launch_app">Kan app niet starten</string>
     <string name="search_for_Launcher_or_home_app">Zoek naar Launcher of start-app</string>
@@ -147,4 +146,6 @@
     <string name="folder_name_hint">Mapnaam</string>
     <string name="empty_folder_tip">Houd lang ingedrukt om apps toe te voegen</string>
     <string name="cancel">Annuleren</string>
+    <string name="rename_app">App hernoemen</string>
+    <string name="app_name_hint">App-naam</string>
 </resources><!-- Dutch -->

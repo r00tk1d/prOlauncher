@@ -46,7 +46,6 @@
     <string name="unable_to_open_app">Nie można otworzyć informacji o aplikacji</string>
     <string name="copied">Skopiowane</string>
     <string name="system_app_cannot_delete">Aplikacja systemowa, nie można usunąć</string>
-    <string name="type_a_new_app_name_first">Najpierw wpisz nową nazwę aplikacji</string>
     <string name="adapter_show">Pokaż</string>
     <string name="adapter_hide">Ukryj</string>
     <string name="app_text_color">Kolor tekstu</string>
@@ -150,4 +149,6 @@
     <string name="folder_name_hint">Nazwa folderu</string>
     <string name="empty_folder_tip">Przytrzymaj, aby dodać aplikacje</string>
     <string name="cancel">Anuluj</string>
+    <string name="rename_app">Zmień nazwę aplikacji</string>
+    <string name="app_name_hint">Nazwa aplikacji</string>
 </resources><!-- Polish -->

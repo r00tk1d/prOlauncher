@@ -110,7 +110,6 @@
     <string name="unable_to_open_app">Impossibile aprire l\'app</string>
     <string name="copied">Copiato</string>
     <string name="system_app_cannot_delete">Impossibile eliminare le app di sistema</string>
-    <string name="type_a_new_app_name_first">Digita prima un nuovo nome per l\'app</string>
     <string name="app_not_found">App non trovata</string>
     <string name="unable_to_launch_app">Impossibile avviare l\'app</string>
     <string name="search_for_Launcher_or_home_app">Cerca Launcher o l\'app Home</string>
@@ -152,4 +151,6 @@
     <string name="folder_name_hint">Nome cartella</string>
     <string name="empty_folder_tip">Tocca a lungo per aggiungere app</string>
     <string name="cancel">Annulla</string>
+    <string name="rename_app">Rinomina app</string>
+    <string name="app_name_hint">Nome app</string>
 </resources><!-- Italian -->

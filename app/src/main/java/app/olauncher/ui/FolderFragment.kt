@@ -181,7 +181,6 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
                 R.id.action_folderFragment_to_appListFragment,
                 bundleOf(
                     Constants.Key.FLAG to (Constants.FLAG_SET_FOLDER_APP_1 + position),
-                    Constants.Key.RENAME to false,
                     Constants.Key.FOLDER_SLOT to folderSlot
                 )
             )
@@ -190,7 +189,6 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
                 R.id.appListFragment,
                 bundleOf(
                     Constants.Key.FLAG to (Constants.FLAG_SET_FOLDER_APP_1 + position),
-                    Constants.Key.RENAME to false,
                     Constants.Key.FOLDER_SLOT to folderSlot
                 )
             )

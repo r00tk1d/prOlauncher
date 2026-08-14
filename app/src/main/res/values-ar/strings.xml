@@ -48,7 +48,6 @@
     <string name="unable_to_open_app">تعذر فتح التطبيق</string>
     <string name="copied">نُسخ</string>
     <string name="system_app_cannot_delete">ﻻ يمكن حذف تطبيقات النظام</string>
-    <string name="type_a_new_app_name_first">اكتب اسمًا جديدًا للتطبيق أولاً</string>
     <string name="adapter_show">يعرض</string>
     <string name="adapter_hide">يخفي</string>
     <string name="app_text_color">لون الخط</string>
@@ -149,4 +148,6 @@
     <string name="folder_name_hint">اسم المجلد</string>
     <string name="empty_folder_tip">اضغط مطولاً لإضافة التطبيقات</string>
     <string name="cancel">إلغاء</string>
+    <string name="rename_app">إعادة تسمية التطبيق</string>
+    <string name="app_name_hint">اسم التطبيق</string>
 </resources>

@@ -108,7 +108,6 @@
     <string name="unable_to_open_app">No se puede abrir la información de la aplicación</string>
     <string name="copied">Copiado</string>
     <string name="system_app_cannot_delete">Aplicación del sistema, no se puede eliminar</string>
-    <string name="type_a_new_app_name_first">Escriba un nombre nuevo para la aplicación</string>
     <string name="app_not_found">Aplicación no encontrada</string>
     <string name="unable_to_launch_app">No se puede iniciar la aplicación</string>
     <string name="search_for_Launcher_or_home_app">Busca la aplicación Launcher o Home</string>
@@ -150,4 +149,6 @@
     <string name="folder_name_hint">Nombre de la carpeta</string>
     <string name="empty_folder_tip">Mantén pulsado para añadir aplicaciones</string>
     <string name="cancel">Cancelar</string>
+    <string name="rename_app">Renombrar aplicación</string>
+    <string name="app_name_hint">Nombre de la aplicación</string>
 </resources><!-- Spanish -->

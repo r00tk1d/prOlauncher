@@ -135,7 +135,6 @@
     <string name="unable_to_open_app_info">Unable to open app info</string>
     <string name="copied">Copied</string>
     <string name="system_app_cannot_delete">System app, cannot delete</string>
-    <string name="type_a_new_app_name_first">Type a new app name first</string>
     <string name="app_not_found">App not found</string>
     <string name="unable_to_launch_app">Unable to launch app</string>
     <string name="search_for_Launcher_or_home_app">Search for Launcher or Home app</string>
@@ -176,6 +175,8 @@
     <string name="replace_app">Replace app</string>
     <string name="remove_app">Remove app</string>
     <string name="folder_name_hint">Folder name</string>
+    <string name="rename_app">Rename app</string>
+    <string name="app_name_hint">App name</string>
     <string name="empty_folder_tip">Long press to add apps</string>
     <string name="cancel">Cancel</string>
 </resources>

@@ -4,7 +4,6 @@ object Constants {
 
     object Key {
         const val FLAG = "flag"
-        const val RENAME = "rename"
         const val FOLDER_SLOT = "folderSlot"
         const val POSITION = "position"
     }

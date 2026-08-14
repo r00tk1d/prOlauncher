@@ -38,7 +38,6 @@
     <string name="unable_to_open_app">无法打开应用程序信息</string>
     <string name="copied">已复制</string>
     <string name="system_app_cannot_delete">系统应用，无法删除</string>
-    <string name="type_a_new_app_name_first">首先输入新的应用程序名称</string>
     <string name="adapter_show">显示</string>
     <string name="adapter_hide">隐藏</string>
     <string name="app_text_color">文字颜色</string>
@@ -153,4 +152,6 @@
     <string name="folder_name_hint">文件夹名称</string>
     <string name="empty_folder_tip">长按以添加应用</string>
     <string name="cancel">取消</string>
+    <string name="rename_app">重命名应用</string>
+    <string name="app_name_hint">应用名称</string>
 </resources><!-- Chinese -->

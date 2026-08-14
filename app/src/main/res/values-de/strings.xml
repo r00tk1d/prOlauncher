@@ -46,7 +46,6 @@
     <string name="unable_to_open_app">App-Informationen können nicht geöffnet werden</string>
     <string name="copied">Kopiert</string>
     <string name="system_app_cannot_delete">System-App, kann nicht gelöscht werden</string>
-    <string name="type_a_new_app_name_first">Geben Sie zuerst einen neuen App-Namen ein</string>
     <string name="adapter_show">Zeigen</string>
     <string name="adapter_hide">Verstecken</string>
     <string name="app_text_color">Textfarbe</string>
@@ -152,4 +151,6 @@
     <string name="folder_name_hint">Ordnername</string>
     <string name="empty_folder_tip">Lange drücken, um Apps hinzuzufügen</string>
     <string name="cancel">Abbrechen</string>
+    <string name="rename_app">App umbenennen</string>
+    <string name="app_name_hint">App-Name</string>
 </resources>

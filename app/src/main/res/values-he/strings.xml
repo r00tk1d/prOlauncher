@@ -100,7 +100,6 @@
     <string name="unable_to_open_app">אין אפשרות לפתוח את המידע על היישום</string>
     <string name="copied">הועתק ללוח</string>
     <string name="system_app_cannot_delete">יישום מערכת, ולכן אי אפשר למחוק אותו</string>
-    <string name="type_a_new_app_name_first">נא לתת שם חדש ליישום תחילה</string>
     <string name="app_not_found">היישום לא נמצא</string>
     <string name="unable_to_launch_app">אין אפשרות להפעיל את היישום</string>
     <string name="search_for_Launcher_or_home_app">חיפוש יישום מסך בית או משגר</string>
@@ -144,4 +143,6 @@
     <string name="folder_name_hint">שם תיקייה</string>
     <string name="empty_folder_tip">לחיצה ארוכה להוספת אפליקציות</string>
     <string name="cancel">ביטול</string>
+    <string name="rename_app">שנה שם אפליקציה</string>
+    <string name="app_name_hint">שם אפליקציה</string>
 </resources>

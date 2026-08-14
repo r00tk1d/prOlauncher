@@ -46,7 +46,6 @@
     <string name="unable_to_open_app">Uygulama bilgisi açılamıyor</string>
     <string name="copied">Kopyalandı</string>
     <string name="system_app_cannot_delete">Sistem uygulaması, silinemez</string>
-    <string name="type_a_new_app_name_first">Önce yeni bir uygulama adı yazın</string>
     <string name="adapter_show">Göster</string>
     <string name="adapter_hide">Gizle</string>
     <string name="app_text_color">Metin rengi</string>
@@ -152,4 +151,6 @@
     <string name="folder_name_hint">Klasör adı</string>
     <string name="empty_folder_tip">Uygulama eklemek için basılı tutun</string>
     <string name="cancel">İptal</string>
+    <string name="rename_app">Uygulamayı yeniden adlandır</string>
+    <string name="app_name_hint">Uygulama adı</string>
 </resources><!-- Turkish -->

@@ -555,23 +555,17 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         )
     }
 
-    private fun showAppList(flag: Int, rename: Boolean = false, includeHiddenApps: Boolean = false) {
+    private fun showAppList(flag: Int, includeHiddenApps: Boolean = false) {
         viewModel.getAppList(includeHiddenApps)
         try {
             findNavController().navigate(
                 R.id.action_mainFragment_to_appListFragment,
-                bundleOf(
-                    Constants.Key.FLAG to flag,
-                    Constants.Key.RENAME to rename
-                )
+                bundleOf(Constants.Key.FLAG to flag)
             )
         } catch (e: Exception) {
             findNavController().navigate(
                 R.id.appListFragment,
-                bundleOf(
-                    Constants.Key.FLAG to flag,
-                    Constants.Key.RENAME to rename
-                )
+                bundleOf(Constants.Key.FLAG to flag)
             )
             e.printStackTrace()
         }
@@ -591,14 +585,14 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         } else {
             if (hasApp) {
                 labels.add(getString(R.string.replace_app)); actions.add {
-                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, hasApp, true)
+                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, true)
                 }
                 labels.add(getString(R.string.rename)); actions.add {
-                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, hasApp, true)
+                    showAppNameDialog(slot)
                 }
             } else {
                 labels.add(getString(R.string.add_app)); actions.add {
-                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, false, true)
+                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, true)
                 }
             }
             labels.add(getString(R.string.create_folder)); actions.add { showFolderNameDialog(slot) }
@@ -635,6 +629,38 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         clearHomeApp(slot)
         prefs.setFolderName(slot, name)
         prefs.setIsFolder(slot, true)
+        populateHomeScreen(false)
+    }
+
+    private fun showAppNameDialog(slot: Int) {
+        val editText = EditText(requireContext()).apply {
+            setText(prefs.getAppName(slot))
+            setSelectAllOnFocus(true)
+            hint = getString(R.string.app_name_hint)
+        }
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.rename_app)
+            .setView(editText)
+            .setPositiveButton(R.string.okay) { _, _ ->
+                setHomeAppName(slot, editText.text.toString().trim())
+            }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .show()
+        editText.requestFocus()
+    }
+
+    private fun setHomeAppName(slot: Int, name: String) {
+        if (name.isBlank()) return
+        when (slot) {
+            1 -> prefs.appName1 = name
+            2 -> prefs.appName2 = name
+            3 -> prefs.appName3 = name
+            4 -> prefs.appName4 = name
+            5 -> prefs.appName5 = name
+            6 -> prefs.appName6 = name
+            7 -> prefs.appName7 = name
+            8 -> prefs.appName8 = name
+        }
         populateHomeScreen(false)
     }
 

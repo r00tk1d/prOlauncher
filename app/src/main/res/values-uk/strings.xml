@@ -110,7 +110,6 @@
     <string name="unable_to_open_app">Неможливо відкрити інформацію про програму</string>
     <string name="copied">Скопійовано</string>
     <string name="system_app_cannot_delete">Неможливо видалити системну програму</string>
-    <string name="type_a_new_app_name_first">Спочатку введіть нове ім\'я програми</string>
     <string name="app_not_found">Додаток не знайдено</string>
     <string name="unable_to_launch_app">Неможливо запустити програму</string>
     <string name="search_for_Launcher_or_home_app">Знайдіть додаток Launcher або Home</string>
@@ -152,4 +151,6 @@
     <string name="folder_name_hint">Назва папки</string>
     <string name="empty_folder_tip">Довге натискання, щоб додати застосунки</string>
     <string name="cancel">Скасувати</string>
+    <string name="rename_app">Перейменувати застосунок</string>
+    <string name="app_name_hint">Назва застосунку</string>
 </resources><!-- Ukrainian -->

@@ -108,7 +108,6 @@
     <string name="unable_to_open_app">Tidak dapat membuka info aplikasi</string>
     <string name="copied">Disalin</string>
     <string name="system_app_cannot_delete">Aplikasi sistem, tidak dapat dihapus</string>
-    <string name="type_a_new_app_name_first">Ketikkan nama aplikasi baru terlebih dahulu</string>
     <string name="app_not_found">Aplikasi tidak ditemukan</string>
     <string name="unable_to_launch_app">Tidak dapat meluncurkan aplikasi</string>
     <string name="search_for_Launcher_or_home_app">Telusuri Peluncur atau aplikasi Beranda</string>
@@ -150,4 +149,6 @@
     <string name="folder_name_hint">Nama folder</string>
     <string name="empty_folder_tip">Tekan lama untuk menambah aplikasi</string>
     <string name="cancel">Batal</string>
+    <string name="rename_app">Ganti nama aplikasi</string>
+    <string name="app_name_hint">Nama aplikasi</string>
 </resources><!-- Indonesian -->

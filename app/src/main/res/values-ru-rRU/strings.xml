@@ -110,7 +110,6 @@
     <string name="unable_to_open_app">Не удалось открыть информацию о приложении</string>
     <string name="copied">Скопировано</string>
     <string name="system_app_cannot_delete">Невозможно удалить системное приложение</string>
-    <string name="type_a_new_app_name_first">Сначала введите новое имя приложения</string>
     <string name="app_not_found">Приложение не найдено</string>
     <string name="unable_to_launch_app">Не удается запустить приложение</string>
     <string name="search_for_Launcher_or_home_app">Найдите приложение Launcher или Home</string>
@@ -152,4 +151,6 @@
     <string name="folder_name_hint">Имя папки</string>
     <string name="empty_folder_tip">Долгое нажатие для добавления приложений</string>
     <string name="cancel">Отмена</string>
+    <string name="rename_app">Переименовать приложение</string>
+    <string name="app_name_hint">Имя приложения</string>
 </resources><!-- Russian -->

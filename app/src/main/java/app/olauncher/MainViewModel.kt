@@ -301,13 +301,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         refreshHome(false)
     }
 
-    fun saveFolderAppName(folderSlot: Int, position: Int, name: String) {
-        val app = prefs.getFolderApps(folderSlot).getOrNull(position) ?: return
-        if (app == null) return
-        prefs.setFolderApp(folderSlot, position, app.copy(appLabel = name))
-        refreshHome(false)
-    }
-
     private fun saveSwipeApp(appModel: AppModel, isLeft: Boolean) {
         when (appModel) {
             is AppModel.PrivateSpaceHeader -> return
