@@ -570,6 +570,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 labels.add(getString(R.string.rename)); actions.add {
                     showAppNameDialog(slot)
                 }
+                labels.add(getString(R.string.remove_app)); actions.add {
+                    clearHomeApp(slot)
+                    populateHomeScreen(false)
+                }
             }
             labels.add(getString(R.string.create_folder)); actions.add { showFolderNameDialog(slot) }
         }
