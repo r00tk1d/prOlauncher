@@ -1,6 +1,7 @@
 package app.olauncher.ui
 
 import android.app.admin.DevicePolicyManager
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
@@ -13,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -99,7 +101,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             else -> {
                 try { // Launch app
                     val appLocation = view.tag.toString().toInt()
-                    homeAppClicked(appLocation)
+                    if (prefs.isFolder(appLocation))
+                        openFolder(appLocation)
+                    else
+                        homeAppClicked(appLocation)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -133,14 +138,14 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     override fun onLongClick(view: View): Boolean {
         when (view.id) {
-            R.id.homeApp1 -> showAppList(Constants.FLAG_SET_HOME_APP_1, prefs.appName1.isNotEmpty(), true)
-            R.id.homeApp2 -> showAppList(Constants.FLAG_SET_HOME_APP_2, prefs.appName2.isNotEmpty(), true)
-            R.id.homeApp3 -> showAppList(Constants.FLAG_SET_HOME_APP_3, prefs.appName3.isNotEmpty(), true)
-            R.id.homeApp4 -> showAppList(Constants.FLAG_SET_HOME_APP_4, prefs.appName4.isNotEmpty(), true)
-            R.id.homeApp5 -> showAppList(Constants.FLAG_SET_HOME_APP_5, prefs.appName5.isNotEmpty(), true)
-            R.id.homeApp6 -> showAppList(Constants.FLAG_SET_HOME_APP_6, prefs.appName6.isNotEmpty(), true)
-            R.id.homeApp7 -> showAppList(Constants.FLAG_SET_HOME_APP_7, prefs.appName7.isNotEmpty(), true)
-            R.id.homeApp8 -> showAppList(Constants.FLAG_SET_HOME_APP_8, prefs.appName8.isNotEmpty(), true)
+            R.id.homeApp1 -> showSlotMenu(1)
+            R.id.homeApp2 -> showSlotMenu(2)
+            R.id.homeApp3 -> showSlotMenu(3)
+            R.id.homeApp4 -> showSlotMenu(4)
+            R.id.homeApp5 -> showSlotMenu(5)
+            R.id.homeApp6 -> showSlotMenu(6)
+            R.id.homeApp7 -> showSlotMenu(7)
+            R.id.homeApp8 -> showSlotMenu(8)
             R.id.clock -> {
                 showAppList(Constants.FLAG_SET_CLOCK_APP)
                 prefs.clockAppPackage = ""
@@ -325,59 +330,75 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         if (homeAppsNum == 0) return
 
         binding.homeApp1.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp1, prefs.appName1, prefs.appPackage1, prefs.appUser1, prefs.isShortcut1, prefs.shortcutId1)) {
+        if (!populateHomeSlot(binding.homeApp1, 1)) {
             prefs.appName1 = ""
             prefs.appPackage1 = ""
         }
         if (homeAppsNum == 1) return
 
         binding.homeApp2.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp2, prefs.appName2, prefs.appPackage2, prefs.appUser2, prefs.isShortcut2, prefs.shortcutId2)) {
+        if (!populateHomeSlot(binding.homeApp2, 2)) {
             prefs.appName2 = ""
             prefs.appPackage2 = ""
         }
         if (homeAppsNum == 2) return
 
         binding.homeApp3.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp3, prefs.appName3, prefs.appPackage3, prefs.appUser3, prefs.isShortcut3, prefs.shortcutId3)) {
+        if (!populateHomeSlot(binding.homeApp3, 3)) {
             prefs.appName3 = ""
             prefs.appPackage3 = ""
         }
         if (homeAppsNum == 3) return
 
         binding.homeApp4.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp4, prefs.appName4, prefs.appPackage4, prefs.appUser4, prefs.isShortcut4, prefs.shortcutId4)) {
+        if (!populateHomeSlot(binding.homeApp4, 4)) {
             prefs.appName4 = ""
             prefs.appPackage4 = ""
         }
         if (homeAppsNum == 4) return
 
         binding.homeApp5.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp5, prefs.appName5, prefs.appPackage5, prefs.appUser5, prefs.isShortcut5, prefs.shortcutId5)) {
+        if (!populateHomeSlot(binding.homeApp5, 5)) {
             prefs.appName5 = ""
             prefs.appPackage5 = ""
         }
         if (homeAppsNum == 5) return
 
         binding.homeApp6.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp6, prefs.appName6, prefs.appPackage6, prefs.appUser6, prefs.isShortcut6, prefs.shortcutId6)) {
+        if (!populateHomeSlot(binding.homeApp6, 6)) {
             prefs.appName6 = ""
             prefs.appPackage6 = ""
         }
         if (homeAppsNum == 6) return
 
         binding.homeApp7.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp7, prefs.appName7, prefs.appPackage7, prefs.appUser7, prefs.isShortcut7, prefs.shortcutId7)) {
+        if (!populateHomeSlot(binding.homeApp7, 7)) {
             prefs.appName7 = ""
             prefs.appPackage7 = ""
         }
         if (homeAppsNum == 7) return
 
         binding.homeApp8.visibility = View.VISIBLE
-        if (!setHomeAppText(binding.homeApp8, prefs.appName8, prefs.appPackage8, prefs.appUser8, prefs.isShortcut8, prefs.shortcutId8)) {
+        if (!populateHomeSlot(binding.homeApp8, 8)) {
             prefs.appName8 = ""
             prefs.appPackage8 = ""
         }
+    }
+
+    private fun populateHomeSlot(textView: TextView, slot: Int): Boolean {
+        if (prefs.isFolder(slot)) {
+            val name = prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
+            textView.text = "\u25B8 $name"
+            return true
+        }
+        return setHomeAppText(
+            textView,
+            prefs.getAppName(slot),
+            prefs.getAppPackage(slot),
+            prefs.getAppUser(slot),
+            prefs.getIsShortcut(slot),
+            prefs.getShortcutId(slot),
+        )
     }
 
     private fun setHomeAppText(
@@ -551,6 +572,131 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                     Constants.Key.FLAG to flag,
                     Constants.Key.RENAME to rename
                 )
+            )
+            e.printStackTrace()
+        }
+    }
+
+    private fun showSlotMenu(slot: Int) {
+        val isFolderSlot = prefs.isFolder(slot)
+        val hasApp = prefs.getAppName(slot).isNotEmpty()
+
+        val labels = mutableListOf<String>()
+        val actions = mutableListOf<() -> Unit>()
+
+        if (isFolderSlot) {
+            labels.add(getString(R.string.open_folder)); actions.add { openFolder(slot) }
+            labels.add(getString(R.string.rename_folder)); actions.add { showFolderNameDialog(slot) }
+            labels.add(getString(R.string.remove_folder)); actions.add { removeFolder(slot) }
+        } else {
+            if (hasApp) {
+                labels.add(getString(R.string.replace_app)); actions.add {
+                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, hasApp, true)
+                }
+                labels.add(getString(R.string.rename)); actions.add {
+                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, hasApp, true)
+                }
+            } else {
+                labels.add(getString(R.string.add_app)); actions.add {
+                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, false, true)
+                }
+            }
+            labels.add(getString(R.string.create_folder)); actions.add { showFolderNameDialog(slot) }
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setItems(labels.toTypedArray()) { _, which -> actions[which]() }
+            .show()
+    }
+
+    private fun showFolderNameDialog(slot: Int) {
+        val isCreating = prefs.isFolder(slot).not()
+        val editText = EditText(requireContext()).apply {
+            if (isCreating) setText(getString(R.string.folder)) else setText(prefs.getFolderName(slot))
+            setSelectAllOnFocus(true)
+            hint = getString(R.string.folder_name_hint)
+        }
+        AlertDialog.Builder(requireContext())
+            .setTitle(if (isCreating) R.string.create_folder else R.string.rename_folder)
+            .setView(editText)
+            .setPositiveButton(R.string.okay) { _, _ ->
+                val name = editText.text.toString().trim().ifBlank { getString(R.string.folder) }
+                if (isCreating) createFolder(slot, name) else {
+                    prefs.setFolderName(slot, name)
+                    populateHomeScreen(false)
+                }
+            }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .show()
+        editText.requestFocus()
+    }
+
+    private fun createFolder(slot: Int, name: String) {
+        clearHomeApp(slot)
+        prefs.setFolderName(slot, name)
+        prefs.setIsFolder(slot, true)
+        populateHomeScreen(false)
+    }
+
+    private fun removeFolder(slot: Int) {
+        prefs.clearFolder(slot)
+        populateHomeScreen(false)
+    }
+
+    private fun clearHomeApp(slot: Int) {
+        when (slot) {
+            1 -> {
+                prefs.appName1 = ""; prefs.appPackage1 = ""; prefs.appUser1 = ""
+                prefs.appActivityClassName1 = ""; prefs.isShortcut1 = false; prefs.shortcutId1 = ""
+            }
+
+            2 -> {
+                prefs.appName2 = ""; prefs.appPackage2 = ""; prefs.appUser2 = ""
+                prefs.appActivityClassName2 = ""; prefs.isShortcut2 = false; prefs.shortcutId2 = ""
+            }
+
+            3 -> {
+                prefs.appName3 = ""; prefs.appPackage3 = ""; prefs.appUser3 = ""
+                prefs.appActivityClassName3 = ""; prefs.isShortcut3 = false; prefs.shortcutId3 = ""
+            }
+
+            4 -> {
+                prefs.appName4 = ""; prefs.appPackage4 = ""; prefs.appUser4 = ""
+                prefs.appActivityClassName4 = ""; prefs.isShortcut4 = false; prefs.shortcutId4 = ""
+            }
+
+            5 -> {
+                prefs.appName5 = ""; prefs.appPackage5 = ""; prefs.appUser5 = ""
+                prefs.appActivityClassName5 = ""; prefs.isShortcut5 = false; prefs.shortcutId5 = ""
+            }
+
+            6 -> {
+                prefs.appName6 = ""; prefs.appPackage6 = ""; prefs.appUser6 = ""
+                prefs.appActivityClassName6 = ""; prefs.isShortcut6 = false; prefs.shortcutId6 = ""
+            }
+
+            7 -> {
+                prefs.appName7 = ""; prefs.appPackage7 = ""; prefs.appUser7 = ""
+                prefs.appActivityClassName7 = ""; prefs.isShortcut7 = false; prefs.shortcutId7 = ""
+            }
+
+            8 -> {
+                prefs.appName8 = ""; prefs.appPackage8 = ""; prefs.appUser8 = ""
+                prefs.appActivityClassName8 = ""; prefs.isShortcut8 = false; prefs.shortcutId8 = ""
+            }
+        }
+    }
+
+    private fun openFolder(slot: Int) {
+        try {
+            findNavController().navigate(
+                R.id.action_mainFragment_to_folderFragment,
+                bundleOf(Constants.Key.FOLDER_SLOT to slot)
+            )
+        } catch (e: Exception) {
+            findNavController().navigate(
+                R.id.folderFragment,
+                bundleOf(Constants.Key.FOLDER_SLOT to slot)
             )
             e.printStackTrace()
         }

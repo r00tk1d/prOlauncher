@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.view.Gravity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
+import org.json.JSONArray
+import org.json.JSONObject
 
 class Prefs(context: Context) {
     private val PREFS_FILENAME = "app.olauncher"
@@ -117,6 +119,31 @@ class Prefs(context: Context) {
     private val IS_SHORTCUT_SWIPE_LEFT = "IS_SHORTCUT_SWIPE_LEFT"
     private val SHORTCUT_ID_SWIPE_RIGHT = "SHORTCUT_ID_SWIPE_RIGHT"
     private val IS_SHORTCUT_SWIPE_RIGHT = "IS_SHORTCUT_SWIPE_RIGHT"
+
+    private val IS_FOLDER_1 = "IS_FOLDER_1"
+    private val IS_FOLDER_2 = "IS_FOLDER_2"
+    private val IS_FOLDER_3 = "IS_FOLDER_3"
+    private val IS_FOLDER_4 = "IS_FOLDER_4"
+    private val IS_FOLDER_5 = "IS_FOLDER_5"
+    private val IS_FOLDER_6 = "IS_FOLDER_6"
+    private val IS_FOLDER_7 = "IS_FOLDER_7"
+    private val IS_FOLDER_8 = "IS_FOLDER_8"
+    private val FOLDER_NAME_1 = "FOLDER_NAME_1"
+    private val FOLDER_NAME_2 = "FOLDER_NAME_2"
+    private val FOLDER_NAME_3 = "FOLDER_NAME_3"
+    private val FOLDER_NAME_4 = "FOLDER_NAME_4"
+    private val FOLDER_NAME_5 = "FOLDER_NAME_5"
+    private val FOLDER_NAME_6 = "FOLDER_NAME_6"
+    private val FOLDER_NAME_7 = "FOLDER_NAME_7"
+    private val FOLDER_NAME_8 = "FOLDER_NAME_8"
+    private val FOLDER_APPS_1 = "FOLDER_APPS_1"
+    private val FOLDER_APPS_2 = "FOLDER_APPS_2"
+    private val FOLDER_APPS_3 = "FOLDER_APPS_3"
+    private val FOLDER_APPS_4 = "FOLDER_APPS_4"
+    private val FOLDER_APPS_5 = "FOLDER_APPS_5"
+    private val FOLDER_APPS_6 = "FOLDER_APPS_6"
+    private val FOLDER_APPS_7 = "FOLDER_APPS_7"
+    private val FOLDER_APPS_8 = "FOLDER_APPS_8"
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_FILENAME, 0)
 
@@ -644,4 +671,139 @@ class Prefs(context: Context) {
     fun getAppRenameLabel(appPackage: String): String = prefs.getString(appPackage, "").toString()
 
     fun setAppRenameLabel(appPackage: String, renameLabel: String) = prefs.edit { putString(appPackage, renameLabel) }
+
+    fun isFolder(slot: Int): Boolean {
+        return when (slot) {
+            1 -> prefs.getBoolean(IS_FOLDER_1, false)
+            2 -> prefs.getBoolean(IS_FOLDER_2, false)
+            3 -> prefs.getBoolean(IS_FOLDER_3, false)
+            4 -> prefs.getBoolean(IS_FOLDER_4, false)
+            5 -> prefs.getBoolean(IS_FOLDER_5, false)
+            6 -> prefs.getBoolean(IS_FOLDER_6, false)
+            7 -> prefs.getBoolean(IS_FOLDER_7, false)
+            8 -> prefs.getBoolean(IS_FOLDER_8, false)
+            else -> false
+        }
+    }
+
+    fun setIsFolder(slot: Int, isFolder: Boolean) {
+        when (slot) {
+            1 -> prefs.edit { putBoolean(IS_FOLDER_1, isFolder) }
+            2 -> prefs.edit { putBoolean(IS_FOLDER_2, isFolder) }
+            3 -> prefs.edit { putBoolean(IS_FOLDER_3, isFolder) }
+            4 -> prefs.edit { putBoolean(IS_FOLDER_4, isFolder) }
+            5 -> prefs.edit { putBoolean(IS_FOLDER_5, isFolder) }
+            6 -> prefs.edit { putBoolean(IS_FOLDER_6, isFolder) }
+            7 -> prefs.edit { putBoolean(IS_FOLDER_7, isFolder) }
+            8 -> prefs.edit { putBoolean(IS_FOLDER_8, isFolder) }
+        }
+    }
+
+    fun getFolderName(slot: Int): String {
+        return when (slot) {
+            1 -> prefs.getString(FOLDER_NAME_1, "").toString()
+            2 -> prefs.getString(FOLDER_NAME_2, "").toString()
+            3 -> prefs.getString(FOLDER_NAME_3, "").toString()
+            4 -> prefs.getString(FOLDER_NAME_4, "").toString()
+            5 -> prefs.getString(FOLDER_NAME_5, "").toString()
+            6 -> prefs.getString(FOLDER_NAME_6, "").toString()
+            7 -> prefs.getString(FOLDER_NAME_7, "").toString()
+            8 -> prefs.getString(FOLDER_NAME_8, "").toString()
+            else -> ""
+        }
+    }
+
+    fun setFolderName(slot: Int, name: String) {
+        when (slot) {
+            1 -> prefs.edit { putString(FOLDER_NAME_1, name) }
+            2 -> prefs.edit { putString(FOLDER_NAME_2, name) }
+            3 -> prefs.edit { putString(FOLDER_NAME_3, name) }
+            4 -> prefs.edit { putString(FOLDER_NAME_4, name) }
+            5 -> prefs.edit { putString(FOLDER_NAME_5, name) }
+            6 -> prefs.edit { putString(FOLDER_NAME_6, name) }
+            7 -> prefs.edit { putString(FOLDER_NAME_7, name) }
+            8 -> prefs.edit { putString(FOLDER_NAME_8, name) }
+        }
+    }
+
+    fun getFolderApps(slot: Int): MutableList<AppModel.FolderApp?> {
+        val raw = when (slot) {
+            1 -> prefs.getString(FOLDER_APPS_1, "").toString()
+            2 -> prefs.getString(FOLDER_APPS_2, "").toString()
+            3 -> prefs.getString(FOLDER_APPS_3, "").toString()
+            4 -> prefs.getString(FOLDER_APPS_4, "").toString()
+            5 -> prefs.getString(FOLDER_APPS_5, "").toString()
+            6 -> prefs.getString(FOLDER_APPS_6, "").toString()
+            7 -> prefs.getString(FOLDER_APPS_7, "").toString()
+            8 -> prefs.getString(FOLDER_APPS_8, "").toString()
+            else -> ""
+        }
+        val apps = MutableList<AppModel.FolderApp?>(Constants.MAX_APPS_IN_FOLDER) { null }
+        if (raw.isBlank()) return apps
+        try {
+            val array = JSONArray(raw)
+            for (i in 0 until array.length().coerceAtMost(Constants.MAX_APPS_IN_FOLDER)) {
+                val obj = array.optJSONObject(i) ?: continue
+                apps[i] = AppModel.FolderApp(
+                    appLabel = obj.optString("name"),
+                    appPackage = obj.optString("package"),
+                    activityClassName = obj.optString("activity").takeIf { it.isNotBlank() },
+                    user = obj.optString("user"),
+                    isShortcut = obj.optBoolean("isShortcut"),
+                    shortcutId = obj.optString("shortcutId"),
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return apps
+    }
+
+    fun setFolderApp(slot: Int, position: Int, app: AppModel.FolderApp) {
+        val apps = getFolderApps(slot)
+        if (position !in apps.indices) return
+        apps[position] = app
+        saveFolderApps(slot, apps)
+    }
+
+    fun removeFolderApp(slot: Int, position: Int) {
+        val apps = getFolderApps(slot)
+        if (position !in apps.indices) return
+        apps[position] = null
+        saveFolderApps(slot, apps)
+    }
+
+    private fun saveFolderApps(slot: Int, apps: List<AppModel.FolderApp?>) {
+        val array = JSONArray()
+        for (app in apps) {
+            if (app == null) {
+                array.put(JSONObject.NULL)
+            } else {
+                array.put(JSONObject().apply {
+                    put("name", app.appLabel)
+                    put("package", app.appPackage)
+                    put("activity", app.activityClassName ?: "")
+                    put("user", app.user)
+                    put("isShortcut", app.isShortcut)
+                    put("shortcutId", app.shortcutId)
+                })
+            }
+        }
+        when (slot) {
+            1 -> prefs.edit { putString(FOLDER_APPS_1, array.toString()) }
+            2 -> prefs.edit { putString(FOLDER_APPS_2, array.toString()) }
+            3 -> prefs.edit { putString(FOLDER_APPS_3, array.toString()) }
+            4 -> prefs.edit { putString(FOLDER_APPS_4, array.toString()) }
+            5 -> prefs.edit { putString(FOLDER_APPS_5, array.toString()) }
+            6 -> prefs.edit { putString(FOLDER_APPS_6, array.toString()) }
+            7 -> prefs.edit { putString(FOLDER_APPS_7, array.toString()) }
+            8 -> prefs.edit { putString(FOLDER_APPS_8, array.toString()) }
+        }
+    }
+
+    fun clearFolder(slot: Int) {
+        setIsFolder(slot, false)
+        setFolderName(slot, "")
+        saveFolderApps(slot, MutableList(Constants.MAX_APPS_IN_FOLDER) { null })
+    }
 }

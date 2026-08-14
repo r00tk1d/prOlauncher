@@ -38,6 +38,15 @@ sealed class AppModel : Comparable<AppModel> {
         override val isNew: Boolean = false
     }
 
+    data class FolderApp(
+        val appLabel: String,
+        val appPackage: String,
+        val activityClassName: String?,
+        val user: String,
+        val isShortcut: Boolean = false,
+        val shortcutId: String = "",
+    )
+
     override fun compareTo(other: AppModel): Int = when {
         key != null && other.key != null -> key!!.compareTo(other.key)
         else -> appLabel.compareTo(other.appLabel, true)

@@ -5,6 +5,8 @@ object Constants {
     object Key {
         const val FLAG = "flag"
         const val RENAME = "rename"
+        const val FOLDER_SLOT = "folderSlot"
+        const val POSITION = "position"
     }
 
     object Dialog {
@@ -76,6 +78,17 @@ object Constants {
     const val FLAG_SET_HOME_APP_6 = 6
     const val FLAG_SET_HOME_APP_7 = 7
     const val FLAG_SET_HOME_APP_8 = 8
+
+    const val FLAG_SET_FOLDER_APP_1 = 21
+    const val FLAG_SET_FOLDER_APP_2 = 22
+    const val FLAG_SET_FOLDER_APP_3 = 23
+    const val FLAG_SET_FOLDER_APP_4 = 24
+    const val FLAG_SET_FOLDER_APP_5 = 25
+    const val FLAG_SET_FOLDER_APP_6 = 26
+    const val FLAG_SET_FOLDER_APP_7 = 27
+    const val FLAG_SET_FOLDER_APP_8 = 28
+
+    const val MAX_APPS_IN_FOLDER = 8
 
     const val FLAG_SET_SWIPE_LEFT_APP = 11
     const val FLAG_SET_SWIPE_RIGHT_APP = 12

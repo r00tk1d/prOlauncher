@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Olauncher</string>
+    <string name="app_name" translatable="false">prOLauncher</string>
     <string name="github" translatable="false">Github</string>
     <string name="lock_layout_description" translatable="false">lock layout description to be used a unique id to lock screen</string>
     <!-- Home button for recents feature disabled -->
@@ -167,4 +167,15 @@
     <string name="cheers">Cheers!</string>
     <string name="notification_bar">Notification bar</string>
     <string name="private_space">Private space</string>
+    <string name="folder">Folder</string>
+    <string name="create_folder">Create folder</string>
+    <string name="rename_folder">Rename folder</string>
+    <string name="remove_folder">Remove folder</string>
+    <string name="open_folder">Open folder</string>
+    <string name="add_app">Add app</string>
+    <string name="replace_app">Replace app</string>
+    <string name="remove_app">Remove app</string>
+    <string name="folder_name_hint">Folder name</string>
+    <string name="empty_folder_tip">Long press to add apps</string>
+    <string name="cancel">Cancel</string>
 </resources>

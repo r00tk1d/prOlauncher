@@ -140,4 +140,15 @@
     <string name="new_year_wish_1">Nije važno kako je prošao siječanj. Još uvijek imate ostatak godine da budete bolji nego ikad.</string>
     <string name="cheers">Živjeli!</string>
     <string name="notification_bar">Traka obavijesti</string>
+    <string name="folder">Mapa</string>
+    <string name="create_folder">Stvori mapu</string>
+    <string name="rename_folder">Preimenuj mapu</string>
+    <string name="remove_folder">Ukloni mapu</string>
+    <string name="open_folder">Otvori mapu</string>
+    <string name="add_app">Dodaj aplikaciju</string>
+    <string name="replace_app">Zamijeni aplikaciju</string>
+    <string name="remove_app">Ukloni aplikaciju</string>
+    <string name="folder_name_hint">Naziv mape</string>
+    <string name="empty_folder_tip">Dugim dodirom dodajete aplikacije</string>
+    <string name="cancel">Odustani</string>
 </resources><!-- Croatian -->

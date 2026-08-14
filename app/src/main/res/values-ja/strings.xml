@@ -140,4 +140,15 @@
     <string name="new_year_wish_1">1月がどうだったかは関係ありません。これまで以上に良い結果を出すために、まだ今年の残りの期間があります。</string>
     <string name="cheers">乾杯!</string>
     <string name="notification_bar">通知バー</string>
+    <string name="folder">フォルダ</string>
+    <string name="create_folder">フォルダを作成</string>
+    <string name="rename_folder">フォルダ名を変更</string>
+    <string name="remove_folder">フォルダを削除</string>
+    <string name="open_folder">フォルダを開く</string>
+    <string name="add_app">アプリを追加</string>
+    <string name="replace_app">アプリを置き換え</string>
+    <string name="remove_app">アプリを削除</string>
+    <string name="folder_name_hint">フォルダ名</string>
+    <string name="empty_folder_tip">長押しでアプリを追加</string>
+    <string name="cancel">キャンセル</string>
 </resources> <!-- Japanese -->

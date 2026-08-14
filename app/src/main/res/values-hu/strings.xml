@@ -143,4 +143,15 @@
     <string name="new_year_wish_1">Nem számít, hogyan telt a január. Még mindig van hátra az évből, hogy minden eddiginél jobban teljesíts.</string>
     <string name="cheers">Egészségére!</string>
     <string name="notification_bar">Értesítési sáv</string>
+    <string name="folder">Mappa</string>
+    <string name="create_folder">Mappa létrehozása</string>
+    <string name="rename_folder">Mappa átnevezése</string>
+    <string name="remove_folder">Mappa eltávolítása</string>
+    <string name="open_folder">Mappa megnyitása</string>
+    <string name="add_app">Alkalmazás hozzáadása</string>
+    <string name="replace_app">Alkalmazás cseréje</string>
+    <string name="remove_app">Alkalmazás eltávolítása</string>
+    <string name="folder_name_hint">Mappa neve</string>
+    <string name="empty_folder_tip">Tartsd nyomva az alkalmazások hozzáadásához</string>
+    <string name="cancel">Mégse</string>
 </resources><!-- Hungarian -->

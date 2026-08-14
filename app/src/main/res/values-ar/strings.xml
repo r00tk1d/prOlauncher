@@ -138,4 +138,15 @@
     <string name="new_year_wish_1">لا يهم كيف مضى شهر يناير. لا يزال لديك بقية العام لتقدم أداءً أفضل من أي وقت مضى.</string>
     <string name="cheers">هتافات!</string>
     <string name="notification_bar">شريط الإشعارات</string>
+    <string name="folder">مجلد</string>
+    <string name="create_folder">إنشاء مجلد</string>
+    <string name="rename_folder">إعادة تسمية المجلد</string>
+    <string name="remove_folder">إزالة المجلد</string>
+    <string name="open_folder">فتح المجلد</string>
+    <string name="add_app">إضافة تطبيق</string>
+    <string name="replace_app">استبدال التطبيق</string>
+    <string name="remove_app">إزالة التطبيق</string>
+    <string name="folder_name_hint">اسم المجلد</string>
+    <string name="empty_folder_tip">اضغط مطولاً لإضافة التطبيقات</string>
+    <string name="cancel">إلغاء</string>
 </resources>

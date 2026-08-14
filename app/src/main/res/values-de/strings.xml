@@ -141,4 +141,15 @@
     <string name="new_year_wish_1">Egal, wie der Januar gelaufen ist. Du hast noch den Rest des Jahres Zeit, um besser zu sein als je zuvor.</string>
     <string name="cheers">Prost!</string>
     <string name="notification_bar">Benachrichtigungsleiste</string>
+    <string name="folder">Ordner</string>
+    <string name="create_folder">Ordner erstellen</string>
+    <string name="rename_folder">Ordner umbenennen</string>
+    <string name="remove_folder">Ordner entfernen</string>
+    <string name="open_folder">Ordner öffnen</string>
+    <string name="add_app">App hinzufügen</string>
+    <string name="replace_app">App ersetzen</string>
+    <string name="remove_app">App entfernen</string>
+    <string name="folder_name_hint">Ordnername</string>
+    <string name="empty_folder_tip">Lange drücken, um Apps hinzuzufügen</string>
+    <string name="cancel">Abbrechen</string>
 </resources>

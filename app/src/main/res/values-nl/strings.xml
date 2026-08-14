@@ -136,4 +136,15 @@
     <string name="home_screen">Startscherm</string>
     <string name="hey">Hoi</string>
     <string name="more_features">Meer functies…</string>
+    <string name="folder">Map</string>
+    <string name="create_folder">Map maken</string>
+    <string name="rename_folder">Map hernoemen</string>
+    <string name="remove_folder">Map verwijderen</string>
+    <string name="open_folder">Map openen</string>
+    <string name="add_app">App toevoegen</string>
+    <string name="replace_app">App vervangen</string>
+    <string name="remove_app">App verwijderen</string>
+    <string name="folder_name_hint">Mapnaam</string>
+    <string name="empty_folder_tip">Houd lang ingedrukt om apps toe te voegen</string>
+    <string name="cancel">Annuleren</string>
 </resources><!-- Dutch -->

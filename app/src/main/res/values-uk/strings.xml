@@ -141,4 +141,15 @@
     <string name="new_year_wish_1">" Неважливо, як пройшов січень. У вас ще є решта року, щоб досягти успіху, як ніколи раніше."</string>
     <string name="cheers">будьмо!</string>
     <string name="notification_bar">Панель сповіщень</string>
+    <string name="folder">Папка</string>
+    <string name="create_folder">Створити папку</string>
+    <string name="rename_folder">Перейменувати папку</string>
+    <string name="remove_folder">Видалити папку</string>
+    <string name="open_folder">Відкрити папку</string>
+    <string name="add_app">Додати застосунок</string>
+    <string name="replace_app">Замінити застосунок</string>
+    <string name="remove_app">Видалити застосунок</string>
+    <string name="folder_name_hint">Назва папки</string>
+    <string name="empty_folder_tip">Довге натискання, щоб додати застосунки</string>
+    <string name="cancel">Скасувати</string>
 </resources><!-- Ukrainian -->

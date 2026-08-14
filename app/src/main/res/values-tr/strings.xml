@@ -141,4 +141,15 @@
     <string name="new_year_wish_1">Ocak ayının nasıl geçtiği önemli değil. Her zamankinden daha iyisini yapmak için hala yılın geri kalanı var.</string>
     <string name="cheers">Şerefe!</string>
     <string name="notification_bar">Bildirim çubuğu</string>
+    <string name="folder">Klasör</string>
+    <string name="create_folder">Klasör oluştur</string>
+    <string name="rename_folder">Klasörü yeniden adlandır</string>
+    <string name="remove_folder">Klasörü kaldır</string>
+    <string name="open_folder">Klasörü aç</string>
+    <string name="add_app">Uygulama ekle</string>
+    <string name="replace_app">Uygulamayı değiştir</string>
+    <string name="remove_app">Uygulamayı kaldır</string>
+    <string name="folder_name_hint">Klasör adı</string>
+    <string name="empty_folder_tip">Uygulama eklemek için basılı tutun</string>
+    <string name="cancel">İptal</string>
 </resources><!-- Turkish -->

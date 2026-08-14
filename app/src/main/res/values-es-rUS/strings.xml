@@ -139,4 +139,15 @@
     <string name="new_year_wish_1">No importa cómo haya ido enero. Todavía tienes el resto del año para hacerlo mejor que nunca.</string>
     <string name="cheers">¡Salud!</string>
     <string name="notification_bar">Barra de notificaciones</string>
+    <string name="folder">Carpeta</string>
+    <string name="create_folder">Crear carpeta</string>
+    <string name="rename_folder">Renombrar carpeta</string>
+    <string name="remove_folder">Eliminar carpeta</string>
+    <string name="open_folder">Abrir carpeta</string>
+    <string name="add_app">Añadir aplicación</string>
+    <string name="replace_app">Reemplazar aplicación</string>
+    <string name="remove_app">Eliminar aplicación</string>
+    <string name="folder_name_hint">Nombre de la carpeta</string>
+    <string name="empty_folder_tip">Mantén pulsado para añadir aplicaciones</string>
+    <string name="cancel">Cancelar</string>
 </resources><!-- Spanish -->

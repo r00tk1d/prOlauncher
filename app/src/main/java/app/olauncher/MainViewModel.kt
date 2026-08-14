@@ -270,6 +270,44 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         refreshHome(false)
     }
 
+    fun saveFolderApp(folderSlot: Int, position: Int, appModel: AppModel) {
+        when (appModel) {
+            is AppModel.PrivateSpaceHeader -> return
+            is AppModel.App -> prefs.setFolderApp(
+                folderSlot,
+                position,
+                AppModel.FolderApp(
+                    appLabel = appModel.appLabel,
+                    appPackage = appModel.appPackage,
+                    activityClassName = appModel.activityClassName,
+                    user = appModel.user.toString(),
+                    isShortcut = false,
+                )
+            )
+
+            is AppModel.PinnedShortcut -> prefs.setFolderApp(
+                folderSlot,
+                position,
+                AppModel.FolderApp(
+                    appLabel = appModel.appLabel,
+                    appPackage = appModel.appPackage,
+                    activityClassName = null,
+                    user = appModel.user.toString(),
+                    isShortcut = true,
+                    shortcutId = appModel.shortcutId,
+                )
+            )
+        }
+        refreshHome(false)
+    }
+
+    fun saveFolderAppName(folderSlot: Int, position: Int, name: String) {
+        val app = prefs.getFolderApps(folderSlot).getOrNull(position) ?: return
+        if (app == null) return
+        prefs.setFolderApp(folderSlot, position, app.copy(appLabel = name))
+        refreshHome(false)
+    }
+
     private fun saveSwipeApp(appModel: AppModel, isLeft: Boolean) {
         when (appModel) {
             is AppModel.PrivateSpaceHeader -> return
