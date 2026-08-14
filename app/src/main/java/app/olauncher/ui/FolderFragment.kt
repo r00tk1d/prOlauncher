@@ -1,5 +1,6 @@
 package app.olauncher.ui
 
+import android.animation.LayoutTransition
 import android.app.AlertDialog
 import android.content.ClipData
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -118,24 +120,26 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
     private fun getFolderAppDragListener(): View.OnDragListener {
         return View.OnDragListener { view, event ->
             when (event.action) {
-                DragEvent.ACTION_DRAG_STARTED -> {
-                    view.isPressed = true
-                    true
-                }
+                DragEvent.ACTION_DRAG_STARTED -> true
 
                 DragEvent.ACTION_DRAG_ENTERED -> {
                     val target = view.tag.toString().toInt() - 1
                     if (draggedPosition != -1 && draggedPosition != target) {
                         prefs.swapFolderApps(folderSlot, draggedPosition, target)
+                        refreshFolderAppText(draggedPosition)
+                        refreshFolderAppText(target)
                         draggedPosition = target
-                        populateFolder()
                     }
                     true
                 }
 
+                DragEvent.ACTION_DROP -> {
+                    true
+                }
+
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    view.isPressed = false
                     draggedPosition = -1
+                    binding.root.post { binding.root.layoutTransition = LayoutTransition() }
                     true
                 }
 
@@ -144,10 +148,39 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         }
     }
 
+    private fun folderAppView(position: Int): TextView {
+        return when (position) {
+            0 -> binding.folderApp1
+            1 -> binding.folderApp2
+            2 -> binding.folderApp3
+            3 -> binding.folderApp4
+            4 -> binding.folderApp5
+            5 -> binding.folderApp6
+            6 -> binding.folderApp7
+            7 -> binding.folderApp8
+            else -> throw IllegalArgumentException("Invalid folder position: $position")
+        }
+    }
+
+    private fun refreshFolderAppText(position: Int) {
+        val tv = folderAppView(position)
+        val app = prefs.getFolderApps(folderSlot).getOrNull(position)
+        if (app == null || app.appPackage.isEmpty()
+            || !isPackageInstalled(requireContext(), app.appPackage, app.user)
+        ) {
+            tv.text = ""
+            tv.visibility = View.GONE
+        } else {
+            tv.text = app.appLabel
+            tv.visibility = View.VISIBLE
+        }
+    }
+
     private fun startFolderAppDrag(view: View) {
         draggedPosition = view.tag.toString().toInt() - 1
         val data = ClipData.newPlainText("slot", draggedPosition.toString())
         view.startDragAndDrop(data, View.DragShadowBuilder(view), draggedPosition, 0)
+        binding.root.layoutTransition = null
     }
 
     private fun textOnClick(view: View) = onClick(view)

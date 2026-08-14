@@ -1,5 +1,6 @@
 package app.olauncher.ui
 
+import android.animation.LayoutTransition
 import android.app.admin.DevicePolicyManager
 import android.app.AlertDialog
 import android.content.ClipData
@@ -280,30 +281,54 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private fun getHomeSlotDragListener(): View.OnDragListener {
         return View.OnDragListener { view, event ->
             when (event.action) {
-                DragEvent.ACTION_DRAG_STARTED -> {
-                    view.isPressed = true
-                    true
-                }
+                DragEvent.ACTION_DRAG_STARTED -> true
 
                 DragEvent.ACTION_DRAG_ENTERED -> {
                     val target = view.tag.toString().toInt()
                     if (draggedSlot != -1 && draggedSlot != target) {
                         prefs.swapHomeSlots(draggedSlot, target)
+                        refreshHomeSlotText(draggedSlot)
+                        refreshHomeSlotText(target)
                         draggedSlot = target
-                        populateHomeScreen(false)
                     }
                     true
                 }
 
+                DragEvent.ACTION_DROP -> {
+                    true
+                }
+
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    view.isPressed = false
                     draggedSlot = -1
+                    binding.root.post { binding.root.layoutTransition = LayoutTransition() }
                     true
                 }
 
                 else -> false
             }
         }
+    }
+
+    private fun homeSlotView(slot: Int): TextView {
+        return when (slot) {
+            1 -> binding.homeApp1
+            2 -> binding.homeApp2
+            3 -> binding.homeApp3
+            4 -> binding.homeApp4
+            5 -> binding.homeApp5
+            6 -> binding.homeApp6
+            7 -> binding.homeApp7
+            8 -> binding.homeApp8
+            else -> throw IllegalArgumentException("Invalid home slot: $slot")
+        }
+    }
+
+    private fun refreshHomeSlotText(slot: Int) {
+        val textView = homeSlotView(slot)
+        textView.text = if (prefs.isFolder(slot))
+            prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
+        else
+            prefs.getAppName(slot)
     }
 
     private fun setHomeAlignment(horizontalGravity: Int = prefs.homeAlignment) {
@@ -929,6 +954,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 draggedSlot = view.tag.toString().toInt()
                 val data = ClipData.newPlainText("slot", draggedSlot.toString())
                 view.startDragAndDrop(data, View.DragShadowBuilder(view), draggedSlot, 0)
+                binding.root.layoutTransition = null
             }
 
             override fun onClick(view: View) {
