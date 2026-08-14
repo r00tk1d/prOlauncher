@@ -177,6 +177,6 @@
     <string name="folder_name_hint">Folder name</string>
     <string name="rename_app">Rename app</string>
     <string name="app_name_hint">App name</string>
-    <string name="empty_folder_tip">Long press to add apps</string>
+    <string name="empty_folder_tip">Tap to add apps</string>
     <string name="cancel">Cancel</string>
 </resources>

@@ -147,7 +147,7 @@
     <string name="replace_app">Zastąp aplikację</string>
     <string name="remove_app">Usuń aplikację</string>
     <string name="folder_name_hint">Nazwa folderu</string>
-    <string name="empty_folder_tip">Przytrzymaj, aby dodać aplikacje</string>
+    <string name="empty_folder_tip">Dotknij, aby dodać aplikacje</string>
     <string name="cancel">Anuluj</string>
     <string name="rename_app">Zmień nazwę aplikacji</string>
     <string name="app_name_hint">Nazwa aplikacji</string>

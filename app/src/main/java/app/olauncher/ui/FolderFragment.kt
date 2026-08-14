@@ -41,6 +41,7 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
             "\u2039 " + prefs.getFolderName(folderSlot).ifBlank { getString(R.string.folder) }
         binding.tvFolderName.setOnClickListener(this)
         binding.tvFolderName.setOnLongClickListener(this)
+        binding.tvFolderHint.setOnClickListener(this)
 
         initClickListeners()
         populateFolder()
@@ -74,6 +75,8 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         when (view.id) {
             R.id.tvFolderName -> findNavController().popBackStack()
 
+            R.id.tvFolderHint -> showAppListForFolder(firstEmptyPosition())
+
             else -> {
                 try {
                     val position = view.tag.toString().toInt() - 1
@@ -94,28 +97,48 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         val position = view.tag.toString().toInt() - 1
         val folderApp = prefs.getFolderApps(folderSlot).getOrNull(position)
         if (folderApp == null) {
-            showAppListForFolder(position)
+            showAppListForFolder(firstEmptyPosition())
         } else {
+            val labels = mutableListOf<String>()
+            val actions = mutableListOf<() -> Unit>()
+            if (getInstalledAppCount() < Constants.MAX_APPS_IN_FOLDER) {
+                labels.add(getString(R.string.add_app))
+                actions.add { showAppListForFolder(firstEmptyPosition()) }
+            }
+            labels.add(getString(R.string.replace_app))
+            actions.add { showAppListForFolder(position) }
+            labels.add(getString(R.string.remove_app))
+            actions.add {
+                prefs.removeFolderApp(folderSlot, position)
+                populateFolder()
+            }
             AlertDialog.Builder(requireContext())
-                .setItems(arrayOf(getString(R.string.replace_app), getString(R.string.remove_app))) { _, which ->
-                    when (which) {
-                        0 -> showAppListForFolder(position)
-                        1 -> {
-                            prefs.removeFolderApp(folderSlot, position)
-                            populateFolder()
-                        }
-                    }
-                }
+                .setItems(labels.toTypedArray()) { _, which -> actions[which]() }
                 .show()
         }
         return true
+    }
+
+    private fun firstEmptyPosition(): Int {
+        val apps = prefs.getFolderApps(folderSlot)
+        for (i in apps.indices) {
+            val app = apps[i]
+            if (app == null || app.appPackage.isEmpty()) return i
+        }
+        return 0
+    }
+
+    private fun getInstalledAppCount(): Int {
+        return prefs.getFolderApps(folderSlot).count { app ->
+            app != null && app.appPackage.isNotEmpty()
+                && isPackageInstalled(requireContext(), app.appPackage, app.user)
+        }
     }
 
     private fun populateFolder() {
         val apps = prefs.getFolderApps(folderSlot)
         val name = prefs.getFolderName(folderSlot).ifBlank { getString(R.string.folder) }
         binding.tvFolderName.text = "\u2039 $name"
-        binding.tvFolderHint.isVisible = apps.none { it != null }
 
         val slotViews = listOf(
             binding.folderApp1,
@@ -127,6 +150,7 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
             binding.folderApp7,
             binding.folderApp8,
         )
+        var visibleCount = 0
         for (i in slotViews.indices) {
             val tv = slotViews[i]
             val app = apps.getOrNull(i)
@@ -137,12 +161,14 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
                     prefs.removeFolderApp(folderSlot, i)
                 }
                 tv.text = ""
-                tv.visibility = View.VISIBLE
+                tv.visibility = View.GONE
                 continue
             }
+            visibleCount++
             tv.text = app.appLabel
             tv.visibility = View.VISIBLE
         }
+        binding.tvFolderHint.isVisible = visibleCount == 0
     }
 
     private fun launchFolderApp(folderApp: AppModel.FolderApp) {

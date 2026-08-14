@@ -141,7 +141,7 @@
     <string name="replace_app">החלף אפליקציה</string>
     <string name="remove_app">הסר אפליקציה</string>
     <string name="folder_name_hint">שם תיקייה</string>
-    <string name="empty_folder_tip">לחיצה ארוכה להוספת אפליקציות</string>
+    <string name="empty_folder_tip">הקש כדי להוסיף אפליקציות</string>
     <string name="cancel">ביטול</string>
     <string name="rename_app">שנה שם אפליקציה</string>
     <string name="app_name_hint">שם אפליקציה</string>

@@ -149,7 +149,7 @@
     <string name="replace_app">Uygulamayı değiştir</string>
     <string name="remove_app">Uygulamayı kaldır</string>
     <string name="folder_name_hint">Klasör adı</string>
-    <string name="empty_folder_tip">Uygulama eklemek için basılı tutun</string>
+    <string name="empty_folder_tip">Uygulama eklemek için dokunun</string>
     <string name="cancel">İptal</string>
     <string name="rename_app">Uygulamayı yeniden adlandır</string>
     <string name="app_name_hint">Uygulama adı</string>

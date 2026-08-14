@@ -151,7 +151,7 @@
     <string name="replace_app">Alkalmazás cseréje</string>
     <string name="remove_app">Alkalmazás eltávolítása</string>
     <string name="folder_name_hint">Mappa neve</string>
-    <string name="empty_folder_tip">Tartsd nyomva az alkalmazások hozzáadásához</string>
+    <string name="empty_folder_tip">Érintsd meg az alkalmazások hozzáadásához</string>
     <string name="cancel">Mégse</string>
     <string name="rename_app">Alkalmazás átnevezése</string>
     <string name="app_name_hint">Alkalmazás neve</string>

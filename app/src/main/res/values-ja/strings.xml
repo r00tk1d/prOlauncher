@@ -148,7 +148,7 @@
     <string name="replace_app">アプリを置き換え</string>
     <string name="remove_app">アプリを削除</string>
     <string name="folder_name_hint">フォルダ名</string>
-    <string name="empty_folder_tip">長押しでアプリを追加</string>
+    <string name="empty_folder_tip">タップしてアプリを追加</string>
     <string name="cancel">キャンセル</string>
     <string name="rename_app">アプリ名を変更</string>
     <string name="app_name_hint">アプリ名</string>

@@ -146,7 +146,7 @@
     <string name="replace_app">استبدال التطبيق</string>
     <string name="remove_app">إزالة التطبيق</string>
     <string name="folder_name_hint">اسم المجلد</string>
-    <string name="empty_folder_tip">اضغط مطولاً لإضافة التطبيقات</string>
+    <string name="empty_folder_tip">انقر لإضافة التطبيقات</string>
     <string name="cancel">إلغاء</string>
     <string name="rename_app">إعادة تسمية التطبيق</string>
     <string name="app_name_hint">اسم التطبيق</string>

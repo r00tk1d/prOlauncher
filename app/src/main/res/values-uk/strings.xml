@@ -149,7 +149,7 @@
     <string name="replace_app">Замінити застосунок</string>
     <string name="remove_app">Видалити застосунок</string>
     <string name="folder_name_hint">Назва папки</string>
-    <string name="empty_folder_tip">Довге натискання, щоб додати застосунки</string>
+    <string name="empty_folder_tip">Торкніться, щоб додати застосунки</string>
     <string name="cancel">Скасувати</string>
     <string name="rename_app">Перейменувати застосунок</string>
     <string name="app_name_hint">Назва застосунку</string>

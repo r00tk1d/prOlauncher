@@ -144,7 +144,7 @@
     <string name="replace_app">App vervangen</string>
     <string name="remove_app">App verwijderen</string>
     <string name="folder_name_hint">Mapnaam</string>
-    <string name="empty_folder_tip">Houd lang ingedrukt om apps toe te voegen</string>
+    <string name="empty_folder_tip">Tik om apps toe te voegen</string>
     <string name="cancel">Annuleren</string>
     <string name="rename_app">App hernoemen</string>
     <string name="app_name_hint">App-naam</string>

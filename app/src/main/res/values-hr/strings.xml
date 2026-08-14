@@ -148,7 +148,7 @@
     <string name="replace_app">Zamijeni aplikaciju</string>
     <string name="remove_app">Ukloni aplikaciju</string>
     <string name="folder_name_hint">Naziv mape</string>
-    <string name="empty_folder_tip">Dugim dodirom dodajete aplikacije</string>
+    <string name="empty_folder_tip">Dodirnite za dodavanje aplikacija</string>
     <string name="cancel">Odustani</string>
     <string name="rename_app">Preimenuj aplikaciju</string>
     <string name="app_name_hint">Naziv aplikacije</string>

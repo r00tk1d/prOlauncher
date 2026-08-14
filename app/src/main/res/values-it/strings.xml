@@ -149,7 +149,7 @@
     <string name="replace_app">Sostituisci app</string>
     <string name="remove_app">Rimuovi app</string>
     <string name="folder_name_hint">Nome cartella</string>
-    <string name="empty_folder_tip">Tocca a lungo per aggiungere app</string>
+    <string name="empty_folder_tip">Tocca per aggiungere app</string>
     <string name="cancel">Annulla</string>
     <string name="rename_app">Rinomina app</string>
     <string name="app_name_hint">Nome app</string>

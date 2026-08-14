@@ -148,7 +148,7 @@
     <string name="replace_app">Substituir app</string>
     <string name="remove_app">Remover app</string>
     <string name="folder_name_hint">Nome da pasta</string>
-    <string name="empty_folder_tip">Pressione e segure para adicionar apps</string>
+    <string name="empty_folder_tip">Toque para adicionar apps</string>
     <string name="cancel">Cancelar</string>
     <string name="rename_app">Renomear app</string>
     <string name="app_name_hint">Nome do app</string>

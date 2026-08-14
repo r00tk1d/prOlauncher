@@ -149,7 +149,7 @@
     <string name="replace_app">App ersetzen</string>
     <string name="remove_app">App entfernen</string>
     <string name="folder_name_hint">Ordnername</string>
-    <string name="empty_folder_tip">Lange drücken, um Apps hinzuzufügen</string>
+    <string name="empty_folder_tip">Tippen, um Apps hinzuzufügen</string>
     <string name="cancel">Abbrechen</string>
     <string name="rename_app">App umbenennen</string>
     <string name="app_name_hint">App-Name</string>

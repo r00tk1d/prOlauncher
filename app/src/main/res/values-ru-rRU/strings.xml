@@ -149,7 +149,7 @@
     <string name="replace_app">Заменить приложение</string>
     <string name="remove_app">Удалить приложение</string>
     <string name="folder_name_hint">Имя папки</string>
-    <string name="empty_folder_tip">Долгое нажатие для добавления приложений</string>
+    <string name="empty_folder_tip">Коснитесь, чтобы добавить приложения</string>
     <string name="cancel">Отмена</string>
     <string name="rename_app">Переименовать приложение</string>
     <string name="app_name_hint">Имя приложения</string>

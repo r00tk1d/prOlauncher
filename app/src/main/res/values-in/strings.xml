@@ -147,7 +147,7 @@
     <string name="replace_app">Ganti aplikasi</string>
     <string name="remove_app">Hapus aplikasi</string>
     <string name="folder_name_hint">Nama folder</string>
-    <string name="empty_folder_tip">Tekan lama untuk menambah aplikasi</string>
+    <string name="empty_folder_tip">Ketuk untuk menambah aplikasi</string>
     <string name="cancel">Batal</string>
     <string name="rename_app">Ganti nama aplikasi</string>
     <string name="app_name_hint">Nama aplikasi</string>

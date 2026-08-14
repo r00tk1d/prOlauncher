@@ -150,7 +150,7 @@
     <string name="replace_app">替换应用</string>
     <string name="remove_app">移除应用</string>
     <string name="folder_name_hint">文件夹名称</string>
-    <string name="empty_folder_tip">长按以添加应用</string>
+    <string name="empty_folder_tip">点击以添加应用</string>
     <string name="cancel">取消</string>
     <string name="rename_app">重命名应用</string>
     <string name="app_name_hint">应用名称</string>
