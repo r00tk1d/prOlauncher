@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -107,6 +108,7 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
             }
             labels.add(getString(R.string.replace_app))
             actions.add { showAppListForFolder(position) }
+            labels.add(getString(R.string.rename)); actions.add { showFolderAppNameDialog(position) }
             labels.add(getString(R.string.remove_app))
             actions.add {
                 prefs.removeFolderApp(folderSlot, position)
@@ -126,6 +128,28 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
             if (app == null || app.appPackage.isEmpty()) return i
         }
         return 0
+    }
+
+    private fun showFolderAppNameDialog(position: Int) {
+        val app = prefs.getFolderApps(folderSlot).getOrNull(position) ?: return
+        val editText = EditText(requireContext()).apply {
+            setText(app.appLabel)
+            setSelectAllOnFocus(true)
+            hint = getString(R.string.app_name_hint)
+        }
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.rename_app)
+            .setView(editText)
+            .setPositiveButton(R.string.okay) { _, _ ->
+                val name = editText.text.toString().trim()
+                if (name.isNotBlank()) {
+                    prefs.renameFolderApp(folderSlot, position, name)
+                    populateFolder()
+                }
+            }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .show()
+        editText.requestFocus()
     }
 
     private fun getInstalledAppCount(): Int {

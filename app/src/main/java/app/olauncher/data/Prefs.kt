@@ -768,6 +768,14 @@ class Prefs(context: Context) {
         saveFolderApps(slot, apps)
     }
 
+    fun renameFolderApp(slot: Int, position: Int, newLabel: String) {
+        val apps = getFolderApps(slot)
+        val app = apps.getOrNull(position) ?: return
+        if (app.appPackage.isEmpty()) return
+        apps[position] = app.copy(appLabel = newLabel)
+        saveFolderApps(slot, apps)
+    }
+
     private fun saveFolderApps(slot: Int, apps: List<AppModel.FolderApp?>) {
         val array = JSONArray()
         for (app in apps) {
