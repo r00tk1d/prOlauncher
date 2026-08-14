@@ -406,7 +406,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private fun populateHomeSlot(textView: TextView, slot: Int): Boolean {
         if (prefs.isFolder(slot)) {
             val name = prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
-            textView.text = name
+            textView.text = "\u25B8 $name"
             return true
         }
         return setHomeAppText(
