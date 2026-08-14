@@ -809,4 +809,116 @@ class Prefs(context: Context) {
         setFolderName(slot, "")
         saveFolderApps(slot, MutableList(Constants.MAX_APPS_IN_FOLDER) { null })
     }
+
+    fun swapHomeSlots(slot1: Int, slot2: Int) {
+        if (slot1 !in 1..8 || slot2 !in 1..8 || slot1 == slot2) return
+
+        val name1 = getAppName(slot1); val name2 = getAppName(slot2)
+        val package1 = getAppPackage(slot1); val package2 = getAppPackage(slot2)
+        val activity1 = getAppActivityClassName(slot1); val activity2 = getAppActivityClassName(slot2)
+        val user1 = getAppUser(slot1); val user2 = getAppUser(slot2)
+        val isShortcut1 = getIsShortcut(slot1); val isShortcut2 = getIsShortcut(slot2)
+        val shortcutId1 = getShortcutId(slot1); val shortcutId2 = getShortcutId(slot2)
+        val isFolder1 = isFolder(slot1); val isFolder2 = isFolder(slot2)
+        val folderName1 = getFolderName(slot1); val folderName2 = getFolderName(slot2)
+        val folderApps1 = prefs.getString(folderAppsKey(slot1), "").toString()
+        val folderApps2 = prefs.getString(folderAppsKey(slot2), "").toString()
+
+        setAppData(slot1, name2, package2, activity2, user2, isShortcut2, shortcutId2, isFolder2, folderName2, folderApps2)
+        setAppData(slot2, name1, package1, activity1, user1, isShortcut1, shortcutId1, isFolder1, folderName1, folderApps1)
+    }
+
+    fun swapFolderApps(slot: Int, position1: Int, position2: Int) {
+        val apps = getFolderApps(slot)
+        if (position1 !in apps.indices || position2 !in apps.indices || position1 == position2) return
+        val temp = apps[position1]
+        apps[position1] = apps[position2]
+        apps[position2] = temp
+        saveFolderApps(slot, apps)
+    }
+
+    private fun folderAppsKey(slot: Int): String {
+        return when (slot) {
+            1 -> FOLDER_APPS_1
+            2 -> FOLDER_APPS_2
+            3 -> FOLDER_APPS_3
+            4 -> FOLDER_APPS_4
+            5 -> FOLDER_APPS_5
+            6 -> FOLDER_APPS_6
+            7 -> FOLDER_APPS_7
+            8 -> FOLDER_APPS_8
+            else -> FOLDER_APPS_1
+        }
+    }
+
+    private fun setAppData(
+        slot: Int,
+        name: String,
+        packageName: String,
+        activityClassName: String,
+        user: String,
+        isShortcut: Boolean,
+        shortcutId: String,
+        isFolder: Boolean,
+        folderName: String,
+        folderApps: String,
+    ) {
+        when (slot) {
+            1 -> {
+                appName1 = name; appPackage1 = packageName; appActivityClassName1 = activityClassName
+                appUser1 = user; isShortcut1 = isShortcut; shortcutId1 = shortcutId
+                setIsFolder(1, isFolder); setFolderName(1, folderName)
+                prefs.edit { putString(FOLDER_APPS_1, folderApps) }
+            }
+
+            2 -> {
+                appName2 = name; appPackage2 = packageName; appActivityClassName2 = activityClassName
+                appUser2 = user; isShortcut2 = isShortcut; shortcutId2 = shortcutId
+                setIsFolder(2, isFolder); setFolderName(2, folderName)
+                prefs.edit { putString(FOLDER_APPS_2, folderApps) }
+            }
+
+            3 -> {
+                appName3 = name; appPackage3 = packageName; appActivityClassName3 = activityClassName
+                appUser3 = user; isShortcut3 = isShortcut; shortcutId3 = shortcutId
+                setIsFolder(3, isFolder); setFolderName(3, folderName)
+                prefs.edit { putString(FOLDER_APPS_3, folderApps) }
+            }
+
+            4 -> {
+                appName4 = name; appPackage4 = packageName; appActivityClassName4 = activityClassName
+                appUser4 = user; isShortcut4 = isShortcut; shortcutId4 = shortcutId
+                setIsFolder(4, isFolder); setFolderName(4, folderName)
+                prefs.edit { putString(FOLDER_APPS_4, folderApps) }
+            }
+
+            5 -> {
+                appName5 = name; appPackage5 = packageName; appActivityClassName5 = activityClassName
+                appUser5 = user; isShortcut5 = isShortcut; shortcutId5 = shortcutId
+                setIsFolder(5, isFolder); setFolderName(5, folderName)
+                prefs.edit { putString(FOLDER_APPS_5, folderApps) }
+            }
+
+            6 -> {
+                appName6 = name; appPackage6 = packageName; appActivityClassName6 = activityClassName
+                appUser6 = user; isShortcut6 = isShortcut; shortcutId6 = shortcutId
+                setIsFolder(6, isFolder); setFolderName(6, folderName)
+                prefs.edit { putString(FOLDER_APPS_6, folderApps) }
+            }
+
+            7 -> {
+                appName7 = name; appPackage7 = packageName; appActivityClassName7 = activityClassName
+                appUser7 = user; isShortcut7 = isShortcut; shortcutId7 = shortcutId
+                setIsFolder(7, isFolder); setFolderName(7, folderName)
+                prefs.edit { putString(FOLDER_APPS_7, folderApps) }
+            }
+
+            8 -> {
+                appName8 = name; appPackage8 = packageName; appActivityClassName8 = activityClassName
+                appUser8 = user; isShortcut8 = isShortcut; shortcutId8 = shortcutId
+                setIsFolder(8, isFolder); setFolderName(8, folderName)
+                prefs.edit { putString(FOLDER_APPS_8, folderApps) }
+            }
+        }
+    }
 }

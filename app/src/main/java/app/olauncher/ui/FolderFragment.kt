@@ -1,7 +1,10 @@
 package app.olauncher.ui
 
 import android.app.AlertDialog
+import android.content.ClipData
 import android.os.Bundle
+import android.view.DragEvent
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +21,14 @@ import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentFolderBinding
 import app.olauncher.helper.getUserHandleFromString
 import app.olauncher.helper.isPackageInstalled
+import app.olauncher.listener.ViewSwipeTouchListener
 
 class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListener {
 
     private lateinit var prefs: Prefs
     private val viewModel: MainViewModel by activityViewModels()
     private var folderSlot = 1
+    private var draggedPosition = -1
 
     private var _binding: FragmentFolderBinding? = null
     private val binding get() = _binding!!
@@ -50,6 +55,7 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
 
     override fun onResume() {
         super.onResume()
+        setFolderAlignment()
         populateFolder()
     }
 
@@ -70,7 +76,83 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         binding.folderApp6.setOnLongClickListener(this)
         binding.folderApp7.setOnLongClickListener(this)
         binding.folderApp8.setOnLongClickListener(this)
+
+        binding.folderApp1.setOnTouchListener(getFolderAppTouchListener(binding.folderApp1))
+        binding.folderApp2.setOnTouchListener(getFolderAppTouchListener(binding.folderApp2))
+        binding.folderApp3.setOnTouchListener(getFolderAppTouchListener(binding.folderApp3))
+        binding.folderApp4.setOnTouchListener(getFolderAppTouchListener(binding.folderApp4))
+        binding.folderApp5.setOnTouchListener(getFolderAppTouchListener(binding.folderApp5))
+        binding.folderApp6.setOnTouchListener(getFolderAppTouchListener(binding.folderApp6))
+        binding.folderApp7.setOnTouchListener(getFolderAppTouchListener(binding.folderApp7))
+        binding.folderApp8.setOnTouchListener(getFolderAppTouchListener(binding.folderApp8))
+
+        binding.folderApp1.setOnDragListener(getFolderAppDragListener())
+        binding.folderApp2.setOnDragListener(getFolderAppDragListener())
+        binding.folderApp3.setOnDragListener(getFolderAppDragListener())
+        binding.folderApp4.setOnDragListener(getFolderAppDragListener())
+        binding.folderApp5.setOnDragListener(getFolderAppDragListener())
+        binding.folderApp6.setOnDragListener(getFolderAppDragListener())
+        binding.folderApp7.setOnDragListener(getFolderAppDragListener())
+        binding.folderApp8.setOnDragListener(getFolderAppDragListener())
     }
+
+    private fun getFolderAppTouchListener(view: View): View.OnTouchListener {
+        return object : ViewSwipeTouchListener(requireContext(), view) {
+            override fun onLongClick(view: View) {
+                super.onLongClick(view)
+                textOnLongClick(view)
+            }
+
+            override fun onLongPressMove(view: View) {
+                super.onLongPressMove(view)
+                startFolderAppDrag(view)
+            }
+
+            override fun onClick(view: View) {
+                super.onClick(view)
+                textOnClick(view)
+            }
+        }
+    }
+
+    private fun getFolderAppDragListener(): View.OnDragListener {
+        return View.OnDragListener { view, event ->
+            when (event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    view.isPressed = true
+                    true
+                }
+
+                DragEvent.ACTION_DRAG_ENTERED -> {
+                    val target = view.tag.toString().toInt() - 1
+                    if (draggedPosition != -1 && draggedPosition != target) {
+                        prefs.swapFolderApps(folderSlot, draggedPosition, target)
+                        draggedPosition = target
+                        populateFolder()
+                    }
+                    true
+                }
+
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    view.isPressed = false
+                    draggedPosition = -1
+                    true
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    private fun startFolderAppDrag(view: View) {
+        draggedPosition = view.tag.toString().toInt() - 1
+        val data = ClipData.newPlainText("slot", draggedPosition.toString())
+        view.startDragAndDrop(data, View.DragShadowBuilder(view), draggedPosition, 0)
+    }
+
+    private fun textOnClick(view: View) = onClick(view)
+
+    private fun textOnLongClick(view: View) = onLongClick(view)
 
     override fun onClick(view: View) {
         when (view.id) {
@@ -159,11 +241,24 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         }
     }
 
+    private fun setFolderAlignment() {
+        val horizontalGravity = prefs.homeAlignment
+        val verticalGravity = if (prefs.homeBottomAlignment) Gravity.BOTTOM else Gravity.CENTER_VERTICAL
+        binding.folderAppsLayout.gravity = horizontalGravity or verticalGravity
+        binding.folderApp1.gravity = horizontalGravity
+        binding.folderApp2.gravity = horizontalGravity
+        binding.folderApp3.gravity = horizontalGravity
+        binding.folderApp4.gravity = horizontalGravity
+        binding.folderApp5.gravity = horizontalGravity
+        binding.folderApp6.gravity = horizontalGravity
+        binding.folderApp7.gravity = horizontalGravity
+        binding.folderApp8.gravity = horizontalGravity
+    }
+
     private fun populateFolder() {
         val apps = prefs.getFolderApps(folderSlot)
         val name = prefs.getFolderName(folderSlot).ifBlank { getString(R.string.folder) }
         binding.tvFolderName.text = "\u2039 $name"
-
         val slotViews = listOf(
             binding.folderApp1,
             binding.folderApp2,

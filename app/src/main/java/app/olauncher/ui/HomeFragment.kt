@@ -2,6 +2,7 @@ package app.olauncher.ui
 
 import android.app.admin.DevicePolicyManager
 import android.app.AlertDialog
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.content.pm.LauncherApps
@@ -9,6 +10,7 @@ import android.content.res.Configuration
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
+import android.view.DragEvent
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -59,6 +61,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private var draggedSlot = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -78,6 +81,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         setHomeAlignment(prefs.homeAlignment)
         initSwipeTouchListener()
         initClickListeners()
+        initDragListeners()
     }
 
     override fun onResume() {
@@ -260,6 +264,46 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.homeApp6.setOnLongClickListener(this)
         binding.homeApp7.setOnLongClickListener(this)
         binding.homeApp8.setOnLongClickListener(this)
+    }
+
+    private fun initDragListeners() {
+        binding.homeApp1.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp2.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp3.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp4.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp5.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp6.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp7.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp8.setOnDragListener(getHomeSlotDragListener())
+    }
+
+    private fun getHomeSlotDragListener(): View.OnDragListener {
+        return View.OnDragListener { view, event ->
+            when (event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> {
+                    view.isPressed = true
+                    true
+                }
+
+                DragEvent.ACTION_DRAG_ENTERED -> {
+                    val target = view.tag.toString().toInt()
+                    if (draggedSlot != -1 && draggedSlot != target) {
+                        prefs.swapHomeSlots(draggedSlot, target)
+                        draggedSlot = target
+                        populateHomeScreen(false)
+                    }
+                    true
+                }
+
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    view.isPressed = false
+                    draggedSlot = -1
+                    true
+                }
+
+                else -> false
+            }
+        }
     }
 
     private fun setHomeAlignment(horizontalGravity: Int = prefs.homeAlignment) {
@@ -878,6 +922,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             override fun onLongClick(view: View) {
                 super.onLongClick(view)
                 textOnLongClick(view)
+            }
+
+            override fun onLongPressMove(view: View) {
+                super.onLongPressMove(view)
+                draggedSlot = view.tag.toString().toInt()
+                val data = ClipData.newPlainText("slot", draggedSlot.toString())
+                view.startDragAndDrop(data, View.DragShadowBuilder(view), draggedSlot, 0)
             }
 
             override fun onClick(view: View) {
