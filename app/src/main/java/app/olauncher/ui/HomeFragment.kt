@@ -97,6 +97,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             R.id.date -> openCalendarApp()
             R.id.setDefaultLauncher -> viewModel.resetLauncherLiveData.call()
             R.id.tvScreenTime -> openScreenTimeDigitalWellbeing()
+            R.id.tvHomeHint -> showAppList(Constants.FLAG_SET_HOME_APP_1 + firstEmptyHomePosition() - 1, true)
 
             else -> {
                 try { // Launch app
@@ -240,6 +241,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.setDefaultLauncher.setOnLongClickListener(this)
         binding.tvScreenTime.setOnClickListener(this)
         binding.tvScreenTime.setOnLongClickListener(this)
+        binding.tvHomeHint.setOnClickListener(this)
 
         // These fire only on d-pad/keyboard events; touch is consumed by ViewSwipeTouchListener
         binding.homeApp1.setOnClickListener(this)
@@ -326,63 +328,35 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             populateScreenTime()
 
-        val homeAppsNum = prefs.homeAppsNum
-        if (homeAppsNum == 0) return
-
-        binding.homeApp1.visibility = View.VISIBLE
-        if (!populateHomeSlot(binding.homeApp1, 1)) {
-            prefs.appName1 = ""
-            prefs.appPackage1 = ""
+        val slotViews = listOf(
+            binding.homeApp1,
+            binding.homeApp2,
+            binding.homeApp3,
+            binding.homeApp4,
+            binding.homeApp5,
+            binding.homeApp6,
+            binding.homeApp7,
+            binding.homeApp8,
+        )
+        var visibleCount = 0
+        for (i in slotViews.indices) {
+            val textView = slotViews[i]
+            val slot = i + 1
+            if (prefs.getAppName(slot).isEmpty() && prefs.isFolder(slot).not()) {
+                textView.text = ""
+                textView.visibility = View.GONE
+                continue
+            }
+            if (!populateHomeSlot(textView, slot)) {
+                clearHomeApp(slot)
+                textView.text = ""
+                textView.visibility = View.GONE
+                continue
+            }
+            visibleCount++
+            textView.visibility = View.VISIBLE
         }
-        if (homeAppsNum == 1) return
-
-        binding.homeApp2.visibility = View.VISIBLE
-        if (!populateHomeSlot(binding.homeApp2, 2)) {
-            prefs.appName2 = ""
-            prefs.appPackage2 = ""
-        }
-        if (homeAppsNum == 2) return
-
-        binding.homeApp3.visibility = View.VISIBLE
-        if (!populateHomeSlot(binding.homeApp3, 3)) {
-            prefs.appName3 = ""
-            prefs.appPackage3 = ""
-        }
-        if (homeAppsNum == 3) return
-
-        binding.homeApp4.visibility = View.VISIBLE
-        if (!populateHomeSlot(binding.homeApp4, 4)) {
-            prefs.appName4 = ""
-            prefs.appPackage4 = ""
-        }
-        if (homeAppsNum == 4) return
-
-        binding.homeApp5.visibility = View.VISIBLE
-        if (!populateHomeSlot(binding.homeApp5, 5)) {
-            prefs.appName5 = ""
-            prefs.appPackage5 = ""
-        }
-        if (homeAppsNum == 5) return
-
-        binding.homeApp6.visibility = View.VISIBLE
-        if (!populateHomeSlot(binding.homeApp6, 6)) {
-            prefs.appName6 = ""
-            prefs.appPackage6 = ""
-        }
-        if (homeAppsNum == 6) return
-
-        binding.homeApp7.visibility = View.VISIBLE
-        if (!populateHomeSlot(binding.homeApp7, 7)) {
-            prefs.appName7 = ""
-            prefs.appPackage7 = ""
-        }
-        if (homeAppsNum == 7) return
-
-        binding.homeApp8.visibility = View.VISIBLE
-        if (!populateHomeSlot(binding.homeApp8, 8)) {
-            prefs.appName8 = ""
-            prefs.appPackage8 = ""
-        }
+        binding.tvHomeHint.isVisible = visibleCount == 0 && prefs.firstSettingsOpen.not()
     }
 
     private fun populateHomeSlot(textView: TextView, slot: Int): Boolean {
@@ -583,16 +557,18 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             labels.add(getString(R.string.rename_folder)); actions.add { showFolderNameDialog(slot) }
             labels.add(getString(R.string.remove_folder)); actions.add { removeFolder(slot) }
         } else {
+            val emptySlot = firstEmptyHomePosition()
+            if (emptySlot != 0) {
+                labels.add(getString(R.string.add_app)); actions.add {
+                    showAppList(Constants.FLAG_SET_HOME_APP_1 + emptySlot - 1, true)
+                }
+            }
             if (hasApp) {
                 labels.add(getString(R.string.replace_app)); actions.add {
                     showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, true)
                 }
                 labels.add(getString(R.string.rename)); actions.add {
                     showAppNameDialog(slot)
-                }
-            } else {
-                labels.add(getString(R.string.add_app)); actions.add {
-                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, true)
                 }
             }
             labels.add(getString(R.string.create_folder)); actions.add { showFolderNameDialog(slot) }
@@ -601,6 +577,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         AlertDialog.Builder(requireContext())
             .setItems(labels.toTypedArray()) { _, which -> actions[which]() }
             .show()
+    }
+
+    private fun firstEmptyHomePosition(): Int {
+        for (i in 1..8) {
+            if (prefs.getAppName(i).isEmpty() && prefs.isFolder(i).not()) return i
+        }
+        return 0
     }
 
     private fun showFolderNameDialog(slot: Int) {
