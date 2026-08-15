@@ -625,7 +625,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         val actions = mutableListOf<() -> Unit>()
 
         if (isFolderSlot) {
-            labels.add(getString(R.string.open_folder)); actions.add { openFolder(slot) }
             labels.add(getString(R.string.rename_folder)); actions.add { showFolderNameDialog(slot) }
             labels.add(getString(R.string.remove_folder)); actions.add { removeFolder(slot) }
         } else {
@@ -639,7 +638,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 labels.add(getString(R.string.replace_app)); actions.add {
                     showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, true)
                 }
-                labels.add(getString(R.string.rename)); actions.add {
+                labels.add(getString(R.string.rename_app)); actions.add {
                     showAppNameDialog(slot)
                 }
                 labels.add(getString(R.string.remove_app)); actions.add {

@@ -13,7 +13,7 @@ All changes are on top of upstream Olauncher (v6.7.19).
 
 ### Folders
 - Create up to 8 folders on the home screen (long-press a slot → *Create folder*).
-- Open a folder in a dedicated full-screen view.
+- Tap a folder to open it in a dedicated full-screen view.
 - Add apps to a folder by long-pressing an app slot inside the folder view.
 - Rename, replace, or remove folders from the long-press menu.
 - Cleaner folder view: empty app slots are hidden, and an empty folder shows a "Tap to add apps" hint.
