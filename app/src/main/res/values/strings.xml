@@ -169,13 +169,15 @@
     <string name="notification_bar">Notification bar</string>
     <string name="private_space">Private space</string>
     <string name="folder">Folder</string>
-    <string name="create_folder">Create folder</string>
+    <string name="create_folder">Add folder</string>
     <string name="rename_folder">Rename folder</string>
     <string name="remove_folder">Remove folder</string>
     <string name="open_folder">Open folder</string>
     <string name="add_app">Add app</string>
     <string name="replace_app">Replace app</string>
     <string name="remove_app">Remove app</string>
+    <string name="add">Add</string>
+    <string name="modify">Modify</string>
     <string name="folder_name_hint">Folder name</string>
     <string name="rename_app">Rename app</string>
     <string name="app_name_hint">App name</string>

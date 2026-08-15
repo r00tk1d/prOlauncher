@@ -682,36 +682,56 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         val isFolderSlot = prefs.isFolder(slot)
         val hasApp = prefs.getAppName(slot).isNotEmpty()
 
-        val labels = mutableListOf<String>()
-        val actions = mutableListOf<() -> Unit>()
+        val items = mutableListOf<SectionedMenuItem>()
+
+        fun addHeader(label: String) {
+            items.add(SectionedMenuItem(label, isHeader = true))
+        }
+
+        fun addItem(label: String, action: () -> Unit) {
+            items.add(SectionedMenuItem(label, isHeader = false, action = action))
+        }
 
         if (isFolderSlot) {
-            labels.add(getString(R.string.rename_folder)); actions.add { showFolderNameDialog(slot) }
-            labels.add(getString(R.string.remove_folder)); actions.add { removeFolder(slot) }
+            addHeader(getString(R.string.modify))
+            addItem(getString(R.string.rename_folder)) { showFolderNameDialog(slot) }
+            addItem(getString(R.string.remove_folder)) { removeFolder(slot) }
         } else {
+            addHeader(getString(R.string.add))
             val emptySlot = firstEmptyHomePosition()
             if (emptySlot != 0) {
-                labels.add(getString(R.string.add_app)); actions.add {
+                addItem(getString(R.string.add_app)) {
                     showAppList(Constants.FLAG_SET_HOME_APP_1 + emptySlot - 1, true)
                 }
             }
+            addItem(getString(R.string.create_folder)) {
+                if (hasApp) {
+                    val folderSlot = firstEmptyHomePosition()
+                    if (folderSlot != 0) showFolderNameDialog(folderSlot)
+                    else requireContext().showToast(getString(R.string.home_screen_full))
+                } else {
+                    showFolderNameDialog(slot)
+                }
+            }
             if (hasApp) {
-                labels.add(getString(R.string.replace_app)); actions.add {
+                addHeader(getString(R.string.modify))
+                addItem(getString(R.string.replace_app)) {
                     showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, true)
                 }
-                labels.add(getString(R.string.rename_app)); actions.add {
+                addItem(getString(R.string.rename_app)) {
                     showAppNameDialog(slot)
                 }
-                labels.add(getString(R.string.remove_app)); actions.add {
+                addItem(getString(R.string.remove_app)) {
                     clearHomeApp(slot)
                     populateHomeScreen(false)
                 }
             }
-            labels.add(getString(R.string.create_folder)); actions.add { showFolderNameDialog(slot) }
         }
 
         AlertDialog.Builder(requireContext())
-            .setItems(labels.toTypedArray()) { _, which -> actions[which]() }
+            .setAdapter(SectionedMenuAdapter(requireContext(), items)) { _, which ->
+                items[which].action?.invoke()
+            }
             .show()
     }
 

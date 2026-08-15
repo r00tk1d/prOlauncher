@@ -227,22 +227,31 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         if (folderApp == null) {
             showAppListForFolder(firstEmptyPosition())
         } else {
-            val labels = mutableListOf<String>()
-            val actions = mutableListOf<() -> Unit>()
-            if (getInstalledAppCount() < Constants.MAX_APPS_IN_FOLDER) {
-                labels.add(getString(R.string.add_app))
-                actions.add { showAppListForFolder(firstEmptyPosition()) }
+            val items = mutableListOf<SectionedMenuItem>()
+
+            fun addHeader(label: String) {
+                items.add(SectionedMenuItem(label, isHeader = true))
             }
-            labels.add(getString(R.string.replace_app))
-            actions.add { showAppListForFolder(position) }
-            labels.add(getString(R.string.rename)); actions.add { showFolderAppNameDialog(position) }
-            labels.add(getString(R.string.remove_app))
-            actions.add {
+
+            fun addItem(label: String, action: () -> Unit) {
+                items.add(SectionedMenuItem(label, isHeader = false, action = action))
+            }
+
+            addHeader(getString(R.string.add))
+            if (getInstalledAppCount() < Constants.MAX_APPS_IN_FOLDER) {
+                addItem(getString(R.string.add_app)) { showAppListForFolder(firstEmptyPosition()) }
+            }
+            addHeader(getString(R.string.modify))
+            addItem(getString(R.string.replace_app)) { showAppListForFolder(position) }
+            addItem(getString(R.string.rename_app)) { showFolderAppNameDialog(position) }
+            addItem(getString(R.string.remove_app)) {
                 prefs.removeFolderApp(folderSlot, position)
                 populateFolder()
             }
             AlertDialog.Builder(requireContext())
-                .setItems(labels.toTypedArray()) { _, which -> actions[which]() }
+                .setAdapter(SectionedMenuAdapter(requireContext(), items)) { _, which ->
+                    items[which].action?.invoke()
+                }
                 .show()
         }
         return true
