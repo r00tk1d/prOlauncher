@@ -1,6 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
+def keystorePath = findProperty('KEYSTORE_PATH') ?: System.getenv('KEYSTORE_PATH')
+def keystoreStorePassword = findProperty('KEYSTORE_PASSWORD') ?: System.getenv('KEYSTORE_PASSWORD')
+def hasReleaseSigning = keystorePath != null && keystoreStorePassword != null && file(keystorePath).exists()
+
 android {
     compileSdk 35
 
@@ -24,8 +28,22 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            if (hasReleaseSigning) {
+                storeFile file(keystorePath)
+                storePassword keystoreStorePassword
+                keyAlias findProperty('KEY_ALIAS') ?: System.getenv('KEY_ALIAS')
+                keyPassword findProperty('KEY_PASSWORD') ?: System.getenv('KEY_PASSWORD')
+            }
+        }
+    }
+
     buildTypes {
         release {
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
             debuggable false
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

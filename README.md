@@ -46,18 +46,40 @@ From the project root:
 ./gradlew assembleDebug
 # Output: app/build/outputs/apk/debug/app-debug.apk
 
-# Release APK (minified with R8, unsigned):
+# Release APK (minified with R8):
 ./gradlew assembleRelease
-# Output: app/build/outputs/apk/release/app-release-unsigned.apk
+# Output: app/build/outputs/apk/release/app-release.apk (signed) or app-release-unsigned.apk (no signing config)
 ```
-
-The release build is unsigned because this fork has no signing config. To produce a signed release APK, add a `signingConfig` for your keystore in `app/build.gradle` or sign afterwards with `apksigner`.
 
 Install the debug build directly on a connected device with:
 
 ```bash
 ./gradlew installDebug
 ```
+
+### Signing the release build
+
+The release build is signed automatically with your keystore when the following settings are available. Provide them either as project properties in `~/.gradle/gradle.properties` or as environment variables:
+
+```properties
+KEYSTORE_PATH=/path/to/prOlauncher-release.jks
+KEYSTORE_PASSWORD=your-store-password
+KEY_ALIAS=prOlauncher
+KEY_PASSWORD=your-key-password
+```
+
+Generate a keystore once (JDK's `keytool`):
+
+```bash
+keytool -genkeypair -v \
+  -keystore prOlauncher-release.jks \
+  -alias prOlauncher \
+  -keyalg RSA -keysize 2048 -validity 10000 \
+  -storepass <password> -keypass <password> \
+  -dname "CN=prOlauncher, O=prOlauncher, C=DE"
+```
+
+Keep the keystore and passwords safe — anyone who has them can sign apps as you. Without a keystore, the release build falls back to an unsigned `app-release-unsigned.apk`.
 
 ## Releases
 
@@ -72,7 +94,10 @@ git push origin v1.0
 
 You can also trigger the build from the **Actions** tab (workflow *Build APK and create release* → *Run workflow*). Every release contains:
 
-- `app-debug.apk` — debug build, signed with the debug key (ready to install)
-- `app-release-unsigned.apk` — minified release build (unsigned, not directly installable)
+- `app-release.apk` — minified release build, signed with your keystore (ready to install, updates in place)
+- `app-debug.apk` — debug build (installable, but each workflow run signs it with a freshly generated debug key, so it cannot update an existing install)
+- `app-release-unsigned.apk` — only produced when no signing keystore is configured
 
-To install the debug APK, download `app-debug.apk` from the release page, allow installing apps from unknown sources for your browser/downloader, and open the file.
+To have releases signed with your stable key, add these repository secrets (**Settings → Secrets and variables → Actions**): `KEYSTORE_BASE64` (your keystore base64-encoded: `base64 -w0 prOlauncher-release.jks`), `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`.
+
+To install the signed release APK, download `app-release.apk` from the release page, allow installing apps from unknown sources for your browser/downloader, and open the file. Because it uses the same key on every release, you can update by simply installing over the previous version.
