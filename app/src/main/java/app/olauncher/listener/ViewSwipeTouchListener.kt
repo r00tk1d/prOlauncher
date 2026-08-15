@@ -28,7 +28,6 @@ internal open class ViewSwipeTouchListener(c: Context?, v: View) : OnTouchListen
 
             MotionEvent.ACTION_UP -> {
                 view.isPressed = false
-                view.parent?.requestDisallowInterceptTouchEvent(false)
                 if (longPressOn && !dragStarted) {
                     longPressOn = false
                     onLongClick(view)
@@ -38,7 +37,6 @@ internal open class ViewSwipeTouchListener(c: Context?, v: View) : OnTouchListen
 
             MotionEvent.ACTION_CANCEL -> {
                 view.isPressed = false
-                view.parent?.requestDisallowInterceptTouchEvent(false)
                 longPressOn = false
                 dragStarted = false
             }
@@ -79,7 +77,6 @@ internal open class ViewSwipeTouchListener(c: Context?, v: View) : OnTouchListen
             dragStarted = false
             longPressX = e.rawX
             longPressY = e.rawY
-            view.parent?.requestDisallowInterceptTouchEvent(true)
             super.onLongPress(e)
         }
 

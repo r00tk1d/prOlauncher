@@ -46,7 +46,6 @@ class AppDrawerFragment : BaseFragment() {
 
     private var flag = Constants.FLAG_LAUNCH_APP
     private var folderSlot = 1
-    private var position = -1
     private var currentAppList: List<AppModel>? = null
     private var currentPrivateSpaceApps: List<AppModel>? = null
     private var currentPrivateSpaceLocked: Boolean = true
@@ -71,7 +70,6 @@ class AppDrawerFragment : BaseFragment() {
         arguments?.let {
             flag = it.getInt(Constants.Key.FLAG, Constants.FLAG_LAUNCH_APP)
             folderSlot = it.getInt(Constants.Key.FOLDER_SLOT, 1)
-            position = it.getInt(Constants.Key.POSITION, -1)
         }
 
         initViews()
@@ -83,7 +81,9 @@ class AppDrawerFragment : BaseFragment() {
     private fun initViews() {
         if (flag == Constants.FLAG_HIDDEN_APPS)
             binding.search.queryHint = getString(R.string.hidden_apps)
-        else if (flag in Constants.FLAG_SET_SWIPE_LEFT_APP..Constants.FLAG_SET_FOLDER_APP)
+        else if (flag in Constants.FLAG_SET_HOME_APP_1..Constants.FLAG_SET_CALENDAR_APP
+            || flag in Constants.FLAG_SET_FOLDER_APP_1..Constants.FLAG_SET_FOLDER_APP_8
+        )
             binding.search.queryHint = "Please select an app"
         try {
             searchTextView = binding.search.findViewById(R.id.search_src_text)
@@ -152,11 +152,14 @@ class AppDrawerFragment : BaseFragment() {
             appClickListener = { appModel ->
                 if (flag == Constants.FLAG_LAUNCH_APP && appModel !is AppModel.PrivateSpaceHeader)
                     prefs.addLaunchHistory(appModel)
-                when (flag) {
-                    Constants.FLAG_SET_HOME_APP -> viewModel.saveHomeApp(appModel, position)
-                    Constants.FLAG_SET_FOLDER_APP -> viewModel.saveFolderApp(folderSlot, position, appModel)
-                    else -> viewModel.selectedApp(appModel, flag)
-                }
+                if (flag in Constants.FLAG_SET_FOLDER_APP_1..Constants.FLAG_SET_FOLDER_APP_8)
+                    viewModel.saveFolderApp(
+                        folderSlot,
+                        flag - Constants.FLAG_SET_FOLDER_APP_1,
+                        appModel
+                    )
+                else
+                    viewModel.selectedApp(appModel, flag)
                 if (flag == Constants.FLAG_LAUNCH_APP || flag == Constants.FLAG_HIDDEN_APPS)
                     findNavController().popBackStack(R.id.mainFragment, false)
                 else

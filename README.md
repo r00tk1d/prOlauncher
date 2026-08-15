@@ -12,16 +12,14 @@ This repository is forked from the original [Olauncher](https://github.com/tanuj
 All changes are on top of upstream Olauncher (v6.7.19).
 
 ### Folders
-- Create any number of folders on the home screen (long-press an app → *Create folder* appends a new empty folder).
+- Create up to 8 folders on the home screen (long-press a slot → *Create folder*).
 - Tap a folder to open it in a dedicated full-screen view.
-- Add apps to a folder by long-pressing inside the folder view.
+- Add apps to a folder by long-pressing an app slot inside the folder view.
 - Rename, replace, or remove folders from the long-press menu.
-- Cleaner folder view: empty slots are hidden, and an empty folder shows a "Tap to add apps" hint.
-- **Unlimited apps per folder**: folder apps scroll when they don't fit on screen.
+- Cleaner folder view: empty app slots are hidden, and an empty folder shows a "Tap to add apps" hint.
 
 ### Home screen
-- **No preset app count / no 8-app limit**: the fixed "number of home apps" setting was removed. Apps are added individually (long-press an app → *Add app* appends, or tap the hint when the home is empty).
-- **Unlimited home apps**: the home app list scrolls when it doesn't fit on screen.
+- **No preset app count**: the fixed "number of home apps" setting was removed. Apps are added individually (long-press an empty slot → *Add app*, or tap the hint when the home is empty), and empty slots are hidden.
 - **Rename home apps** via the long-press menu.
 - **Remove apps** from the home screen via the long-press menu.
 - **Drag & drop reordering** of home screen slots.

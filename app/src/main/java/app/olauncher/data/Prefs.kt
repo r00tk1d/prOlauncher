@@ -47,7 +47,38 @@ class Prefs(context: Context) {
     // Home button for recents feature disabled
     // private val HOME_BUTTON_SHOW_RECENTS = "HOME_BUTTON_SHOW_RECENTS"
 
-    private val HOME_APPS = "HOME_APPS"
+    private val APP_NAME_1 = "APP_NAME_1"
+    private val APP_NAME_2 = "APP_NAME_2"
+    private val APP_NAME_3 = "APP_NAME_3"
+    private val APP_NAME_4 = "APP_NAME_4"
+    private val APP_NAME_5 = "APP_NAME_5"
+    private val APP_NAME_6 = "APP_NAME_6"
+    private val APP_NAME_7 = "APP_NAME_7"
+    private val APP_NAME_8 = "APP_NAME_8"
+    private val APP_PACKAGE_1 = "APP_PACKAGE_1"
+    private val APP_PACKAGE_2 = "APP_PACKAGE_2"
+    private val APP_PACKAGE_3 = "APP_PACKAGE_3"
+    private val APP_PACKAGE_4 = "APP_PACKAGE_4"
+    private val APP_PACKAGE_5 = "APP_PACKAGE_5"
+    private val APP_PACKAGE_6 = "APP_PACKAGE_6"
+    private val APP_PACKAGE_7 = "APP_PACKAGE_7"
+    private val APP_PACKAGE_8 = "APP_PACKAGE_8"
+    private val APP_ACTIVITY_CLASS_NAME_1 = "APP_ACTIVITY_CLASS_NAME_1"
+    private val APP_ACTIVITY_CLASS_NAME_2 = "APP_ACTIVITY_CLASS_NAME_2"
+    private val APP_ACTIVITY_CLASS_NAME_3 = "APP_ACTIVITY_CLASS_NAME_3"
+    private val APP_ACTIVITY_CLASS_NAME_4 = "APP_ACTIVITY_CLASS_NAME_4"
+    private val APP_ACTIVITY_CLASS_NAME_5 = "APP_ACTIVITY_CLASS_NAME_5"
+    private val APP_ACTIVITY_CLASS_NAME_6 = "APP_ACTIVITY_CLASS_NAME_6"
+    private val APP_ACTIVITY_CLASS_NAME_7 = "APP_ACTIVITY_CLASS_NAME_7"
+    private val APP_ACTIVITY_CLASS_NAME_8 = "APP_ACTIVITY_CLASS_NAME_8"
+    private val APP_USER_1 = "APP_USER_1"
+    private val APP_USER_2 = "APP_USER_2"
+    private val APP_USER_3 = "APP_USER_3"
+    private val APP_USER_4 = "APP_USER_4"
+    private val APP_USER_5 = "APP_USER_5"
+    private val APP_USER_6 = "APP_USER_6"
+    private val APP_USER_7 = "APP_USER_7"
+    private val APP_USER_8 = "APP_USER_8"
 
     private val APP_NAME_SWIPE_LEFT = "APP_NAME_SWIPE_LEFT"
     private val APP_NAME_SWIPE_RIGHT = "APP_NAME_SWIPE_RIGHT"
@@ -67,11 +98,52 @@ class Prefs(context: Context) {
     private val SCREEN_TIME_APP_USER = "SCREEN_TIME_APP_USER"
     private val SCREEN_TIME_APP_CLASS_NAME = "SCREEN_TIME_APP_CLASS_NAME"
 
+    private val IS_SHORTCUT_1 = "IS_SHORTCUT_1"
+    private val SHORTCUT_ID_1 = "SHORTCUT_ID_1"
+    private val IS_SHORTCUT_2 = "IS_SHORTCUT_2"
+    private val SHORTCUT_ID_2 = "SHORTCUT_ID_2"
+    private val IS_SHORTCUT_3 = "IS_SHORTCUT_3"
+    private val SHORTCUT_ID_3 = "SHORTCUT_ID_3"
+    private val IS_SHORTCUT_4 = "IS_SHORTCUT_4"
+    private val SHORTCUT_ID_4 = "SHORTCUT_ID_4"
+    private val IS_SHORTCUT_5 = "IS_SHORTCUT_5"
+    private val SHORTCUT_ID_5 = "SHORTCUT_ID_5"
+    private val IS_SHORTCUT_6 = "IS_SHORTCUT_6"
+    private val SHORTCUT_ID_6 = "SHORTCUT_ID_6"
+    private val IS_SHORTCUT_7 = "IS_SHORTCUT_7"
+    private val SHORTCUT_ID_7 = "SHORTCUT_ID_7"
+    private val IS_SHORTCUT_8 = "IS_SHORTCUT_8"
+    private val SHORTCUT_ID_8 = "SHORTCUT_ID_8"
+
     private val SHORTCUT_ID_SWIPE_LEFT = "SHORTCUT_ID_SWIPE_LEFT"
     private val IS_SHORTCUT_SWIPE_LEFT = "IS_SHORTCUT_SWIPE_LEFT"
     private val SHORTCUT_ID_SWIPE_RIGHT = "SHORTCUT_ID_SWIPE_RIGHT"
     private val IS_SHORTCUT_SWIPE_RIGHT = "IS_SHORTCUT_SWIPE_RIGHT"
 
+    private val IS_FOLDER_1 = "IS_FOLDER_1"
+    private val IS_FOLDER_2 = "IS_FOLDER_2"
+    private val IS_FOLDER_3 = "IS_FOLDER_3"
+    private val IS_FOLDER_4 = "IS_FOLDER_4"
+    private val IS_FOLDER_5 = "IS_FOLDER_5"
+    private val IS_FOLDER_6 = "IS_FOLDER_6"
+    private val IS_FOLDER_7 = "IS_FOLDER_7"
+    private val IS_FOLDER_8 = "IS_FOLDER_8"
+    private val FOLDER_NAME_1 = "FOLDER_NAME_1"
+    private val FOLDER_NAME_2 = "FOLDER_NAME_2"
+    private val FOLDER_NAME_3 = "FOLDER_NAME_3"
+    private val FOLDER_NAME_4 = "FOLDER_NAME_4"
+    private val FOLDER_NAME_5 = "FOLDER_NAME_5"
+    private val FOLDER_NAME_6 = "FOLDER_NAME_6"
+    private val FOLDER_NAME_7 = "FOLDER_NAME_7"
+    private val FOLDER_NAME_8 = "FOLDER_NAME_8"
+    private val FOLDER_APPS_1 = "FOLDER_APPS_1"
+    private val FOLDER_APPS_2 = "FOLDER_APPS_2"
+    private val FOLDER_APPS_3 = "FOLDER_APPS_3"
+    private val FOLDER_APPS_4 = "FOLDER_APPS_4"
+    private val FOLDER_APPS_5 = "FOLDER_APPS_5"
+    private val FOLDER_APPS_6 = "FOLDER_APPS_6"
+    private val FOLDER_APPS_7 = "FOLDER_APPS_7"
+    private val FOLDER_APPS_8 = "FOLDER_APPS_8"
     private val LAUNCH_HISTORY = "LAUNCH_HISTORY"
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_FILENAME, 0)
@@ -209,6 +281,134 @@ class Prefs(context: Context) {
         get() = prefs.getInt(SWIPE_DOWN_ACTION, Constants.SwipeDownAction.NOTIFICATIONS)
         set(value) = prefs.edit { putInt(SWIPE_DOWN_ACTION, value).apply() }
 
+    var appName1: String
+        get() = prefs.getString(APP_NAME_1, "").toString()
+        set(value) = prefs.edit { putString(APP_NAME_1, value).apply() }
+
+    var appName2: String
+        get() = prefs.getString(APP_NAME_2, "").toString()
+        set(value) = prefs.edit { putString(APP_NAME_2, value).apply() }
+
+    var appName3: String
+        get() = prefs.getString(APP_NAME_3, "").toString()
+        set(value) = prefs.edit { putString(APP_NAME_3, value).apply() }
+
+    var appName4: String
+        get() = prefs.getString(APP_NAME_4, "").toString()
+        set(value) = prefs.edit { putString(APP_NAME_4, value).apply() }
+
+    var appName5: String
+        get() = prefs.getString(APP_NAME_5, "").toString()
+        set(value) = prefs.edit { putString(APP_NAME_5, value).apply() }
+
+    var appName6: String
+        get() = prefs.getString(APP_NAME_6, "").toString()
+        set(value) = prefs.edit { putString(APP_NAME_6, value).apply() }
+
+    var appName7: String
+        get() = prefs.getString(APP_NAME_7, "").toString()
+        set(value) = prefs.edit { putString(APP_NAME_7, value).apply() }
+
+    var appName8: String
+        get() = prefs.getString(APP_NAME_8, "").toString()
+        set(value) = prefs.edit { putString(APP_NAME_8, value).apply() }
+
+    var appPackage1: String
+        get() = prefs.getString(APP_PACKAGE_1, "").toString()
+        set(value) = prefs.edit { putString(APP_PACKAGE_1, value).apply() }
+
+    var appPackage2: String
+        get() = prefs.getString(APP_PACKAGE_2, "").toString()
+        set(value) = prefs.edit { putString(APP_PACKAGE_2, value).apply() }
+
+    var appPackage3: String
+        get() = prefs.getString(APP_PACKAGE_3, "").toString()
+        set(value) = prefs.edit { putString(APP_PACKAGE_3, value).apply() }
+
+    var appPackage4: String
+        get() = prefs.getString(APP_PACKAGE_4, "").toString()
+        set(value) = prefs.edit { putString(APP_PACKAGE_4, value).apply() }
+
+    var appPackage5: String
+        get() = prefs.getString(APP_PACKAGE_5, "").toString()
+        set(value) = prefs.edit { putString(APP_PACKAGE_5, value).apply() }
+
+    var appPackage6: String
+        get() = prefs.getString(APP_PACKAGE_6, "").toString()
+        set(value) = prefs.edit { putString(APP_PACKAGE_6, value).apply() }
+
+    var appPackage7: String
+        get() = prefs.getString(APP_PACKAGE_7, "").toString()
+        set(value) = prefs.edit { putString(APP_PACKAGE_7, value).apply() }
+
+    var appPackage8: String
+        get() = prefs.getString(APP_PACKAGE_8, "").toString()
+        set(value) = prefs.edit { putString(APP_PACKAGE_8, value).apply() }
+
+    var appActivityClassName1: String?
+        get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_1, "").toString()
+        set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_1, value).apply() }
+
+    var appActivityClassName2: String?
+        get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_2, "").toString()
+        set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_2, value).apply() }
+
+    var appActivityClassName3: String?
+        get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_3, "").toString()
+        set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_3, value).apply() }
+
+    var appActivityClassName4: String?
+        get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_4, "").toString()
+        set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_4, value).apply() }
+
+    var appActivityClassName5: String?
+        get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_5, "").toString()
+        set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_5, value).apply() }
+
+    var appActivityClassName6: String?
+        get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_6, "").toString()
+        set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_6, value).apply() }
+
+    var appActivityClassName7: String?
+        get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_7, "").toString()
+        set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_7, value).apply() }
+
+    var appActivityClassName8: String?
+        get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_8, "").toString()
+        set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_8, value).apply() }
+
+    var appUser1: String
+        get() = prefs.getString(APP_USER_1, "").toString()
+        set(value) = prefs.edit { putString(APP_USER_1, value).apply() }
+
+    var appUser2: String
+        get() = prefs.getString(APP_USER_2, "").toString()
+        set(value) = prefs.edit { putString(APP_USER_2, value).apply() }
+
+    var appUser3: String
+        get() = prefs.getString(APP_USER_3, "").toString()
+        set(value) = prefs.edit { putString(APP_USER_3, value).apply() }
+
+    var appUser4: String
+        get() = prefs.getString(APP_USER_4, "").toString()
+        set(value) = prefs.edit { putString(APP_USER_4, value).apply() }
+
+    var appUser5: String
+        get() = prefs.getString(APP_USER_5, "").toString()
+        set(value) = prefs.edit { putString(APP_USER_5, value).apply() }
+
+    var appUser6: String
+        get() = prefs.getString(APP_USER_6, "").toString()
+        set(value) = prefs.edit { putString(APP_USER_6, value).apply() }
+
+    var appUser7: String
+        get() = prefs.getString(APP_USER_7, "").toString()
+        set(value) = prefs.edit { putString(APP_USER_7, value).apply() }
+
+    var appUser8: String
+        get() = prefs.getString(APP_USER_8, "").toString()
+        set(value) = prefs.edit { putString(APP_USER_8, value).apply() }
+
     var appNameSwipeLeft: String
         get() = prefs.getString(APP_NAME_SWIPE_LEFT, "Camera").toString()
         set(value) = prefs.edit { putString(APP_NAME_SWIPE_LEFT, value).apply() }
@@ -277,6 +477,70 @@ class Prefs(context: Context) {
         get() = prefs.getString(SCREEN_TIME_APP_CLASS_NAME, "").toString()
         set(value) = prefs.edit { putString(SCREEN_TIME_APP_CLASS_NAME, value).apply() }
 
+    var isShortcut1: Boolean
+        get() = prefs.getBoolean(IS_SHORTCUT_1, false)
+        set(value) = prefs.edit { putBoolean(IS_SHORTCUT_1, value) }
+
+    var shortcutId1: String
+        get() = prefs.getString(SHORTCUT_ID_1, "").toString()
+        set(value) = prefs.edit { putString(SHORTCUT_ID_1, value) }
+
+    var isShortcut2: Boolean
+        get() = prefs.getBoolean(IS_SHORTCUT_2, false)
+        set(value) = prefs.edit { putBoolean(IS_SHORTCUT_2, value) }
+
+    var shortcutId2: String
+        get() = prefs.getString(SHORTCUT_ID_2, "").toString()
+        set(value) = prefs.edit { putString(SHORTCUT_ID_2, value) }
+
+    var isShortcut3: Boolean
+        get() = prefs.getBoolean(IS_SHORTCUT_3, false)
+        set(value) = prefs.edit { putBoolean(IS_SHORTCUT_3, value) }
+
+    var shortcutId3: String
+        get() = prefs.getString(SHORTCUT_ID_3, "").toString()
+        set(value) = prefs.edit { putString(SHORTCUT_ID_3, value) }
+
+    var isShortcut4: Boolean
+        get() = prefs.getBoolean(IS_SHORTCUT_4, false)
+        set(value) = prefs.edit { putBoolean(IS_SHORTCUT_4, value) }
+
+    var shortcutId4: String
+        get() = prefs.getString(SHORTCUT_ID_4, "").toString()
+        set(value) = prefs.edit { putString(SHORTCUT_ID_4, value) }
+
+    var isShortcut5: Boolean
+        get() = prefs.getBoolean(IS_SHORTCUT_5, false)
+        set(value) = prefs.edit { putBoolean(IS_SHORTCUT_5, value) }
+
+    var shortcutId5: String
+        get() = prefs.getString(SHORTCUT_ID_5, "").toString()
+        set(value) = prefs.edit { putString(SHORTCUT_ID_5, value) }
+
+    var isShortcut6: Boolean
+        get() = prefs.getBoolean(IS_SHORTCUT_6, false)
+        set(value) = prefs.edit { putBoolean(IS_SHORTCUT_6, value) }
+
+    var shortcutId6: String
+        get() = prefs.getString(SHORTCUT_ID_6, "").toString()
+        set(value) = prefs.edit { putString(SHORTCUT_ID_6, value) }
+
+    var isShortcut7: Boolean
+        get() = prefs.getBoolean(IS_SHORTCUT_7, false)
+        set(value) = prefs.edit { putBoolean(IS_SHORTCUT_7, value) }
+
+    var shortcutId7: String
+        get() = prefs.getString(SHORTCUT_ID_7, "").toString()
+        set(value) = prefs.edit { putString(SHORTCUT_ID_7, value) }
+
+    var isShortcut8: Boolean
+        get() = prefs.getBoolean(IS_SHORTCUT_8, false)
+        set(value) = prefs.edit { putBoolean(IS_SHORTCUT_8, value) }
+
+    var shortcutId8: String
+        get() = prefs.getString(SHORTCUT_ID_8, "").toString()
+        set(value) = prefs.edit { putString(SHORTCUT_ID_8, value) }
+
     var shortcutIdSwipeLeft: String
         get() = prefs.getString(SHORTCUT_ID_SWIPE_LEFT, "").toString()
         set(value) = prefs.edit { putString(SHORTCUT_ID_SWIPE_LEFT, value) }
@@ -293,134 +557,107 @@ class Prefs(context: Context) {
         get() = prefs.getBoolean(IS_SHORTCUT_SWIPE_RIGHT, false)
         set(value) = prefs.edit { putBoolean(IS_SHORTCUT_SWIPE_RIGHT, value) }
 
-    fun getHomeApps(): List<AppModel.HomeApp> =
-        HomeAppsCodec.decodeHomeApps(prefs.getString(HOME_APPS, "").toString())
-
-    fun saveHomeApps(apps: List<AppModel.HomeApp>) =
-        prefs.edit { putString(HOME_APPS, HomeAppsCodec.encodeHomeApps(apps)) }
-
-    fun saveHomeApp(position: Int, app: AppModel.HomeApp) {
-        val apps = getHomeApps().toMutableList()
-        if (position in 0 until apps.size) apps[position] = app
-        else apps.add(app)
-        saveHomeApps(apps)
+    fun getAppName(location: Int): String {
+        return when (location) {
+            1 -> prefs.getString(APP_NAME_1, "").toString()
+            2 -> prefs.getString(APP_NAME_2, "").toString()
+            3 -> prefs.getString(APP_NAME_3, "").toString()
+            4 -> prefs.getString(APP_NAME_4, "").toString()
+            5 -> prefs.getString(APP_NAME_5, "").toString()
+            6 -> prefs.getString(APP_NAME_6, "").toString()
+            7 -> prefs.getString(APP_NAME_7, "").toString()
+            8 -> prefs.getString(APP_NAME_8, "").toString()
+            else -> ""
+        }
     }
 
-    fun removeHomeApp(position: Int) {
-        val apps = getHomeApps().toMutableList()
-        if (position !in apps.indices) return
-        apps.removeAt(position)
-        saveHomeApps(apps)
+    fun getAppPackage(location: Int): String {
+        return when (location) {
+            1 -> prefs.getString(APP_PACKAGE_1, "").toString()
+            2 -> prefs.getString(APP_PACKAGE_2, "").toString()
+            3 -> prefs.getString(APP_PACKAGE_3, "").toString()
+            4 -> prefs.getString(APP_PACKAGE_4, "").toString()
+            5 -> prefs.getString(APP_PACKAGE_5, "").toString()
+            6 -> prefs.getString(APP_PACKAGE_6, "").toString()
+            7 -> prefs.getString(APP_PACKAGE_7, "").toString()
+            8 -> prefs.getString(APP_PACKAGE_8, "").toString()
+            else -> ""
+        }
     }
 
-    fun swapHomeApps(i: Int, j: Int) {
-        if (i == j) return
-        val apps = getHomeApps().toMutableList()
-        if (i !in apps.indices || j !in apps.indices) return
-        val temp = apps[i]
-        apps[i] = apps[j]
-        apps[j] = temp
-        saveHomeApps(apps)
+    fun getAppActivityClassName(location: Int): String {
+        return when (location) {
+            1 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_1, "").toString()
+            2 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_2, "").toString()
+            3 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_3, "").toString()
+            4 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_4, "").toString()
+            5 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_5, "").toString()
+            6 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_6, "").toString()
+            7 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_7, "").toString()
+            8 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_8, "").toString()
+            else -> ""
+        }
     }
 
-    fun createFolder(name: String) {
-        if (name.isEmpty()) return
-        saveHomeApps(getHomeApps() + AppModel.HomeApp(isFolder = true, folderName = name))
+    fun getAppUser(location: Int): String {
+        return when (location) {
+            1 -> prefs.getString(APP_USER_1, "").toString()
+            2 -> prefs.getString(APP_USER_2, "").toString()
+            3 -> prefs.getString(APP_USER_3, "").toString()
+            4 -> prefs.getString(APP_USER_4, "").toString()
+            5 -> prefs.getString(APP_USER_5, "").toString()
+            6 -> prefs.getString(APP_USER_6, "").toString()
+            7 -> prefs.getString(APP_USER_7, "").toString()
+            8 -> prefs.getString(APP_USER_8, "").toString()
+            else -> ""
+        }
     }
 
-    fun renameFolderApp(index: Int, name: String) {
-        val apps = getHomeApps().toMutableList()
-        val folder = apps.getOrNull(index) ?: return
-        if (!folder.isFolder) return
-        apps[index] = folder.copy(folderName = name)
-        saveHomeApps(apps)
+    fun getShortcutId(location: Int): String {
+        return when (location) {
+            1 -> shortcutId1
+            2 -> shortcutId2
+            3 -> shortcutId3
+            4 -> shortcutId4
+            5 -> shortcutId5
+            6 -> shortcutId6
+            7 -> shortcutId7
+            8 -> shortcutId8
+            else -> ""
+        }
     }
 
-    fun getFolderName(index: Int): String =
-        getHomeApps().getOrNull(index)?.folderName ?: ""
-
-    fun getFolderApps(index: Int): List<AppModel.FolderApp> =
-        getHomeApps().getOrNull(index)?.folderApps ?: emptyList()
-
-    fun saveFolderApp(index: Int, position: Int, app: AppModel.FolderApp) {
-        val apps = getHomeApps().toMutableList()
-        val folder = apps.getOrNull(index) ?: return
-        if (!folder.isFolder) return
-        val folderApps = folder.folderApps.toMutableList()
-        if (position in 0 until folderApps.size) folderApps[position] = app
-        else folderApps.add(app)
-        apps[index] = folder.copy(folderApps = folderApps)
-        saveHomeApps(apps)
+    fun getIsShortcut(location: Int): Boolean {
+        return when (location) {
+            1 -> isShortcut1
+            2 -> isShortcut2
+            3 -> isShortcut3
+            4 -> isShortcut4
+            5 -> isShortcut5
+            6 -> isShortcut6
+            7 -> isShortcut7
+            8 -> isShortcut8
+            else -> false
+        }
     }
 
-    fun saveFolderApps(index: Int, apps: List<AppModel.FolderApp>) {
-        val homeApps = getHomeApps().toMutableList()
-        val folder = homeApps.getOrNull(index) ?: return
-        if (!folder.isFolder) return
-        homeApps[index] = folder.copy(folderApps = apps)
-        saveHomeApps(homeApps)
-    }
-
-    fun removeFolderApp(index: Int, position: Int) {
-        val apps = getHomeApps().toMutableList()
-        val folder = apps.getOrNull(index) ?: return
-        if (!folder.isFolder) return
-        val folderApps = folder.folderApps.toMutableList()
-        if (position !in folderApps.indices) return
-        folderApps.removeAt(position)
-        apps[index] = folder.copy(folderApps = folderApps)
-        saveHomeApps(apps)
-    }
-
-    fun renameFolderApp(index: Int, position: Int, newLabel: String) {
-        val apps = getHomeApps().toMutableList()
-        val folder = apps.getOrNull(index) ?: return
-        if (!folder.isFolder) return
-        val folderApps = folder.folderApps.toMutableList()
-        val folderApp = folderApps.getOrNull(position) ?: return
-        if (folderApp.appPackage.isEmpty()) return
-        folderApps[position] = folderApp.copy(appLabel = newLabel)
-        apps[index] = folder.copy(folderApps = folderApps)
-        saveHomeApps(apps)
-    }
-
-    fun swapFolderApps(index: Int, position1: Int, position2: Int) {
-        if (position1 == position2) return
-        val apps = getHomeApps().toMutableList()
-        val folder = apps.getOrNull(index) ?: return
-        if (!folder.isFolder) return
-        val folderApps = folder.folderApps.toMutableList()
-        if (position1 !in folderApps.indices || position2 !in folderApps.indices) return
-        val temp = folderApps[position1]
-        folderApps[position1] = folderApps[position2]
-        folderApps[position2] = temp
-        apps[index] = folder.copy(folderApps = folderApps)
-        saveHomeApps(apps)
+    fun setAppActivityClassName(location: Int, activityClassName: String) {
+        when (location) {
+            1 -> appActivityClassName1 = activityClassName
+            2 -> appActivityClassName2 = activityClassName
+            3 -> appActivityClassName3 = activityClassName
+            4 -> appActivityClassName4 = activityClassName
+            5 -> appActivityClassName5 = activityClassName
+            6 -> appActivityClassName6 = activityClassName
+            7 -> appActivityClassName7 = activityClassName
+            8 -> appActivityClassName8 = activityClassName
+        }
     }
 
     fun updateAppActivityClassName(packageName: String, activityClassName: String) {
-        var updated = false
-        val apps = getHomeApps().map { homeApp ->
-            when {
-                !homeApp.isFolder && homeApp.appPackage == packageName -> {
-                    updated = true
-                    homeApp.copy(activityClassName = activityClassName)
-                }
-
-                homeApp.isFolder && homeApp.folderApps.any { it.appPackage == packageName } -> {
-                    updated = true
-                    homeApp.copy(
-                        folderApps = homeApp.folderApps.map {
-                            if (it.appPackage == packageName) it.copy(activityClassName = activityClassName)
-                            else it
-                        }
-                    )
-                }
-
-                else -> homeApp
-            }
+        for (i in 1..8) {
+            if (getAppPackage(i) == packageName) setAppActivityClassName(i, activityClassName)
         }
-        if (updated) saveHomeApps(apps)
         if (clockAppPackage == packageName) clockAppClassName = activityClassName
         if (calendarAppPackage == packageName) calendarAppClassName = activityClassName
         if (screenTimeAppPackage == packageName) screenTimeAppClassName = activityClassName
@@ -431,6 +668,149 @@ class Prefs(context: Context) {
     fun getAppRenameLabel(appPackage: String): String = prefs.getString(appPackage, "").toString()
 
     fun setAppRenameLabel(appPackage: String, renameLabel: String) = prefs.edit { putString(appPackage, renameLabel) }
+
+    fun isFolder(slot: Int): Boolean {
+        return when (slot) {
+            1 -> prefs.getBoolean(IS_FOLDER_1, false)
+            2 -> prefs.getBoolean(IS_FOLDER_2, false)
+            3 -> prefs.getBoolean(IS_FOLDER_3, false)
+            4 -> prefs.getBoolean(IS_FOLDER_4, false)
+            5 -> prefs.getBoolean(IS_FOLDER_5, false)
+            6 -> prefs.getBoolean(IS_FOLDER_6, false)
+            7 -> prefs.getBoolean(IS_FOLDER_7, false)
+            8 -> prefs.getBoolean(IS_FOLDER_8, false)
+            else -> false
+        }
+    }
+
+    fun setIsFolder(slot: Int, isFolder: Boolean) {
+        when (slot) {
+            1 -> prefs.edit { putBoolean(IS_FOLDER_1, isFolder) }
+            2 -> prefs.edit { putBoolean(IS_FOLDER_2, isFolder) }
+            3 -> prefs.edit { putBoolean(IS_FOLDER_3, isFolder) }
+            4 -> prefs.edit { putBoolean(IS_FOLDER_4, isFolder) }
+            5 -> prefs.edit { putBoolean(IS_FOLDER_5, isFolder) }
+            6 -> prefs.edit { putBoolean(IS_FOLDER_6, isFolder) }
+            7 -> prefs.edit { putBoolean(IS_FOLDER_7, isFolder) }
+            8 -> prefs.edit { putBoolean(IS_FOLDER_8, isFolder) }
+        }
+    }
+
+    fun getFolderName(slot: Int): String {
+        return when (slot) {
+            1 -> prefs.getString(FOLDER_NAME_1, "").toString()
+            2 -> prefs.getString(FOLDER_NAME_2, "").toString()
+            3 -> prefs.getString(FOLDER_NAME_3, "").toString()
+            4 -> prefs.getString(FOLDER_NAME_4, "").toString()
+            5 -> prefs.getString(FOLDER_NAME_5, "").toString()
+            6 -> prefs.getString(FOLDER_NAME_6, "").toString()
+            7 -> prefs.getString(FOLDER_NAME_7, "").toString()
+            8 -> prefs.getString(FOLDER_NAME_8, "").toString()
+            else -> ""
+        }
+    }
+
+    fun setFolderName(slot: Int, name: String) {
+        when (slot) {
+            1 -> prefs.edit { putString(FOLDER_NAME_1, name) }
+            2 -> prefs.edit { putString(FOLDER_NAME_2, name) }
+            3 -> prefs.edit { putString(FOLDER_NAME_3, name) }
+            4 -> prefs.edit { putString(FOLDER_NAME_4, name) }
+            5 -> prefs.edit { putString(FOLDER_NAME_5, name) }
+            6 -> prefs.edit { putString(FOLDER_NAME_6, name) }
+            7 -> prefs.edit { putString(FOLDER_NAME_7, name) }
+            8 -> prefs.edit { putString(FOLDER_NAME_8, name) }
+        }
+    }
+
+    fun getFolderApps(slot: Int): MutableList<AppModel.FolderApp?> {
+        val raw = when (slot) {
+            1 -> prefs.getString(FOLDER_APPS_1, "").toString()
+            2 -> prefs.getString(FOLDER_APPS_2, "").toString()
+            3 -> prefs.getString(FOLDER_APPS_3, "").toString()
+            4 -> prefs.getString(FOLDER_APPS_4, "").toString()
+            5 -> prefs.getString(FOLDER_APPS_5, "").toString()
+            6 -> prefs.getString(FOLDER_APPS_6, "").toString()
+            7 -> prefs.getString(FOLDER_APPS_7, "").toString()
+            8 -> prefs.getString(FOLDER_APPS_8, "").toString()
+            else -> ""
+        }
+        val apps = MutableList<AppModel.FolderApp?>(Constants.MAX_APPS_IN_FOLDER) { null }
+        if (raw.isBlank()) return apps
+        try {
+            val array = JSONArray(raw)
+            for (i in 0 until array.length().coerceAtMost(Constants.MAX_APPS_IN_FOLDER)) {
+                val obj = array.optJSONObject(i) ?: continue
+                apps[i] = AppModel.FolderApp(
+                    appLabel = obj.optString("name"),
+                    appPackage = obj.optString("package"),
+                    activityClassName = obj.optString("activity").takeIf { it.isNotBlank() },
+                    user = obj.optString("user"),
+                    isShortcut = obj.optBoolean("isShortcut"),
+                    shortcutId = obj.optString("shortcutId"),
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return apps
+    }
+
+    fun setFolderApp(slot: Int, position: Int, app: AppModel.FolderApp) {
+        val apps = getFolderApps(slot)
+        if (position !in apps.indices) return
+        apps[position] = app
+        saveFolderApps(slot, apps)
+    }
+
+    fun removeFolderApp(slot: Int, position: Int) {
+        val apps = getFolderApps(slot)
+        if (position !in apps.indices) return
+        apps[position] = null
+        saveFolderApps(slot, apps)
+    }
+
+    fun renameFolderApp(slot: Int, position: Int, newLabel: String) {
+        val apps = getFolderApps(slot)
+        val app = apps.getOrNull(position) ?: return
+        if (app.appPackage.isEmpty()) return
+        apps[position] = app.copy(appLabel = newLabel)
+        saveFolderApps(slot, apps)
+    }
+
+    private fun saveFolderApps(slot: Int, apps: List<AppModel.FolderApp?>) {
+        val array = JSONArray()
+        for (app in apps) {
+            if (app == null) {
+                array.put(JSONObject.NULL)
+            } else {
+                array.put(JSONObject().apply {
+                    put("name", app.appLabel)
+                    put("package", app.appPackage)
+                    put("activity", app.activityClassName ?: "")
+                    put("user", app.user)
+                    put("isShortcut", app.isShortcut)
+                    put("shortcutId", app.shortcutId)
+                })
+            }
+        }
+        when (slot) {
+            1 -> prefs.edit { putString(FOLDER_APPS_1, array.toString()) }
+            2 -> prefs.edit { putString(FOLDER_APPS_2, array.toString()) }
+            3 -> prefs.edit { putString(FOLDER_APPS_3, array.toString()) }
+            4 -> prefs.edit { putString(FOLDER_APPS_4, array.toString()) }
+            5 -> prefs.edit { putString(FOLDER_APPS_5, array.toString()) }
+            6 -> prefs.edit { putString(FOLDER_APPS_6, array.toString()) }
+            7 -> prefs.edit { putString(FOLDER_APPS_7, array.toString()) }
+            8 -> prefs.edit { putString(FOLDER_APPS_8, array.toString()) }
+        }
+    }
+
+    fun clearFolder(slot: Int) {
+        setIsFolder(slot, false)
+        setFolderName(slot, "")
+        saveFolderApps(slot, MutableList(Constants.MAX_APPS_IN_FOLDER) { null })
+    }
 
     fun addLaunchHistory(appModel: AppModel) {
         if (appModel is AppModel.PrivateSpaceHeader) return
@@ -527,5 +907,117 @@ class Prefs(context: Context) {
         val id = userString.substringAfter("UserHandle{").substringBefore("}").toIntOrNull()
         return if (id != null) UserHandle.getUserHandleForUid(id * 100000)
         else android.os.Process.myUserHandle()
+    }
+
+    fun swapHomeSlots(slot1: Int, slot2: Int) {
+        if (slot1 !in 1..8 || slot2 !in 1..8 || slot1 == slot2) return
+
+        val name1 = getAppName(slot1); val name2 = getAppName(slot2)
+        val package1 = getAppPackage(slot1); val package2 = getAppPackage(slot2)
+        val activity1 = getAppActivityClassName(slot1); val activity2 = getAppActivityClassName(slot2)
+        val user1 = getAppUser(slot1); val user2 = getAppUser(slot2)
+        val isShortcut1 = getIsShortcut(slot1); val isShortcut2 = getIsShortcut(slot2)
+        val shortcutId1 = getShortcutId(slot1); val shortcutId2 = getShortcutId(slot2)
+        val isFolder1 = isFolder(slot1); val isFolder2 = isFolder(slot2)
+        val folderName1 = getFolderName(slot1); val folderName2 = getFolderName(slot2)
+        val folderApps1 = prefs.getString(folderAppsKey(slot1), "").toString()
+        val folderApps2 = prefs.getString(folderAppsKey(slot2), "").toString()
+
+        setAppData(slot1, name2, package2, activity2, user2, isShortcut2, shortcutId2, isFolder2, folderName2, folderApps2)
+        setAppData(slot2, name1, package1, activity1, user1, isShortcut1, shortcutId1, isFolder1, folderName1, folderApps1)
+    }
+
+    fun swapFolderApps(slot: Int, position1: Int, position2: Int) {
+        val apps = getFolderApps(slot)
+        if (position1 !in apps.indices || position2 !in apps.indices || position1 == position2) return
+        val temp = apps[position1]
+        apps[position1] = apps[position2]
+        apps[position2] = temp
+        saveFolderApps(slot, apps)
+    }
+
+    private fun folderAppsKey(slot: Int): String {
+        return when (slot) {
+            1 -> FOLDER_APPS_1
+            2 -> FOLDER_APPS_2
+            3 -> FOLDER_APPS_3
+            4 -> FOLDER_APPS_4
+            5 -> FOLDER_APPS_5
+            6 -> FOLDER_APPS_6
+            7 -> FOLDER_APPS_7
+            8 -> FOLDER_APPS_8
+            else -> FOLDER_APPS_1
+        }
+    }
+
+    private fun setAppData(
+        slot: Int,
+        name: String,
+        packageName: String,
+        activityClassName: String,
+        user: String,
+        isShortcut: Boolean,
+        shortcutId: String,
+        isFolder: Boolean,
+        folderName: String,
+        folderApps: String,
+    ) {
+        when (slot) {
+            1 -> {
+                appName1 = name; appPackage1 = packageName; appActivityClassName1 = activityClassName
+                appUser1 = user; isShortcut1 = isShortcut; shortcutId1 = shortcutId
+                setIsFolder(1, isFolder); setFolderName(1, folderName)
+                prefs.edit { putString(FOLDER_APPS_1, folderApps) }
+            }
+
+            2 -> {
+                appName2 = name; appPackage2 = packageName; appActivityClassName2 = activityClassName
+                appUser2 = user; isShortcut2 = isShortcut; shortcutId2 = shortcutId
+                setIsFolder(2, isFolder); setFolderName(2, folderName)
+                prefs.edit { putString(FOLDER_APPS_2, folderApps) }
+            }
+
+            3 -> {
+                appName3 = name; appPackage3 = packageName; appActivityClassName3 = activityClassName
+                appUser3 = user; isShortcut3 = isShortcut; shortcutId3 = shortcutId
+                setIsFolder(3, isFolder); setFolderName(3, folderName)
+                prefs.edit { putString(FOLDER_APPS_3, folderApps) }
+            }
+
+            4 -> {
+                appName4 = name; appPackage4 = packageName; appActivityClassName4 = activityClassName
+                appUser4 = user; isShortcut4 = isShortcut; shortcutId4 = shortcutId
+                setIsFolder(4, isFolder); setFolderName(4, folderName)
+                prefs.edit { putString(FOLDER_APPS_4, folderApps) }
+            }
+
+            5 -> {
+                appName5 = name; appPackage5 = packageName; appActivityClassName5 = activityClassName
+                appUser5 = user; isShortcut5 = isShortcut; shortcutId5 = shortcutId
+                setIsFolder(5, isFolder); setFolderName(5, folderName)
+                prefs.edit { putString(FOLDER_APPS_5, folderApps) }
+            }
+
+            6 -> {
+                appName6 = name; appPackage6 = packageName; appActivityClassName6 = activityClassName
+                appUser6 = user; isShortcut6 = isShortcut; shortcutId6 = shortcutId
+                setIsFolder(6, isFolder); setFolderName(6, folderName)
+                prefs.edit { putString(FOLDER_APPS_6, folderApps) }
+            }
+
+            7 -> {
+                appName7 = name; appPackage7 = packageName; appActivityClassName7 = activityClassName
+                appUser7 = user; isShortcut7 = isShortcut; shortcutId7 = shortcutId
+                setIsFolder(7, isFolder); setFolderName(7, folderName)
+                prefs.edit { putString(FOLDER_APPS_7, folderApps) }
+            }
+
+            8 -> {
+                appName8 = name; appPackage8 = packageName; appActivityClassName8 = activityClassName
+                appUser8 = user; isShortcut8 = isShortcut; shortcutId8 = shortcutId
+                setIsFolder(8, isFolder); setFolderName(8, folderName)
+                prefs.edit { putString(FOLDER_APPS_8, folderApps) }
+            }
+        }
     }
 }

@@ -9,6 +9,15 @@
     <string name="new_app_note_safe" translatable="false"><u>Note to Self</u>\n<sub><small>(Ad-Free)</small></sub></string>
     <string name="new_app_minimal_todo_lists" translatable="false"><u>Minimal Todo Lists</u>\n<sub><small>(Ad-Free)</small></sub></string>
     <string name="day_battery" formatted="false" translatable="false">%s, %d%%</string>
+    <string name="tag_0" translatable="false">0</string>
+    <string name="tag_1" translatable="false">1</string>
+    <string name="tag_2" translatable="false">2</string>
+    <string name="tag_3" translatable="false">3</string>
+    <string name="tag_4" translatable="false">4</string>
+    <string name="tag_5" translatable="false">5</string>
+    <string name="tag_6" translatable="false">6</string>
+    <string name="tag_7" translatable="false">7</string>
+    <string name="tag_8" translatable="false">8</string>
     <string name="time_spent_min" translatable="false"><b>%1$sm</b></string>
     <string name="time_spent_hour" translatable="false">%1$sh %2$sm</string>
 
