@@ -50,6 +50,7 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         binding.tvFolderName.setOnClickListener(this)
         binding.tvFolderName.setOnLongClickListener(this)
         binding.tvFolderHint.setOnClickListener(this)
+        binding.folderMainLayout.setOnClickListener(this)
 
         initClickListeners()
         populateFolder()
@@ -189,7 +190,7 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.tvFolderName -> findNavController().popBackStack()
+            R.id.folderMainLayout, R.id.tvFolderName -> findNavController().popBackStack()
 
             R.id.tvFolderHint -> showAppListForFolder(firstEmptyPosition())
 
