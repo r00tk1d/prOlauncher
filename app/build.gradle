@@ -64,4 +64,8 @@ dependencies {
     //Material dependency
     implementation libs.material
 
+    // Unit tests
+    testImplementation libs.junit
+    testImplementation "org.json:json:20240303"
+
 }

@@ -47,6 +47,18 @@ sealed class AppModel : Comparable<AppModel> {
         val shortcutId: String = "",
     )
 
+    data class HomeApp(
+        val appLabel: String = "",
+        val appPackage: String = "",
+        val activityClassName: String? = null,
+        val user: String = "",
+        val isShortcut: Boolean = false,
+        val shortcutId: String = "",
+        val isFolder: Boolean = false,
+        val folderName: String = "",
+        val folderApps: List<FolderApp> = emptyList(),
+    )
+
     override fun compareTo(other: AppModel): Int = when {
         key != null && other.key != null -> key!!.compareTo(other.key)
         else -> appLabel.compareTo(other.appLabel, true)

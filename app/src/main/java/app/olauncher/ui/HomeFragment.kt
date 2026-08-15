@@ -63,7 +63,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private var draggedSlot = -1
+    private var draggedIndex = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -83,7 +83,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         setHomeAlignment(prefs.homeAlignment)
         initSwipeTouchListener()
         initClickListeners()
-        initDragListeners()
     }
 
     override fun onResume() {
@@ -103,15 +102,19 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             R.id.date -> openCalendarApp()
             R.id.setDefaultLauncher -> viewModel.resetLauncherLiveData.call()
             R.id.tvScreenTime -> openScreenTimeDigitalWellbeing()
-            R.id.tvHomeHint -> showAppList(Constants.FLAG_SET_HOME_APP_1 + firstEmptyHomePosition() - 1, true)
+            R.id.tvHomeHint -> showAppList(
+                Constants.FLAG_SET_HOME_APP,
+                position = prefs.getHomeApps().size,
+                includeHiddenApps = true,
+            )
 
             else -> {
                 try { // Launch app
-                    val appLocation = view.tag.toString().toInt()
-                    if (prefs.isFolder(appLocation))
-                        openFolder(appLocation)
+                    val index = view.tag.toString().toInt()
+                    if (prefs.getHomeApps().getOrNull(index)?.isFolder == true)
+                        openFolder(index)
                     else
-                        homeAppClicked(appLocation)
+                        homeAppClicked(index)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -145,14 +148,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     override fun onLongClick(view: View): Boolean {
         when (view.id) {
-            R.id.homeApp1 -> showSlotMenu(1)
-            R.id.homeApp2 -> showSlotMenu(2)
-            R.id.homeApp3 -> showSlotMenu(3)
-            R.id.homeApp4 -> showSlotMenu(4)
-            R.id.homeApp5 -> showSlotMenu(5)
-            R.id.homeApp6 -> showSlotMenu(6)
-            R.id.homeApp7 -> showSlotMenu(7)
-            R.id.homeApp8 -> showSlotMenu(8)
             R.id.clock -> {
                 showAppList(Constants.FLAG_SET_CLOCK_APP)
                 prefs.clockAppPackage = ""
@@ -180,6 +175,14 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 if (viewModel.isOlauncherDefault.value != true) {
                     requireContext().showToast(R.string.set_as_default_launcher)
                     findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+                }
+            }
+
+            else -> {
+                try {
+                    showSlotMenu(view.tag.toString().toInt())
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }
@@ -225,14 +228,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private fun initSwipeTouchListener() {
         val context = requireContext()
         binding.mainLayout.setOnTouchListener(getSwipeGestureListener(context))
-        binding.homeApp1.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp1))
-        binding.homeApp2.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp2))
-        binding.homeApp3.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp3))
-        binding.homeApp4.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp4))
-        binding.homeApp5.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp5))
-        binding.homeApp6.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp6))
-        binding.homeApp7.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp7))
-        binding.homeApp8.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp8))
     }
 
     private fun initClickListeners() {
@@ -248,35 +243,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.tvScreenTime.setOnClickListener(this)
         binding.tvScreenTime.setOnLongClickListener(this)
         binding.tvHomeHint.setOnClickListener(this)
-
-        // These fire only on d-pad/keyboard events; touch is consumed by ViewSwipeTouchListener
-        binding.homeApp1.setOnClickListener(this)
-        binding.homeApp2.setOnClickListener(this)
-        binding.homeApp3.setOnClickListener(this)
-        binding.homeApp4.setOnClickListener(this)
-        binding.homeApp5.setOnClickListener(this)
-        binding.homeApp6.setOnClickListener(this)
-        binding.homeApp7.setOnClickListener(this)
-        binding.homeApp8.setOnClickListener(this)
-        binding.homeApp1.setOnLongClickListener(this)
-        binding.homeApp2.setOnLongClickListener(this)
-        binding.homeApp3.setOnLongClickListener(this)
-        binding.homeApp4.setOnLongClickListener(this)
-        binding.homeApp5.setOnLongClickListener(this)
-        binding.homeApp6.setOnLongClickListener(this)
-        binding.homeApp7.setOnLongClickListener(this)
-        binding.homeApp8.setOnLongClickListener(this)
-    }
-
-    private fun initDragListeners() {
-        binding.homeApp1.setOnDragListener(getHomeSlotDragListener())
-        binding.homeApp2.setOnDragListener(getHomeSlotDragListener())
-        binding.homeApp3.setOnDragListener(getHomeSlotDragListener())
-        binding.homeApp4.setOnDragListener(getHomeSlotDragListener())
-        binding.homeApp5.setOnDragListener(getHomeSlotDragListener())
-        binding.homeApp6.setOnDragListener(getHomeSlotDragListener())
-        binding.homeApp7.setOnDragListener(getHomeSlotDragListener())
-        binding.homeApp8.setOnDragListener(getHomeSlotDragListener())
     }
 
     private fun getHomeSlotDragListener(): View.OnDragListener {
@@ -286,11 +252,11 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
                 DragEvent.ACTION_DRAG_ENTERED -> {
                     val target = view.tag.toString().toInt()
-                    if (draggedSlot != -1 && draggedSlot != target) {
-                        prefs.swapHomeSlots(draggedSlot, target)
-                        refreshHomeSlotText(draggedSlot)
+                    if (draggedIndex != -1 && draggedIndex != target) {
+                        prefs.swapHomeApps(draggedIndex, target)
+                        refreshHomeSlotText(draggedIndex)
                         refreshHomeSlotText(target)
-                        draggedSlot = target
+                        draggedIndex = target
                     }
                     true
                 }
@@ -300,7 +266,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 }
 
                 DragEvent.ACTION_DRAG_ENDED -> {
-                    draggedSlot = -1
+                    draggedIndex = -1
                     binding.root.post { binding.root.layoutTransition = LayoutTransition() }
                     true
                 }
@@ -310,27 +276,14 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         }
     }
 
-    private fun homeSlotView(slot: Int): TextView {
-        return when (slot) {
-            1 -> binding.homeApp1
-            2 -> binding.homeApp2
-            3 -> binding.homeApp3
-            4 -> binding.homeApp4
-            5 -> binding.homeApp5
-            6 -> binding.homeApp6
-            7 -> binding.homeApp7
-            8 -> binding.homeApp8
-            else -> throw IllegalArgumentException("Invalid home slot: $slot")
-        }
-    }
-
-    private fun refreshHomeSlotText(slot: Int) {
-        val textView = homeSlotView(slot)
-        if (prefs.isFolder(slot)) {
-            val name = prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
+    private fun refreshHomeSlotText(index: Int) {
+        val textView = binding.homeAppsLayout.getChildAt(index) as? TextView ?: return
+        val homeApp = prefs.getHomeApps().getOrNull(index) ?: return
+        if (homeApp.isFolder) {
+            val name = homeApp.folderName.ifBlank { getString(R.string.folder) }
             textView.text = "\u25B8 $name"
         } else {
-            textView.text = prefs.getAppName(slot)
+            textView.text = homeApp.appLabel
         }
     }
 
@@ -338,14 +291,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         val verticalGravity = if (prefs.homeBottomAlignment) Gravity.BOTTOM else Gravity.CENTER_VERTICAL
         binding.homeAppsLayout.gravity = horizontalGravity or verticalGravity
         binding.dateTimeLayout.gravity = horizontalGravity
-        binding.homeApp1.gravity = horizontalGravity
-        binding.homeApp2.gravity = horizontalGravity
-        binding.homeApp3.gravity = horizontalGravity
-        binding.homeApp4.gravity = horizontalGravity
-        binding.homeApp5.gravity = horizontalGravity
-        binding.homeApp6.gravity = horizontalGravity
-        binding.homeApp7.gravity = horizontalGravity
-        binding.homeApp8.gravity = horizontalGravity
+        for (i in 0 until binding.homeAppsLayout.childCount) {
+            (binding.homeAppsLayout.getChildAt(i) as? TextView)?.gravity = horizontalGravity
+        }
     }
 
     private fun populateDateTime() {
@@ -394,114 +342,68 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun populateHomeScreen(appCountUpdated: Boolean) {
-        if (appCountUpdated) hideHomeApps()
         populateDateTime()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             populateScreenTime()
 
-        val slotViews = listOf(
-            binding.homeApp1,
-            binding.homeApp2,
-            binding.homeApp3,
-            binding.homeApp4,
-            binding.homeApp5,
-            binding.homeApp6,
-            binding.homeApp7,
-            binding.homeApp8,
-        )
-        var visibleCount = 0
-        for (i in slotViews.indices) {
-            val textView = slotViews[i]
-            val slot = i + 1
-            if (prefs.getAppName(slot).isEmpty() && prefs.isFolder(slot).not()) {
-                textView.text = ""
-                textView.visibility = View.GONE
-                continue
-            }
-            if (!populateHomeSlot(textView, slot)) {
-                clearHomeApp(slot)
-                textView.text = ""
-                textView.visibility = View.GONE
-                continue
-            }
-            visibleCount++
-            textView.visibility = View.VISIBLE
+        val homeApps = prefs.getHomeApps()
+        val cleaned = mutableListOf<AppModel.HomeApp>()
+        for (homeApp in homeApps) {
+            if (homeApp.isFolder || isHomeAppValid(homeApp)) cleaned.add(homeApp)
         }
-        binding.tvHomeHint.isVisible = visibleCount == 0 && prefs.firstSettingsOpen.not()
+        if (cleaned.size != homeApps.size) prefs.saveHomeApps(cleaned)
+
+        val container = binding.homeAppsLayout
+        while (container.childCount > cleaned.size) {
+            container.removeViewAt(container.childCount - 1)
+        }
+        for (i in cleaned.indices) {
+            val textView = if (i < container.childCount) {
+                container.getChildAt(i) as TextView
+            } else {
+                createHomeItemView().also { container.addView(it) }
+            }
+            textView.tag = i
+            if (cleaned[i].isFolder) {
+                val name = cleaned[i].folderName.ifBlank { getString(R.string.folder) }
+                textView.text = "\u25B8 $name"
+            } else {
+                textView.text = cleaned[i].appLabel
+            }
+        }
+        binding.tvHomeHint.isVisible = cleaned.isEmpty() && prefs.firstSettingsOpen.not()
     }
 
-    private fun populateHomeSlot(textView: TextView, slot: Int): Boolean {
-        if (prefs.isFolder(slot)) {
-            val name = prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
-            textView.text = "\u25B8 $name"
-            return true
-        }
-        return setHomeAppText(
-            textView,
-            prefs.getAppName(slot),
-            prefs.getAppPackage(slot),
-            prefs.getAppUser(slot),
-            prefs.getIsShortcut(slot),
-            prefs.getShortcutId(slot),
-        )
+    private fun createHomeItemView(): TextView {
+        val textView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.item_app_text, binding.homeAppsLayout, false) as TextView
+        textView.gravity = prefs.homeAlignment
+        // These fire only on d-pad/keyboard events; touch is consumed by ViewSwipeTouchListener
+        textView.setOnClickListener(this)
+        textView.setOnLongClickListener(this)
+        textView.setOnDragListener(getHomeSlotDragListener())
+        textView.setOnTouchListener(getViewSwipeTouchListener(requireContext(), textView))
+        return textView
     }
 
-    private fun setHomeAppText(
-        textView: TextView,
-        appName: String,
-        packageName: String,
-        userString: String,
-        isShortcut: Boolean,
-        shortcutId: String?,
-    ): Boolean {
-        // Get user handle for the app/shortcut
-        val userHandle = getUserHandleFromString(requireContext(), userString)
-
-        // If it's a shortcut, verify it still exists
-        if (isShortcut) {
+    private fun isHomeAppValid(homeApp: AppModel.HomeApp): Boolean {
+        val userHandle = getUserHandleFromString(requireContext(), homeApp.user)
+        if (homeApp.isShortcut) {
             val launcherApps = requireContext().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-
-            // Query for the specific shortcut
             val query = LauncherApps.ShortcutQuery().apply {
-                setPackage(packageName)
+                setPackage(homeApp.appPackage)
                 setQueryFlags(LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED)
             }
-
-            try {
+            return try {
                 val shortcuts = launcherApps.getShortcuts(query, userHandle)
-                // Check if our shortcut still exists
-                if (shortcuts?.any { it.id == shortcutId } == true) {
-                    textView.text = appName
-                    return true
-                }
-                textView.text = ""
-                return false
+                shortcuts?.any { it.id == homeApp.shortcutId } == true
             } catch (e: Exception) {
                 e.printStackTrace()
-                textView.text = ""
-                return false
+                false
             }
         }
-
-        // Regular app check
-        if (isPackageInstalled(requireContext(), packageName, userString)) {
-            textView.text = appName
-            return true
-        }
-        textView.text = ""
-        return false
-    }
-
-    private fun hideHomeApps() {
-        binding.homeApp1.visibility = View.GONE
-        binding.homeApp2.visibility = View.GONE
-        binding.homeApp3.visibility = View.GONE
-        binding.homeApp4.visibility = View.GONE
-        binding.homeApp5.visibility = View.GONE
-        binding.homeApp6.visibility = View.GONE
-        binding.homeApp7.visibility = View.GONE
-        binding.homeApp8.visibility = View.GONE
+        return isPackageInstalled(requireContext(), homeApp.appPackage, homeApp.user)
     }
 
     private fun launchAppOrShortcut(
@@ -564,14 +466,15 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         )
     }
 
-    private fun homeAppClicked(location: Int) {
+    private fun homeAppClicked(index: Int) {
+        val homeApp = prefs.getHomeApps().getOrNull(index) ?: return
         launchAppOrShortcut(
-            appName = prefs.getAppName(location),
-            packageName = prefs.getAppPackage(location),
-            activityClassName = prefs.getAppActivityClassName(location),
-            shortcutId = prefs.getShortcutId(location),
-            isShortcut = prefs.getIsShortcut(location),
-            userString = prefs.getAppUser(location)
+            appName = homeApp.appLabel,
+            packageName = homeApp.appPackage,
+            activityClassName = homeApp.activityClassName,
+            shortcutId = homeApp.shortcutId,
+            isShortcut = homeApp.isShortcut,
+            userString = homeApp.user
         )
     }
 
@@ -601,52 +504,54 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         )
     }
 
-    private fun showAppList(flag: Int, includeHiddenApps: Boolean = false) {
+    private fun showAppList(flag: Int, position: Int = -1, includeHiddenApps: Boolean = false) {
         viewModel.getAppList(includeHiddenApps)
         try {
             findNavController().navigate(
                 R.id.action_mainFragment_to_appListFragment,
-                bundleOf(Constants.Key.FLAG to flag)
+                bundleOf(Constants.Key.FLAG to flag, Constants.Key.POSITION to position)
             )
         } catch (e: Exception) {
             findNavController().navigate(
                 R.id.appListFragment,
-                bundleOf(Constants.Key.FLAG to flag)
+                bundleOf(Constants.Key.FLAG to flag, Constants.Key.POSITION to position)
             )
             e.printStackTrace()
         }
     }
 
-    private fun showSlotMenu(slot: Int) {
-        val isFolderSlot = prefs.isFolder(slot)
-        val hasApp = prefs.getAppName(slot).isNotEmpty()
+    private fun showSlotMenu(index: Int) {
+        val homeApp = prefs.getHomeApps().getOrNull(index)
+        val isFolderEntry = homeApp?.isFolder == true
+        val hasApp = homeApp != null && homeApp.appPackage.isNotEmpty()
 
         val labels = mutableListOf<String>()
         val actions = mutableListOf<() -> Unit>()
 
-        if (isFolderSlot) {
-            labels.add(getString(R.string.rename_folder)); actions.add { showFolderNameDialog(slot) }
-            labels.add(getString(R.string.remove_folder)); actions.add { removeFolder(slot) }
+        if (isFolderEntry) {
+            labels.add(getString(R.string.rename_folder)); actions.add { showFolderNameDialog(index) }
+            labels.add(getString(R.string.remove_folder)); actions.add { removeFolder(index) }
         } else {
-            val emptySlot = firstEmptyHomePosition()
-            if (emptySlot != 0) {
-                labels.add(getString(R.string.add_app)); actions.add {
-                    showAppList(Constants.FLAG_SET_HOME_APP_1 + emptySlot - 1, true)
-                }
+            labels.add(getString(R.string.add_app)); actions.add {
+                showAppList(
+                    Constants.FLAG_SET_HOME_APP,
+                    position = prefs.getHomeApps().size,
+                    includeHiddenApps = true,
+                )
             }
             if (hasApp) {
                 labels.add(getString(R.string.replace_app)); actions.add {
-                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, true)
+                    showAppList(Constants.FLAG_SET_HOME_APP, position = index, includeHiddenApps = true)
                 }
                 labels.add(getString(R.string.rename_app)); actions.add {
-                    showAppNameDialog(slot)
+                    showAppNameDialog(index)
                 }
                 labels.add(getString(R.string.remove_app)); actions.add {
-                    clearHomeApp(slot)
+                    prefs.removeHomeApp(index)
                     populateHomeScreen(false)
                 }
             }
-            labels.add(getString(R.string.create_folder)); actions.add { showFolderNameDialog(slot) }
+            labels.add(getString(R.string.create_folder)); actions.add { showFolderNameDialog(index) }
         }
 
         AlertDialog.Builder(requireContext())
@@ -654,17 +559,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             .show()
     }
 
-    private fun firstEmptyHomePosition(): Int {
-        for (i in 1..8) {
-            if (prefs.getAppName(i).isEmpty() && prefs.isFolder(i).not()) return i
-        }
-        return 0
-    }
-
-    private fun showFolderNameDialog(slot: Int) {
-        val isCreating = prefs.isFolder(slot).not()
+    private fun showFolderNameDialog(index: Int) {
+        val isCreating = prefs.getHomeApps().getOrNull(index)?.isFolder != true
         val editText = EditText(requireContext()).apply {
-            if (isCreating) setText(getString(R.string.folder)) else setText(prefs.getFolderName(slot))
+            if (isCreating) setText(getString(R.string.folder)) else setText(prefs.getFolderName(index))
             setSelectAllOnFocus(true)
             hint = getString(R.string.folder_name_hint)
         }
@@ -673,8 +571,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             .setView(editText)
             .setPositiveButton(R.string.okay) { _, _ ->
                 val name = editText.text.toString().trim().ifBlank { getString(R.string.folder) }
-                if (isCreating) createFolder(slot, name) else {
-                    prefs.setFolderName(slot, name)
+                if (isCreating) createFolder(name) else {
+                    prefs.renameFolderApp(index, name)
                     populateHomeScreen(false)
                 }
             }
@@ -683,16 +581,15 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         editText.showKeyboard()
     }
 
-    private fun createFolder(slot: Int, name: String) {
-        clearHomeApp(slot)
-        prefs.setFolderName(slot, name)
-        prefs.setIsFolder(slot, true)
+    private fun createFolder(name: String) {
+        prefs.createFolder(name)
         populateHomeScreen(false)
     }
 
-    private fun showAppNameDialog(slot: Int) {
+    private fun showAppNameDialog(index: Int) {
+        val homeApp = prefs.getHomeApps().getOrNull(index) ?: return
         val editText = EditText(requireContext()).apply {
-            setText(prefs.getAppName(slot))
+            setText(homeApp.appLabel)
             setSelectAllOnFocus(true)
             hint = getString(R.string.app_name_hint)
         }
@@ -700,87 +597,38 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             .setTitle(R.string.rename_app)
             .setView(editText)
             .setPositiveButton(R.string.okay) { _, _ ->
-                setHomeAppName(slot, editText.text.toString().trim())
+                setHomeAppName(index, editText.text.toString().trim())
             }
             .setNegativeButton(R.string.cancel) { _, _ -> }
             .show()
         editText.showKeyboard()
     }
 
-    private fun setHomeAppName(slot: Int, name: String) {
+    private fun setHomeAppName(index: Int, name: String) {
         if (name.isBlank()) return
-        when (slot) {
-            1 -> prefs.appName1 = name
-            2 -> prefs.appName2 = name
-            3 -> prefs.appName3 = name
-            4 -> prefs.appName4 = name
-            5 -> prefs.appName5 = name
-            6 -> prefs.appName6 = name
-            7 -> prefs.appName7 = name
-            8 -> prefs.appName8 = name
-        }
+        val apps = prefs.getHomeApps().toMutableList()
+        val homeApp = apps.getOrNull(index) ?: return
+        if (homeApp.isFolder) return
+        apps[index] = homeApp.copy(appLabel = name)
+        prefs.saveHomeApps(apps)
         populateHomeScreen(false)
     }
 
-    private fun removeFolder(slot: Int) {
-        prefs.clearFolder(slot)
+    private fun removeFolder(index: Int) {
+        prefs.removeHomeApp(index)
         populateHomeScreen(false)
     }
 
-    private fun clearHomeApp(slot: Int) {
-        when (slot) {
-            1 -> {
-                prefs.appName1 = ""; prefs.appPackage1 = ""; prefs.appUser1 = ""
-                prefs.appActivityClassName1 = ""; prefs.isShortcut1 = false; prefs.shortcutId1 = ""
-            }
-
-            2 -> {
-                prefs.appName2 = ""; prefs.appPackage2 = ""; prefs.appUser2 = ""
-                prefs.appActivityClassName2 = ""; prefs.isShortcut2 = false; prefs.shortcutId2 = ""
-            }
-
-            3 -> {
-                prefs.appName3 = ""; prefs.appPackage3 = ""; prefs.appUser3 = ""
-                prefs.appActivityClassName3 = ""; prefs.isShortcut3 = false; prefs.shortcutId3 = ""
-            }
-
-            4 -> {
-                prefs.appName4 = ""; prefs.appPackage4 = ""; prefs.appUser4 = ""
-                prefs.appActivityClassName4 = ""; prefs.isShortcut4 = false; prefs.shortcutId4 = ""
-            }
-
-            5 -> {
-                prefs.appName5 = ""; prefs.appPackage5 = ""; prefs.appUser5 = ""
-                prefs.appActivityClassName5 = ""; prefs.isShortcut5 = false; prefs.shortcutId5 = ""
-            }
-
-            6 -> {
-                prefs.appName6 = ""; prefs.appPackage6 = ""; prefs.appUser6 = ""
-                prefs.appActivityClassName6 = ""; prefs.isShortcut6 = false; prefs.shortcutId6 = ""
-            }
-
-            7 -> {
-                prefs.appName7 = ""; prefs.appPackage7 = ""; prefs.appUser7 = ""
-                prefs.appActivityClassName7 = ""; prefs.isShortcut7 = false; prefs.shortcutId7 = ""
-            }
-
-            8 -> {
-                prefs.appName8 = ""; prefs.appPackage8 = ""; prefs.appUser8 = ""
-                prefs.appActivityClassName8 = ""; prefs.isShortcut8 = false; prefs.shortcutId8 = ""
-            }
-        }
-    }
-
-    private fun openFolder(slot: Int) {
+    private fun openFolder(index: Int) {
         try {
             findNavController().navigate(
                 R.id.action_mainFragment_to_folderFragment,
-                bundleOf(Constants.Key.FOLDER_SLOT to slot)
+                bundleOf(Constants.Key.FOLDER_SLOT to index)
             )
         } catch (e: Exception) {
             findNavController().navigate(
                 R.id.folderFragment,
-                bundleOf(Constants.Key.FOLDER_SLOT to slot)
+                bundleOf(Constants.Key.FOLDER_SLOT to index)
             )
             e.printStackTrace()
         }
@@ -953,9 +801,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
             override fun onLongPressMove(view: View) {
                 super.onLongPressMove(view)
-                draggedSlot = view.tag.toString().toInt()
-                val data = ClipData.newPlainText("slot", draggedSlot.toString())
-                view.startDragAndDrop(data, View.DragShadowBuilder(view), draggedSlot, 0)
+                draggedIndex = view.tag.toString().toInt()
+                val data = ClipData.newPlainText("slot", draggedIndex.toString())
+                view.startDragAndDrop(data, View.DragShadowBuilder(view), draggedIndex, 0)
                 binding.root.layoutTransition = null
             }
 
