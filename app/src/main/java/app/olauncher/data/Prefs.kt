@@ -48,6 +48,7 @@ class Prefs(context: Context) {
     // private val HOME_BUTTON_SHOW_RECENTS = "HOME_BUTTON_SHOW_RECENTS"
 
     private val HOME_APPS = "HOME_APPS"
+    private val PINNED_APPS = "PINNED_APPS"
 
     private val APP_NAME_SWIPE_LEFT = "APP_NAME_SWIPE_LEFT"
     private val APP_NAME_SWIPE_RIGHT = "APP_NAME_SWIPE_RIGHT"
@@ -312,6 +313,48 @@ class Prefs(context: Context) {
         apps.removeAt(position)
         saveHomeApps(apps)
     }
+
+    fun getPinnedApps(): List<AppModel.PinnedApp> =
+        HomeAppsCodec.decodePinnedApps(prefs.getString(PINNED_APPS, "").toString())
+
+    fun savePinnedApps(apps: List<AppModel.PinnedApp>) =
+        prefs.edit { putString(PINNED_APPS, HomeAppsCodec.encodePinnedApps(apps)) }
+
+    fun pinApp(app: AppModel.PinnedApp) {
+        val apps = getPinnedApps().toMutableList()
+        apps.removeAll { samePinnedApp(it, app.appPackage, app.user, app.isShortcut, app.shortcutId) }
+        apps.add(app)
+        savePinnedApps(apps)
+    }
+
+    fun removePinnedApp(
+        appPackage: String,
+        user: String,
+        isShortcut: Boolean = false,
+        shortcutId: String = "",
+    ) {
+        val apps = getPinnedApps().toMutableList()
+        apps.removeAll { samePinnedApp(it, appPackage, user, isShortcut, shortcutId) }
+        savePinnedApps(apps)
+    }
+
+    fun getActivePinnedApps(now: Long = System.currentTimeMillis()): List<AppModel.PinnedApp> {
+        val all = getPinnedApps()
+        val active = all.filter { it.expiresAt > now }
+        if (active.size != all.size) savePinnedApps(active)
+        return active
+    }
+
+    private fun samePinnedApp(
+        app: AppModel.PinnedApp,
+        appPackage: String,
+        user: String,
+        isShortcut: Boolean,
+        shortcutId: String,
+    ): Boolean = app.appPackage == appPackage &&
+        app.user == user &&
+        app.isShortcut == isShortcut &&
+        app.shortcutId == shortcutId
 
     fun swapHomeApps(i: Int, j: Int) {
         if (i == j) return

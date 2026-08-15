@@ -33,6 +33,7 @@ class AppDrawerAdapter(
     private val appDeleteListener: (AppModel) -> Unit,
     private val appHideListener: (AppModel, Int) -> Unit,
     private val appRenameListener: (AppModel, String) -> Unit,
+    private val appPinListener: (AppModel) -> Unit = {},
     private val privateSpaceToggleListener: () -> Unit = {},
     private val privateSpaceSettingsListener: () -> Unit = {},
 ) : ListAdapter<AppModel, RecyclerView.ViewHolder>(DIFF_CALLBACK), Filterable {
@@ -120,7 +121,8 @@ class AppDrawerAdapter(
                     appDeleteListener,
                     appInfoListener,
                     appHideListener,
-                    appRenameListener
+                    appRenameListener,
+                    appPinListener,
                 )
             }
         } catch (e: Exception) {
@@ -255,10 +257,12 @@ class AppDrawerAdapter(
             appInfoListener: (AppModel) -> Unit,
             appHideListener: (AppModel, Int) -> Unit,
             appRenameListener: (AppModel, String) -> Unit,
+            appPinListener: (AppModel) -> Unit,
         ) = with(binding) {
             appHideLayout.visibility = View.GONE
             renameLayout.visibility = View.GONE
             appTitle.visibility = View.VISIBLE
+            appPin.isVisible = flag == Constants.FLAG_LAUNCH_APP
 
             // Show indicators in title based on app type and state
             appTitle.text = buildString {
@@ -362,6 +366,11 @@ class AppDrawerAdapter(
                 appTitle.visibility = View.VISIBLE
             }
             appHide.setOnClickListener { appHideListener(appModel, bindingAdapterPosition) }
+            appPin.setOnClickListener {
+                appHideLayout.visibility = View.GONE
+                appTitle.visibility = View.VISIBLE
+                appPinListener(appModel)
+            }
         }
 
         private fun getAppName(context: Context, appPackage: String, user: UserHandle): String {

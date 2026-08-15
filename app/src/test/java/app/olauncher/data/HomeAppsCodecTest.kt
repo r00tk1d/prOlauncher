@@ -92,6 +92,43 @@ class HomeAppsCodecTest {
     }
 
     @Test
+    fun `empty pinned apps round-trip`() {
+        assertEquals(emptyList<AppModel.PinnedApp>(), HomeAppsCodec.decodePinnedApps(HomeAppsCodec.encodePinnedApps(emptyList())))
+    }
+
+    @Test
+    fun `regular and shortcut pinned apps round-trip`() {
+        val apps = listOf(
+            AppModel.PinnedApp(
+                appLabel = "Spotify",
+                appPackage = "com.spotify.music",
+                activityClassName = "com.spotify.music.MainActivity",
+                user = "UserHandle{0}",
+                isShortcut = false,
+                expiresAt = 123456789L,
+            ),
+            AppModel.PinnedApp(
+                appLabel = "Site",
+                appPackage = "com.example.site",
+                activityClassName = null,
+                user = "UserHandle{0}",
+                isShortcut = true,
+                shortcutId = "site",
+                expiresAt = 987654321L,
+            ),
+        )
+        val decoded = HomeAppsCodec.decodePinnedApps(HomeAppsCodec.encodePinnedApps(apps))
+        assertEquals(apps, decoded)
+    }
+
+    @Test
+    fun `blank and corrupt pinned input decode to empty list`() {
+        assertTrue(HomeAppsCodec.decodePinnedApps("").isEmpty())
+        assertTrue(HomeAppsCodec.decodePinnedApps("not json").isEmpty())
+        assertTrue(HomeAppsCodec.decodePinnedApps("[]").isEmpty())
+    }
+
+    @Test
     fun `blank and corrupt input decode to empty list`() {
         assertTrue(HomeAppsCodec.decodeHomeApps("").isEmpty())
         assertTrue(HomeAppsCodec.decodeHomeApps("not json").isEmpty())

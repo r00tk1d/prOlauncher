@@ -29,6 +29,10 @@ All changes are on top of upstream Olauncher (v6.7.19).
 ### App drawer / search
 - **Search history**: when the search box is empty, the drawer shows the apps you most recently launched from the search (instead of the full list). Typing a letter switches to normal filtering; clearing the text shows the history again.
 
+### Pinned apps
+- **Pin an app for a while**: long-press an app in the search → *Pin* → choose a duration (1 day or 7 days directly, or pick hours/days). The app is shown at the top of the home screen with a small pin icon in front of its name and disappears automatically once the time has passed.
+- **Remove a pin early** by long-pressing the pinned app on the home screen. Re-pinning an already-pinned app from the search also offers *Remove pin*.
+
 ### Folder apps
 - **Rename apps inside a folder** via the long-press menu.
 - **Drag & drop reordering** of apps inside a folder.

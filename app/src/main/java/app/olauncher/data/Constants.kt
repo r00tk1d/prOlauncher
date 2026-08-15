@@ -74,6 +74,9 @@ object Constants {
 
     const val MAX_LAUNCH_HISTORY = 20
 
+    val PIN_DURATION_HOURS = intArrayOf(1, 2, 4, 8, 12, 24)
+    val PIN_DURATION_DAYS = intArrayOf(2, 3, 5, 14, 30)
+
     const val FLAG_SET_SWIPE_LEFT_APP = 11
     const val FLAG_SET_SWIPE_RIGHT_APP = 12
     const val FLAG_SET_CLOCK_APP = 13
