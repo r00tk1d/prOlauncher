@@ -1,6 +1,5 @@
 package app.olauncher.ui
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -233,9 +232,6 @@ class AppDrawerFragment : BaseFragment() {
                 prefs.setAppRenameLabel(identifier, renameLabel)
                 viewModel.getAppList()
             },
-            appPinListener = { appModel ->
-                showPinDialog(appModel)
-            },
             privateSpaceToggleListener = {
                 viewModel.togglePrivateSpaceLock()
             },
@@ -313,85 +309,6 @@ class AppDrawerFragment : BaseFragment() {
 
         adapter.setAppList(combined)
         adapter.filter.filter(binding.search.query)
-    }
-
-    private fun showPinDialog(appModel: AppModel) {
-        if (appModel is AppModel.PrivateSpaceHeader) return
-        val context = requireContext()
-        val alreadyPinned = prefs.getPinnedApps().any {
-            it.appPackage == appModel.appPackage && it.user == appModel.user.toString() &&
-                it.isShortcut == (appModel is AppModel.PinnedShortcut) &&
-                it.shortcutId == (appModel as? AppModel.PinnedShortcut)?.shortcutId.orEmpty()
-        }
-
-        val options = mutableListOf<Pair<String, () -> Unit>>()
-        if (alreadyPinned)
-            options.add(getString(R.string.remove_pin) to { removePin(appModel) })
-        options.add("${formatPinDuration(1, hours = false)} ${getString(R.string.pin_recommended)}" to { pin(appModel, 1, days = true) })
-        options.add("${formatPinDuration(7, hours = false)} ${getString(R.string.pin_recommended)}" to { pin(appModel, 7, days = true) })
-        options.add(getString(R.string.pin_option_hours) to { showPinDurationDialog(appModel, hours = true) })
-        options.add(getString(R.string.pin_option_days) to { showPinDurationDialog(appModel, hours = false) })
-
-        AlertDialog.Builder(context)
-            .setTitle(R.string.pin_for)
-            .setItems(options.map { it.first }.toTypedArray()) { _, which -> options[which].second() }
-            .show()
-    }
-
-    private fun showPinDurationDialog(appModel: AppModel, hours: Boolean) {
-        val durations = if (hours) Constants.PIN_DURATION_HOURS else Constants.PIN_DURATION_DAYS
-        val labels = durations.map { formatPinDuration(it, hours) }
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.pin_for)
-            .setItems(labels.toTypedArray()) { _, which ->
-                pin(appModel, durations[which], days = !hours)
-            }
-            .show()
-    }
-
-    private fun formatPinDuration(value: Int, hours: Boolean): String = resources.getQuantityString(
-        if (hours) R.plurals.pin_hours_plural else R.plurals.pin_days_plural,
-        value,
-        value
-    )
-
-    private fun pin(appModel: AppModel, value: Int, days: Boolean) {
-        val expiresAt = System.currentTimeMillis() +
-            value * (if (days) Constants.ONE_DAY_IN_MILLIS else Constants.ONE_HOUR_IN_MILLIS)
-        val pinned = when (appModel) {
-            is AppModel.PinnedShortcut -> AppModel.PinnedApp(
-                appLabel = appModel.appLabel,
-                appPackage = appModel.appPackage,
-                activityClassName = null,
-                user = appModel.user.toString(),
-                isShortcut = true,
-                shortcutId = appModel.shortcutId,
-                expiresAt = expiresAt,
-            )
-
-            is AppModel.App -> AppModel.PinnedApp(
-                appLabel = appModel.appLabel,
-                appPackage = appModel.appPackage,
-                activityClassName = appModel.activityClassName,
-                user = appModel.user.toString(),
-                isShortcut = false,
-                expiresAt = expiresAt,
-            )
-
-            else -> return
-        }
-        prefs.pinApp(pinned)
-        requireContext().showToast(getString(R.string.pinned_app_for, appModel.appLabel, formatPinDuration(value, !days)))
-    }
-
-    private fun removePin(appModel: AppModel) {
-        prefs.removePinnedApp(
-            appPackage = appModel.appPackage,
-            user = appModel.user.toString(),
-            isShortcut = appModel is AppModel.PinnedShortcut,
-            shortcutId = (appModel as? AppModel.PinnedShortcut)?.shortcutId.orEmpty(),
-        )
-        requireContext().showToast(getString(R.string.pin_removed, appModel.appLabel))
     }
 
     private fun getRecyclerViewOnScrollListener(): RecyclerView.OnScrollListener {

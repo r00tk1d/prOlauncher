@@ -47,16 +47,6 @@ sealed class AppModel : Comparable<AppModel> {
         val shortcutId: String = "",
     )
 
-    data class PinnedApp(
-        val appLabel: String,
-        val appPackage: String,
-        val activityClassName: String?,
-        val user: String,
-        val isShortcut: Boolean = false,
-        val shortcutId: String = "",
-        val expiresAt: Long,
-    )
-
     data class HomeApp(
         val appLabel: String = "",
         val appPackage: String = "",

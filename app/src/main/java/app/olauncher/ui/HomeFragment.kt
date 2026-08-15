@@ -111,9 +111,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             else -> {
                 try { // Launch app
                     val index = view.tag.toString().toInt()
-                    if (index < 0)
-                        pinnedAppClicked(-index - 1)
-                    else if (prefs.getHomeApps().getOrNull(index)?.isFolder == true)
+                    if (prefs.getHomeApps().getOrNull(index)?.isFolder == true)
                         openFolder(index)
                     else
                         homeAppClicked(index)
@@ -182,9 +180,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
             else -> {
                 try {
-                    val index = view.tag.toString().toInt()
-                    if (index < 0) showPinnedSlotMenu(-index - 1)
-                    else showSlotMenu(index)
+                    showSlotMenu(view.tag.toString().toInt())
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -255,8 +251,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 DragEvent.ACTION_DRAG_STARTED -> true
 
                 DragEvent.ACTION_DRAG_ENTERED -> {
-                    val target = view.tag as? Int ?: return@OnDragListener false
-                    if (target < 0) return@OnDragListener false
+                    val target = view.tag.toString().toInt()
                     if (draggedIndex != -1 && draggedIndex != target) {
                         prefs.swapHomeApps(draggedIndex, target)
                         refreshHomeSlotText(draggedIndex)
@@ -282,9 +277,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun refreshHomeSlotText(index: Int) {
-        val textView = (0 until binding.homeAppsLayout.childCount)
-            .map { binding.homeAppsLayout.getChildAt(it) }
-            .firstOrNull { it.tag == index } as? TextView ?: return
+        val textView = binding.homeAppsLayout.getChildAt(index) as? TextView ?: return
         val homeApp = prefs.getHomeApps().getOrNull(index) ?: return
         if (homeApp.isFolder) {
             val name = homeApp.folderName.ifBlank { getString(R.string.folder) }
@@ -361,23 +354,16 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         }
         if (cleaned.size != homeApps.size) prefs.saveHomeApps(cleaned)
 
-        val pinned = prefs.getActivePinnedApps().filter { isPinnedAppValid(it) }
-        val total = pinned.size + cleaned.size
-
         val container = binding.homeAppsLayout
-        while (container.childCount > total) {
+        while (container.childCount > cleaned.size) {
             container.removeViewAt(container.childCount - 1)
         }
-        var viewIndex = 0
-        for (i in pinned.indices) {
-            val textView = getOrCreateHomeItemView(viewIndex)
-            textView.tag = -(i + 1)
-            textView.text = pinned[i].appLabel
-            applyPinIcon(textView, pinned = true)
-            viewIndex++
-        }
         for (i in cleaned.indices) {
-            val textView = getOrCreateHomeItemView(viewIndex)
+            val textView = if (i < container.childCount) {
+                container.getChildAt(i) as TextView
+            } else {
+                createHomeItemView().also { container.addView(it) }
+            }
             textView.tag = i
             if (cleaned[i].isFolder) {
                 val name = cleaned[i].folderName.ifBlank { getString(R.string.folder) }
@@ -385,26 +371,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             } else {
                 textView.text = cleaned[i].appLabel
             }
-            applyPinIcon(textView, pinned = false)
-            viewIndex++
         }
         binding.tvHomeHint.isVisible = cleaned.isEmpty() && prefs.firstSettingsOpen.not()
-    }
-
-    private fun getOrCreateHomeItemView(index: Int): TextView {
-        val existing = binding.homeAppsLayout.getChildAt(index)
-        if (existing != null) return existing as TextView
-        return createHomeItemView().also { binding.homeAppsLayout.addView(it) }
-    }
-
-    private fun applyPinIcon(textView: TextView, pinned: Boolean) {
-        if (pinned) {
-            textView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_pin, 0, 0, 0)
-            textView.compoundDrawablePadding = 6.dpToPx()
-        } else {
-            textView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
-            textView.compoundDrawablePadding = 0
-        }
     }
 
     private fun createHomeItemView(): TextView {
@@ -436,25 +404,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             }
         }
         return isPackageInstalled(requireContext(), homeApp.appPackage, homeApp.user)
-    }
-
-    private fun isPinnedAppValid(pinned: AppModel.PinnedApp): Boolean {
-        val userHandle = getUserHandleFromString(requireContext(), pinned.user)
-        if (pinned.isShortcut) {
-            val launcherApps = requireContext().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
-            val query = LauncherApps.ShortcutQuery().apply {
-                setPackage(pinned.appPackage)
-                setQueryFlags(LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED)
-            }
-            return try {
-                val shortcuts = launcherApps.getShortcuts(query, userHandle)
-                shortcuts?.any { it.id == pinned.shortcutId } == true
-            } catch (e: Exception) {
-                e.printStackTrace()
-                false
-            }
-        }
-        return isPackageInstalled(requireContext(), pinned.appPackage, pinned.user)
     }
 
     private fun launchAppOrShortcut(
@@ -527,55 +476,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             isShortcut = homeApp.isShortcut,
             userString = homeApp.user
         )
-    }
-
-    private fun pinnedAppClicked(index: Int) {
-        val pinned = prefs.getActivePinnedApps().getOrNull(index) ?: return
-        if (pinned.isShortcut) {
-            viewModel.selectedApp(
-                AppModel.PinnedShortcut(
-                    shortcutId = pinned.shortcutId,
-                    appLabel = pinned.appLabel,
-                    user = getUserHandleFromString(requireContext(), pinned.user),
-                    key = null,
-                    appPackage = pinned.appPackage,
-                    isNew = false,
-                ),
-                Constants.FLAG_LAUNCH_APP
-            )
-        } else {
-            viewModel.selectedApp(
-                AppModel.App(
-                    appLabel = pinned.appLabel,
-                    key = null,
-                    appPackage = pinned.appPackage,
-                    activityClassName = pinned.activityClassName,
-                    isNew = false,
-                    user = getUserHandleFromString(requireContext(), pinned.user)
-                ),
-                Constants.FLAG_LAUNCH_APP
-            )
-        }
-    }
-
-    private fun showPinnedSlotMenu(index: Int) {
-        val pinned = prefs.getActivePinnedApps().getOrNull(index) ?: return
-        AlertDialog.Builder(requireContext())
-            .setTitle(pinned.appLabel)
-            .setItems(arrayOf(getString(R.string.remove_pin))) { _, _ -> removePinnedApp(index) }
-            .show()
-    }
-
-    private fun removePinnedApp(index: Int) {
-        val pinned = prefs.getActivePinnedApps().getOrNull(index) ?: return
-        prefs.removePinnedApp(
-            appPackage = pinned.appPackage,
-            user = pinned.user,
-            isShortcut = pinned.isShortcut,
-            shortcutId = pinned.shortcutId,
-        )
-        requireContext().showToast(getString(R.string.pin_removed, pinned.appLabel))
-        populateHomeScreen(false)
     }
 
     private fun openSwipeRightApp() {
@@ -901,9 +801,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
             override fun onLongPressMove(view: View) {
                 super.onLongPressMove(view)
-                val tag = view.tag as? Int ?: return
-                if (tag < 0) return
-                draggedIndex = tag
+                draggedIndex = view.tag.toString().toInt()
                 val data = ClipData.newPlainText("slot", draggedIndex.toString())
                 view.startDragAndDrop(data, View.DragShadowBuilder(view), draggedIndex, 0)
                 binding.root.layoutTransition = null

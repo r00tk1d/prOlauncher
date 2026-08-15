@@ -170,20 +170,4 @@
     <string name="app_name_hint">App name</string>
     <string name="empty_folder_tip">Tap to add apps</string>
     <string name="cancel">Cancel</string>
-    <string name="pin">Pin</string>
-    <string name="pin_for">Pin for</string>
-    <string name="remove_pin">Remove pin</string>
-    <string name="pin_option_hours">Hours…</string>
-    <string name="pin_option_days">Days…</string>
-    <string name="pin_recommended">(Recommended)</string>
-    <string name="pinned_app_for">%1$s pinned for %2$s</string>
-    <string name="pin_removed">Pin removed for %1$s</string>
-    <plurals name="pin_hours_plural">
-        <item quantity="one">%1$d hour</item>
-        <item quantity="other">%1$d hours</item>
-    </plurals>
-    <plurals name="pin_days_plural">
-        <item quantity="one">%1$d day</item>
-        <item quantity="other">%1$d days</item>
-    </plurals>
 </resources>

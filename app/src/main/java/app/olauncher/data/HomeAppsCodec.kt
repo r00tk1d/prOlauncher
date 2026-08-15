@@ -28,29 +28,6 @@ object HomeAppsCodec {
         return result
     }
 
-    fun encodePinnedApps(apps: List<AppModel.PinnedApp>): String {
-        val array = JSONArray()
-        for (app in apps) {
-            array.put(encodePinnedApp(app))
-        }
-        return array.toString()
-    }
-
-    fun decodePinnedApps(raw: String): List<AppModel.PinnedApp> {
-        if (raw.isBlank()) return emptyList()
-        val result = mutableListOf<AppModel.PinnedApp>()
-        try {
-            val array = JSONArray(raw)
-            for (i in 0 until array.length()) {
-                val obj = array.optJSONObject(i) ?: continue
-                result.add(decodePinnedApp(obj))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return result
-    }
-
     fun encodeFolderApps(apps: List<AppModel.FolderApp>): String {
         val array = JSONArray()
         for (app in apps) {
@@ -110,30 +87,6 @@ object HomeAppsCodec {
             user = obj.optString("user"),
             isShortcut = obj.optBoolean("isShortcut"),
             shortcutId = obj.optString("shortcutId"),
-        )
-    }
-
-    private fun encodePinnedApp(app: AppModel.PinnedApp): JSONObject {
-        return JSONObject().apply {
-            put("name", app.appLabel)
-            put("package", app.appPackage)
-            put("activity", app.activityClassName ?: "")
-            put("user", app.user)
-            put("isShortcut", app.isShortcut)
-            put("shortcutId", app.shortcutId)
-            put("expiresAt", app.expiresAt)
-        }
-    }
-
-    private fun decodePinnedApp(obj: JSONObject): AppModel.PinnedApp {
-        return AppModel.PinnedApp(
-            appLabel = obj.optString("name"),
-            appPackage = obj.optString("package"),
-            activityClassName = obj.optString("activity").takeIf { it.isNotBlank() },
-            user = obj.optString("user"),
-            isShortcut = obj.optBoolean("isShortcut"),
-            shortcutId = obj.optString("shortcutId"),
-            expiresAt = obj.optLong("expiresAt", 0L),
         )
     }
 
