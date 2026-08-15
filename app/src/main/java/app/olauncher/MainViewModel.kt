@@ -92,6 +92,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             Constants.FLAG_SET_HOME_APP_6 -> saveHomeApp(appModel, 6)
             Constants.FLAG_SET_HOME_APP_7 -> saveHomeApp(appModel, 7)
             Constants.FLAG_SET_HOME_APP_8 -> saveHomeApp(appModel, 8)
+            Constants.FLAG_SET_HOME_APP_9 -> saveHomeApp(appModel, 9)
+            Constants.FLAG_SET_HOME_APP_10 -> saveHomeApp(appModel, 10)
 
             Constants.FLAG_SET_SWIPE_LEFT_APP -> saveSwipeApp(appModel, isLeft = true)
             Constants.FLAG_SET_SWIPE_RIGHT_APP -> saveSwipeApp(appModel, isLeft = false)
@@ -189,6 +191,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         prefs.isShortcut8 = false
                         prefs.shortcutId8 = ""
                     }
+
+                    9 -> {
+                        prefs.appName9 = appModel.appLabel
+                        prefs.appPackage9 = appModel.appPackage
+                        prefs.appUser9 = appModel.user.toString()
+                        prefs.appActivityClassName9 = appModel.activityClassName
+                        prefs.isShortcut9 = false
+                        prefs.shortcutId9 = ""
+                    }
+
+                    10 -> {
+                        prefs.appName10 = appModel.appLabel
+                        prefs.appPackage10 = appModel.appPackage
+                        prefs.appUser10 = appModel.user.toString()
+                        prefs.appActivityClassName10 = appModel.activityClassName
+                        prefs.isShortcut10 = false
+                        prefs.shortcutId10 = ""
+                    }
                 }
             }
 
@@ -265,6 +285,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         prefs.isShortcut8 = true
                         prefs.shortcutId8 = appModel.shortcutId
                     }
+
+                    9 -> {
+                        prefs.appName9 = appModel.appLabel
+                        prefs.appPackage9 = appModel.appPackage
+                        prefs.appUser9 = appModel.user.toString()
+                        prefs.appActivityClassName9 = null
+                        prefs.isShortcut9 = true
+                        prefs.shortcutId9 = appModel.shortcutId
+                    }
+
+                    10 -> {
+                        prefs.appName10 = appModel.appLabel
+                        prefs.appPackage10 = appModel.appPackage
+                        prefs.appUser10 = appModel.user.toString()
+                        prefs.appActivityClassName10 = null
+                        prefs.isShortcut10 = true
+                        prefs.shortcutId10 = appModel.shortcutId
+                    }
                 }
             }
         }
@@ -276,13 +314,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val now = System.currentTimeMillis()
 
         // Clear any expired pins so they free up their slots.
-        for (slot in 1..8) {
+        for (slot in 1..Constants.MAX_HOME_APPS) {
             val expiry = prefs.getPinExpiry(slot)
             if (expiry in 1..now) prefs.clearHomeSlot(slot)
         }
 
         // Re-pinning an already pinned app just extends its time and keeps it on top.
-        for (slot in 1..8) {
+        for (slot in 1..Constants.MAX_HOME_APPS) {
             if (prefs.getAppPackage(slot) == appModel.appPackage &&
                 prefs.getAppUser(slot) == appModel.user.toString() &&
                 prefs.getPinExpiry(slot) > now
@@ -294,7 +332,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         // Already on the home screen as a regular app/shortcut: nothing to pin.
-        for (slot in 1..8) {
+        for (slot in 1..Constants.MAX_HOME_APPS) {
             if (prefs.getAppPackage(slot).isNotEmpty() &&
                 prefs.getAppPackage(slot) == appModel.appPackage &&
                 prefs.getAppUser(slot) == appModel.user.toString()

@@ -158,6 +158,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             R.id.homeApp6 -> showSlotMenu(6)
             R.id.homeApp7 -> showSlotMenu(7)
             R.id.homeApp8 -> showSlotMenu(8)
+            R.id.homeApp9 -> showSlotMenu(9)
+            R.id.homeApp10 -> showSlotMenu(10)
             R.id.clock -> {
                 showAppList(Constants.FLAG_SET_CLOCK_APP)
                 prefs.clockAppPackage = ""
@@ -238,6 +240,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.homeApp6.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp6))
         binding.homeApp7.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp7))
         binding.homeApp8.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp8))
+        binding.homeApp9.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp9))
+        binding.homeApp10.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp10))
     }
 
     private fun initClickListeners() {
@@ -263,6 +267,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.homeApp6.setOnClickListener(this)
         binding.homeApp7.setOnClickListener(this)
         binding.homeApp8.setOnClickListener(this)
+        binding.homeApp9.setOnClickListener(this)
+        binding.homeApp10.setOnClickListener(this)
         binding.homeApp1.setOnLongClickListener(this)
         binding.homeApp2.setOnLongClickListener(this)
         binding.homeApp3.setOnLongClickListener(this)
@@ -271,6 +277,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.homeApp6.setOnLongClickListener(this)
         binding.homeApp7.setOnLongClickListener(this)
         binding.homeApp8.setOnLongClickListener(this)
+        binding.homeApp9.setOnLongClickListener(this)
+        binding.homeApp10.setOnLongClickListener(this)
     }
 
     private fun initDragListeners() {
@@ -282,6 +290,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.homeApp6.setOnDragListener(getHomeSlotDragListener())
         binding.homeApp7.setOnDragListener(getHomeSlotDragListener())
         binding.homeApp8.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp9.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp10.setOnDragListener(getHomeSlotDragListener())
     }
 
     private fun getHomeSlotDragListener(): View.OnDragListener {
@@ -325,6 +335,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             6 -> binding.homeApp6
             7 -> binding.homeApp7
             8 -> binding.homeApp8
+            9 -> binding.homeApp9
+            10 -> binding.homeApp10
             else -> throw IllegalArgumentException("Invalid home slot: $slot")
         }
     }
@@ -354,6 +366,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.homeApp6.gravity = horizontalGravity
         binding.homeApp7.gravity = horizontalGravity
         binding.homeApp8.gravity = horizontalGravity
+        binding.homeApp9.gravity = horizontalGravity
+        binding.homeApp10.gravity = horizontalGravity
     }
 
     private fun populateDateTime() {
@@ -418,6 +432,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             binding.homeApp6,
             binding.homeApp7,
             binding.homeApp8,
+            binding.homeApp9,
+            binding.homeApp10,
         )
         var visibleCount = 0
         for (i in slotViews.indices) {
@@ -443,7 +459,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     private fun clearExpiredPins() {
         val now = System.currentTimeMillis()
-        for (slot in 1..8) {
+        for (slot in 1..Constants.MAX_HOME_APPS) {
             val expiry = prefs.getPinExpiry(slot)
             if (expiry in 1..now) clearHomeApp(slot)
         }
@@ -453,7 +469,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         pinCleanupJob?.cancel()
         val now = System.currentTimeMillis()
         var nextExpiry = Long.MAX_VALUE
-        for (slot in 1..8) {
+        for (slot in 1..Constants.MAX_HOME_APPS) {
             val expiry = prefs.getPinExpiry(slot)
             if (expiry > now) nextExpiry = minOf(nextExpiry, expiry)
         }
@@ -545,6 +561,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         binding.homeApp6.visibility = View.GONE
         binding.homeApp7.visibility = View.GONE
         binding.homeApp8.visibility = View.GONE
+        binding.homeApp9.visibility = View.GONE
+        binding.homeApp10.visibility = View.GONE
     }
 
     private fun launchAppOrShortcut(
@@ -756,6 +774,8 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             6 -> prefs.appName6 = name
             7 -> prefs.appName7 = name
             8 -> prefs.appName8 = name
+            9 -> prefs.appName9 = name
+            10 -> prefs.appName10 = name
         }
         populateHomeScreen(false)
     }

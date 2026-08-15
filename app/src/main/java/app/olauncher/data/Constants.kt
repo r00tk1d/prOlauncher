@@ -77,6 +77,8 @@ object Constants {
     const val FLAG_SET_HOME_APP_6 = 6
     const val FLAG_SET_HOME_APP_7 = 7
     const val FLAG_SET_HOME_APP_8 = 8
+    const val FLAG_SET_HOME_APP_9 = 9
+    const val FLAG_SET_HOME_APP_10 = 10
 
     const val FLAG_SET_FOLDER_APP_1 = 21
     const val FLAG_SET_FOLDER_APP_2 = 22
@@ -86,8 +88,11 @@ object Constants {
     const val FLAG_SET_FOLDER_APP_6 = 26
     const val FLAG_SET_FOLDER_APP_7 = 27
     const val FLAG_SET_FOLDER_APP_8 = 28
+    const val FLAG_SET_FOLDER_APP_9 = 29
+    const val FLAG_SET_FOLDER_APP_10 = 30
 
-    const val MAX_APPS_IN_FOLDER = 8
+    const val MAX_APPS_IN_FOLDER = 10
+    const val MAX_HOME_APPS = 10
     const val MAX_LAUNCH_HISTORY = 20
 
     const val FLAG_SET_SWIPE_LEFT_APP = 11

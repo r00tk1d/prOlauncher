@@ -72,6 +72,8 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         binding.folderApp6.setOnClickListener(this)
         binding.folderApp7.setOnClickListener(this)
         binding.folderApp8.setOnClickListener(this)
+        binding.folderApp9.setOnClickListener(this)
+        binding.folderApp10.setOnClickListener(this)
         binding.folderApp1.setOnLongClickListener(this)
         binding.folderApp2.setOnLongClickListener(this)
         binding.folderApp3.setOnLongClickListener(this)
@@ -80,6 +82,8 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         binding.folderApp6.setOnLongClickListener(this)
         binding.folderApp7.setOnLongClickListener(this)
         binding.folderApp8.setOnLongClickListener(this)
+        binding.folderApp9.setOnLongClickListener(this)
+        binding.folderApp10.setOnLongClickListener(this)
 
         binding.folderApp1.setOnTouchListener(getFolderAppTouchListener(binding.folderApp1))
         binding.folderApp2.setOnTouchListener(getFolderAppTouchListener(binding.folderApp2))
@@ -89,6 +93,8 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         binding.folderApp6.setOnTouchListener(getFolderAppTouchListener(binding.folderApp6))
         binding.folderApp7.setOnTouchListener(getFolderAppTouchListener(binding.folderApp7))
         binding.folderApp8.setOnTouchListener(getFolderAppTouchListener(binding.folderApp8))
+        binding.folderApp9.setOnTouchListener(getFolderAppTouchListener(binding.folderApp9))
+        binding.folderApp10.setOnTouchListener(getFolderAppTouchListener(binding.folderApp10))
 
         binding.folderApp1.setOnDragListener(getFolderAppDragListener())
         binding.folderApp2.setOnDragListener(getFolderAppDragListener())
@@ -98,6 +104,8 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         binding.folderApp6.setOnDragListener(getFolderAppDragListener())
         binding.folderApp7.setOnDragListener(getFolderAppDragListener())
         binding.folderApp8.setOnDragListener(getFolderAppDragListener())
+        binding.folderApp9.setOnDragListener(getFolderAppDragListener())
+        binding.folderApp10.setOnDragListener(getFolderAppDragListener())
     }
 
     private fun getFolderAppTouchListener(view: View): View.OnTouchListener {
@@ -160,6 +168,8 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
             5 -> binding.folderApp6
             6 -> binding.folderApp7
             7 -> binding.folderApp8
+            8 -> binding.folderApp9
+            9 -> binding.folderApp10
             else -> throw IllegalArgumentException("Invalid folder position: $position")
         }
     }
@@ -288,6 +298,8 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
         binding.folderApp6.gravity = horizontalGravity
         binding.folderApp7.gravity = horizontalGravity
         binding.folderApp8.gravity = horizontalGravity
+        binding.folderApp9.gravity = horizontalGravity
+        binding.folderApp10.gravity = horizontalGravity
     }
 
     private fun populateFolder() {
@@ -303,6 +315,8 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
             binding.folderApp6,
             binding.folderApp7,
             binding.folderApp8,
+            binding.folderApp9,
+            binding.folderApp10,
         )
         var visibleCount = 0
         for (i in slotViews.indices) {

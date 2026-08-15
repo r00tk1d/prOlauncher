@@ -55,6 +55,8 @@ class Prefs(context: Context) {
     private val APP_NAME_6 = "APP_NAME_6"
     private val APP_NAME_7 = "APP_NAME_7"
     private val APP_NAME_8 = "APP_NAME_8"
+    private val APP_NAME_9 = "APP_NAME_9"
+    private val APP_NAME_10 = "APP_NAME_10"
     private val APP_PACKAGE_1 = "APP_PACKAGE_1"
     private val APP_PACKAGE_2 = "APP_PACKAGE_2"
     private val APP_PACKAGE_3 = "APP_PACKAGE_3"
@@ -63,6 +65,8 @@ class Prefs(context: Context) {
     private val APP_PACKAGE_6 = "APP_PACKAGE_6"
     private val APP_PACKAGE_7 = "APP_PACKAGE_7"
     private val APP_PACKAGE_8 = "APP_PACKAGE_8"
+    private val APP_PACKAGE_9 = "APP_PACKAGE_9"
+    private val APP_PACKAGE_10 = "APP_PACKAGE_10"
     private val APP_ACTIVITY_CLASS_NAME_1 = "APP_ACTIVITY_CLASS_NAME_1"
     private val APP_ACTIVITY_CLASS_NAME_2 = "APP_ACTIVITY_CLASS_NAME_2"
     private val APP_ACTIVITY_CLASS_NAME_3 = "APP_ACTIVITY_CLASS_NAME_3"
@@ -71,6 +75,8 @@ class Prefs(context: Context) {
     private val APP_ACTIVITY_CLASS_NAME_6 = "APP_ACTIVITY_CLASS_NAME_6"
     private val APP_ACTIVITY_CLASS_NAME_7 = "APP_ACTIVITY_CLASS_NAME_7"
     private val APP_ACTIVITY_CLASS_NAME_8 = "APP_ACTIVITY_CLASS_NAME_8"
+    private val APP_ACTIVITY_CLASS_NAME_9 = "APP_ACTIVITY_CLASS_NAME_9"
+    private val APP_ACTIVITY_CLASS_NAME_10 = "APP_ACTIVITY_CLASS_NAME_10"
     private val APP_USER_1 = "APP_USER_1"
     private val APP_USER_2 = "APP_USER_2"
     private val APP_USER_3 = "APP_USER_3"
@@ -79,6 +85,8 @@ class Prefs(context: Context) {
     private val APP_USER_6 = "APP_USER_6"
     private val APP_USER_7 = "APP_USER_7"
     private val APP_USER_8 = "APP_USER_8"
+    private val APP_USER_9 = "APP_USER_9"
+    private val APP_USER_10 = "APP_USER_10"
 
     private val APP_NAME_SWIPE_LEFT = "APP_NAME_SWIPE_LEFT"
     private val APP_NAME_SWIPE_RIGHT = "APP_NAME_SWIPE_RIGHT"
@@ -114,6 +122,10 @@ class Prefs(context: Context) {
     private val SHORTCUT_ID_7 = "SHORTCUT_ID_7"
     private val IS_SHORTCUT_8 = "IS_SHORTCUT_8"
     private val SHORTCUT_ID_8 = "SHORTCUT_ID_8"
+    private val IS_SHORTCUT_9 = "IS_SHORTCUT_9"
+    private val SHORTCUT_ID_9 = "SHORTCUT_ID_9"
+    private val IS_SHORTCUT_10 = "IS_SHORTCUT_10"
+    private val SHORTCUT_ID_10 = "SHORTCUT_ID_10"
 
     private val SHORTCUT_ID_SWIPE_LEFT = "SHORTCUT_ID_SWIPE_LEFT"
     private val IS_SHORTCUT_SWIPE_LEFT = "IS_SHORTCUT_SWIPE_LEFT"
@@ -128,6 +140,8 @@ class Prefs(context: Context) {
     private val IS_FOLDER_6 = "IS_FOLDER_6"
     private val IS_FOLDER_7 = "IS_FOLDER_7"
     private val IS_FOLDER_8 = "IS_FOLDER_8"
+    private val IS_FOLDER_9 = "IS_FOLDER_9"
+    private val IS_FOLDER_10 = "IS_FOLDER_10"
     private val FOLDER_NAME_1 = "FOLDER_NAME_1"
     private val FOLDER_NAME_2 = "FOLDER_NAME_2"
     private val FOLDER_NAME_3 = "FOLDER_NAME_3"
@@ -136,6 +150,8 @@ class Prefs(context: Context) {
     private val FOLDER_NAME_6 = "FOLDER_NAME_6"
     private val FOLDER_NAME_7 = "FOLDER_NAME_7"
     private val FOLDER_NAME_8 = "FOLDER_NAME_8"
+    private val FOLDER_NAME_9 = "FOLDER_NAME_9"
+    private val FOLDER_NAME_10 = "FOLDER_NAME_10"
     private val FOLDER_APPS_1 = "FOLDER_APPS_1"
     private val FOLDER_APPS_2 = "FOLDER_APPS_2"
     private val FOLDER_APPS_3 = "FOLDER_APPS_3"
@@ -144,6 +160,8 @@ class Prefs(context: Context) {
     private val FOLDER_APPS_6 = "FOLDER_APPS_6"
     private val FOLDER_APPS_7 = "FOLDER_APPS_7"
     private val FOLDER_APPS_8 = "FOLDER_APPS_8"
+    private val FOLDER_APPS_9 = "FOLDER_APPS_9"
+    private val FOLDER_APPS_10 = "FOLDER_APPS_10"
     private val LAUNCH_HISTORY = "LAUNCH_HISTORY"
     private val PINNED_EXPIRIES = "PINNED_EXPIRIES"
 
@@ -314,6 +332,14 @@ class Prefs(context: Context) {
         get() = prefs.getString(APP_NAME_8, "").toString()
         set(value) = prefs.edit { putString(APP_NAME_8, value).apply() }
 
+    var appName9: String
+        get() = prefs.getString(APP_NAME_9, "").toString()
+        set(value) = prefs.edit { putString(APP_NAME_9, value).apply() }
+
+    var appName10: String
+        get() = prefs.getString(APP_NAME_10, "").toString()
+        set(value) = prefs.edit { putString(APP_NAME_10, value).apply() }
+
     var appPackage1: String
         get() = prefs.getString(APP_PACKAGE_1, "").toString()
         set(value) = prefs.edit { putString(APP_PACKAGE_1, value).apply() }
@@ -345,6 +371,14 @@ class Prefs(context: Context) {
     var appPackage8: String
         get() = prefs.getString(APP_PACKAGE_8, "").toString()
         set(value) = prefs.edit { putString(APP_PACKAGE_8, value).apply() }
+
+    var appPackage9: String
+        get() = prefs.getString(APP_PACKAGE_9, "").toString()
+        set(value) = prefs.edit { putString(APP_PACKAGE_9, value).apply() }
+
+    var appPackage10: String
+        get() = prefs.getString(APP_PACKAGE_10, "").toString()
+        set(value) = prefs.edit { putString(APP_PACKAGE_10, value).apply() }
 
     var appActivityClassName1: String?
         get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_1, "").toString()
@@ -378,6 +412,14 @@ class Prefs(context: Context) {
         get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_8, "").toString()
         set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_8, value).apply() }
 
+    var appActivityClassName9: String?
+        get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_9, "").toString()
+        set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_9, value).apply() }
+
+    var appActivityClassName10: String?
+        get() = prefs.getString(APP_ACTIVITY_CLASS_NAME_10, "").toString()
+        set(value) = prefs.edit { putString(APP_ACTIVITY_CLASS_NAME_10, value).apply() }
+
     var appUser1: String
         get() = prefs.getString(APP_USER_1, "").toString()
         set(value) = prefs.edit { putString(APP_USER_1, value).apply() }
@@ -409,6 +451,14 @@ class Prefs(context: Context) {
     var appUser8: String
         get() = prefs.getString(APP_USER_8, "").toString()
         set(value) = prefs.edit { putString(APP_USER_8, value).apply() }
+
+    var appUser9: String
+        get() = prefs.getString(APP_USER_9, "").toString()
+        set(value) = prefs.edit { putString(APP_USER_9, value).apply() }
+
+    var appUser10: String
+        get() = prefs.getString(APP_USER_10, "").toString()
+        set(value) = prefs.edit { putString(APP_USER_10, value).apply() }
 
     var appNameSwipeLeft: String
         get() = prefs.getString(APP_NAME_SWIPE_LEFT, "Camera").toString()
@@ -542,6 +592,22 @@ class Prefs(context: Context) {
         get() = prefs.getString(SHORTCUT_ID_8, "").toString()
         set(value) = prefs.edit { putString(SHORTCUT_ID_8, value) }
 
+    var isShortcut9: Boolean
+        get() = prefs.getBoolean(IS_SHORTCUT_9, false)
+        set(value) = prefs.edit { putBoolean(IS_SHORTCUT_9, value) }
+
+    var shortcutId9: String
+        get() = prefs.getString(SHORTCUT_ID_9, "").toString()
+        set(value) = prefs.edit { putString(SHORTCUT_ID_9, value) }
+
+    var isShortcut10: Boolean
+        get() = prefs.getBoolean(IS_SHORTCUT_10, false)
+        set(value) = prefs.edit { putBoolean(IS_SHORTCUT_10, value) }
+
+    var shortcutId10: String
+        get() = prefs.getString(SHORTCUT_ID_10, "").toString()
+        set(value) = prefs.edit { putString(SHORTCUT_ID_10, value) }
+
     var shortcutIdSwipeLeft: String
         get() = prefs.getString(SHORTCUT_ID_SWIPE_LEFT, "").toString()
         set(value) = prefs.edit { putString(SHORTCUT_ID_SWIPE_LEFT, value) }
@@ -568,6 +634,8 @@ class Prefs(context: Context) {
             6 -> prefs.getString(APP_NAME_6, "").toString()
             7 -> prefs.getString(APP_NAME_7, "").toString()
             8 -> prefs.getString(APP_NAME_8, "").toString()
+            9 -> prefs.getString(APP_NAME_9, "").toString()
+            10 -> prefs.getString(APP_NAME_10, "").toString()
             else -> ""
         }
     }
@@ -582,6 +650,8 @@ class Prefs(context: Context) {
             6 -> prefs.getString(APP_PACKAGE_6, "").toString()
             7 -> prefs.getString(APP_PACKAGE_7, "").toString()
             8 -> prefs.getString(APP_PACKAGE_8, "").toString()
+            9 -> prefs.getString(APP_PACKAGE_9, "").toString()
+            10 -> prefs.getString(APP_PACKAGE_10, "").toString()
             else -> ""
         }
     }
@@ -596,6 +666,8 @@ class Prefs(context: Context) {
             6 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_6, "").toString()
             7 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_7, "").toString()
             8 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_8, "").toString()
+            9 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_9, "").toString()
+            10 -> prefs.getString(APP_ACTIVITY_CLASS_NAME_10, "").toString()
             else -> ""
         }
     }
@@ -610,6 +682,8 @@ class Prefs(context: Context) {
             6 -> prefs.getString(APP_USER_6, "").toString()
             7 -> prefs.getString(APP_USER_7, "").toString()
             8 -> prefs.getString(APP_USER_8, "").toString()
+            9 -> prefs.getString(APP_USER_9, "").toString()
+            10 -> prefs.getString(APP_USER_10, "").toString()
             else -> ""
         }
     }
@@ -624,6 +698,8 @@ class Prefs(context: Context) {
             6 -> shortcutId6
             7 -> shortcutId7
             8 -> shortcutId8
+            9 -> shortcutId9
+            10 -> shortcutId10
             else -> ""
         }
     }
@@ -638,6 +714,8 @@ class Prefs(context: Context) {
             6 -> isShortcut6
             7 -> isShortcut7
             8 -> isShortcut8
+            9 -> isShortcut9
+            10 -> isShortcut10
             else -> false
         }
     }
@@ -652,11 +730,13 @@ class Prefs(context: Context) {
             6 -> appActivityClassName6 = activityClassName
             7 -> appActivityClassName7 = activityClassName
             8 -> appActivityClassName8 = activityClassName
+            9 -> appActivityClassName9 = activityClassName
+            10 -> appActivityClassName10 = activityClassName
         }
     }
 
     fun updateAppActivityClassName(packageName: String, activityClassName: String) {
-        for (i in 1..8) {
+        for (i in 1..10) {
             if (getAppPackage(i) == packageName) setAppActivityClassName(i, activityClassName)
         }
         if (clockAppPackage == packageName) clockAppClassName = activityClassName
@@ -680,6 +760,8 @@ class Prefs(context: Context) {
             6 -> prefs.getBoolean(IS_FOLDER_6, false)
             7 -> prefs.getBoolean(IS_FOLDER_7, false)
             8 -> prefs.getBoolean(IS_FOLDER_8, false)
+            9 -> prefs.getBoolean(IS_FOLDER_9, false)
+            10 -> prefs.getBoolean(IS_FOLDER_10, false)
             else -> false
         }
     }
@@ -694,6 +776,8 @@ class Prefs(context: Context) {
             6 -> prefs.edit { putBoolean(IS_FOLDER_6, isFolder) }
             7 -> prefs.edit { putBoolean(IS_FOLDER_7, isFolder) }
             8 -> prefs.edit { putBoolean(IS_FOLDER_8, isFolder) }
+            9 -> prefs.edit { putBoolean(IS_FOLDER_9, isFolder) }
+            10 -> prefs.edit { putBoolean(IS_FOLDER_10, isFolder) }
         }
     }
 
@@ -707,6 +791,8 @@ class Prefs(context: Context) {
             6 -> prefs.getString(FOLDER_NAME_6, "").toString()
             7 -> prefs.getString(FOLDER_NAME_7, "").toString()
             8 -> prefs.getString(FOLDER_NAME_8, "").toString()
+            9 -> prefs.getString(FOLDER_NAME_9, "").toString()
+            10 -> prefs.getString(FOLDER_NAME_10, "").toString()
             else -> ""
         }
     }
@@ -721,6 +807,8 @@ class Prefs(context: Context) {
             6 -> prefs.edit { putString(FOLDER_NAME_6, name) }
             7 -> prefs.edit { putString(FOLDER_NAME_7, name) }
             8 -> prefs.edit { putString(FOLDER_NAME_8, name) }
+            9 -> prefs.edit { putString(FOLDER_NAME_9, name) }
+            10 -> prefs.edit { putString(FOLDER_NAME_10, name) }
         }
     }
 
@@ -734,6 +822,8 @@ class Prefs(context: Context) {
             6 -> prefs.getString(FOLDER_APPS_6, "").toString()
             7 -> prefs.getString(FOLDER_APPS_7, "").toString()
             8 -> prefs.getString(FOLDER_APPS_8, "").toString()
+            9 -> prefs.getString(FOLDER_APPS_9, "").toString()
+            10 -> prefs.getString(FOLDER_APPS_10, "").toString()
             else -> ""
         }
         val apps = MutableList<AppModel.FolderApp?>(Constants.MAX_APPS_IN_FOLDER) { null }
@@ -804,6 +894,8 @@ class Prefs(context: Context) {
             6 -> prefs.edit { putString(FOLDER_APPS_6, array.toString()) }
             7 -> prefs.edit { putString(FOLDER_APPS_7, array.toString()) }
             8 -> prefs.edit { putString(FOLDER_APPS_8, array.toString()) }
+            9 -> prefs.edit { putString(FOLDER_APPS_9, array.toString()) }
+            10 -> prefs.edit { putString(FOLDER_APPS_10, array.toString()) }
         }
     }
 
@@ -815,7 +907,7 @@ class Prefs(context: Context) {
     }
 
     fun firstEmptyHomePosition(): Int {
-        for (i in 1..8) {
+        for (i in 1..Constants.MAX_HOME_APPS) {
             if (getAppName(i).isEmpty() && isFolder(i).not()) return i
         }
         return 0
@@ -861,6 +953,16 @@ class Prefs(context: Context) {
             8 -> {
                 appName8 = ""; appPackage8 = ""; appUser8 = ""
                 appActivityClassName8 = ""; isShortcut8 = false; shortcutId8 = ""
+            }
+
+            9 -> {
+                appName9 = ""; appPackage9 = ""; appUser9 = ""
+                appActivityClassName9 = ""; isShortcut9 = false; shortcutId9 = ""
+            }
+
+            10 -> {
+                appName10 = ""; appPackage10 = ""; appUser10 = ""
+                appActivityClassName10 = ""; isShortcut10 = false; shortcutId10 = ""
             }
         }
         setIsFolder(slot, false)
@@ -1000,7 +1102,7 @@ class Prefs(context: Context) {
     }
 
     fun swapHomeSlots(slot1: Int, slot2: Int) {
-        if (slot1 !in 1..8 || slot2 !in 1..8 || slot1 == slot2) return
+        if (slot1 !in 1..Constants.MAX_HOME_APPS || slot2 !in 1..Constants.MAX_HOME_APPS || slot1 == slot2) return
 
         val name1 = getAppName(slot1); val name2 = getAppName(slot2)
         val package1 = getAppPackage(slot1); val package2 = getAppPackage(slot2)
@@ -1037,6 +1139,8 @@ class Prefs(context: Context) {
             6 -> FOLDER_APPS_6
             7 -> FOLDER_APPS_7
             8 -> FOLDER_APPS_8
+            9 -> FOLDER_APPS_9
+            10 -> FOLDER_APPS_10
             else -> FOLDER_APPS_1
         }
     }
@@ -1108,6 +1212,20 @@ class Prefs(context: Context) {
                 appUser8 = user; isShortcut8 = isShortcut; shortcutId8 = shortcutId
                 setIsFolder(8, isFolder); setFolderName(8, folderName)
                 prefs.edit { putString(FOLDER_APPS_8, folderApps) }
+            }
+
+            9 -> {
+                appName9 = name; appPackage9 = packageName; appActivityClassName9 = activityClassName
+                appUser9 = user; isShortcut9 = isShortcut; shortcutId9 = shortcutId
+                setIsFolder(9, isFolder); setFolderName(9, folderName)
+                prefs.edit { putString(FOLDER_APPS_9, folderApps) }
+            }
+
+            10 -> {
+                appName10 = name; appPackage10 = packageName; appActivityClassName10 = activityClassName
+                appUser10 = user; isShortcut10 = isShortcut; shortcutId10 = shortcutId
+                setIsFolder(10, isFolder); setFolderName(10, folderName)
+                prefs.edit { putString(FOLDER_APPS_10, folderApps) }
             }
         }
     }

@@ -87,7 +87,7 @@ class AppDrawerFragment : BaseFragment() {
         if (flag == Constants.FLAG_HIDDEN_APPS)
             binding.search.queryHint = getString(R.string.hidden_apps)
         else if (flag in Constants.FLAG_SET_HOME_APP_1..Constants.FLAG_SET_CALENDAR_APP
-            || flag in Constants.FLAG_SET_FOLDER_APP_1..Constants.FLAG_SET_FOLDER_APP_8
+            || flag in Constants.FLAG_SET_FOLDER_APP_1..Constants.FLAG_SET_FOLDER_APP_10
         )
             binding.search.queryHint = "Please select an app"
         try {
@@ -157,7 +157,7 @@ class AppDrawerFragment : BaseFragment() {
             appClickListener = { appModel ->
                 if (flag == Constants.FLAG_LAUNCH_APP && appModel !is AppModel.PrivateSpaceHeader)
                     prefs.addLaunchHistory(appModel)
-                if (flag in Constants.FLAG_SET_FOLDER_APP_1..Constants.FLAG_SET_FOLDER_APP_8)
+                if (flag in Constants.FLAG_SET_FOLDER_APP_1..Constants.FLAG_SET_FOLDER_APP_10)
                     viewModel.saveFolderApp(
                         folderSlot,
                         flag - Constants.FLAG_SET_FOLDER_APP_1,
@@ -378,7 +378,7 @@ class AppDrawerFragment : BaseFragment() {
     }
 
     private fun isAppAlreadyOnHome(appModel: AppModel): Boolean {
-        for (slot in 1..8) {
+        for (slot in 1..Constants.MAX_HOME_APPS) {
             if (prefs.getAppPackage(slot).isNotEmpty() &&
                 prefs.getAppPackage(slot) == appModel.appPackage &&
                 prefs.getAppUser(slot) == appModel.user.toString() &&
