@@ -179,4 +179,15 @@
     <string name="app_name_hint">App name</string>
     <string name="empty_folder_tip">Tap to add apps</string>
     <string name="cancel">Cancel</string>
+    <string name="pin">Pin</string>
+    <string name="pin_for">Pin for</string>
+    <string name="pin_1_day">1 day</string>
+    <string name="pin_7_days">7 days</string>
+    <string name="pin_custom">Custom…</string>
+    <string name="custom_pin_duration">Custom duration</string>
+    <string name="days">Days</string>
+    <string name="hours">Hours</string>
+    <string name="home_screen_full">Home screen is full</string>
+    <string name="app_already_on_home_screen">App is already on the home screen</string>
+    <string name="invalid_pin_duration">Please enter a valid duration</string>
 </resources>

@@ -113,6 +113,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun saveHomeApp(appModel: AppModel, position: Int) {
+        prefs.clearPin(position)
         when (appModel) {
             is AppModel.PrivateSpaceHeader -> return
             is AppModel.App -> {
@@ -268,6 +269,53 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
         refreshHome(false)
+    }
+
+    fun pinApp(appModel: AppModel, hours: Int): Boolean {
+        if (appModel is AppModel.PrivateSpaceHeader || hours <= 0) return false
+        val now = System.currentTimeMillis()
+
+        // Clear any expired pins so they free up their slots.
+        for (slot in 1..8) {
+            val expiry = prefs.getPinExpiry(slot)
+            if (expiry in 1..now) prefs.clearHomeSlot(slot)
+        }
+
+        // Re-pinning an already pinned app just extends its time and keeps it on top.
+        for (slot in 1..8) {
+            if (prefs.getAppPackage(slot) == appModel.appPackage &&
+                prefs.getAppUser(slot) == appModel.user.toString() &&
+                prefs.getPinExpiry(slot) > now
+            ) {
+                prefs.setPinExpiry(slot, now + hours * Constants.ONE_HOUR_IN_MILLIS)
+                refreshHome(false)
+                return true
+            }
+        }
+
+        // Already on the home screen as a regular app/shortcut: nothing to pin.
+        for (slot in 1..8) {
+            if (prefs.getAppPackage(slot).isNotEmpty() &&
+                prefs.getAppPackage(slot) == appModel.appPackage &&
+                prefs.getAppUser(slot) == appModel.user.toString()
+            ) {
+                appContext.showToast(R.string.app_already_on_home_screen)
+                return false
+            }
+        }
+
+        val emptySlot = prefs.firstEmptyHomePosition()
+        if (emptySlot == 0) {
+            appContext.showToast(R.string.home_screen_full)
+            return false
+        }
+
+        // Bubble the empty slot up to position 1 so the pinned app sits on top.
+        for (i in emptySlot - 1 downTo 1) prefs.swapHomeSlots(i, i + 1)
+        saveHomeApp(appModel, 1)
+        prefs.setPinExpiry(1, now + hours * Constants.ONE_HOUR_IN_MILLIS)
+        refreshHome(false)
+        return true
     }
 
     fun saveFolderApp(folderSlot: Int, position: Int, appModel: AppModel) {

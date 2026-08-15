@@ -1,6 +1,6 @@
 # prOlauncher
 
-A personal fork of [**Olauncher | Minimal AF Launcher**](https://github.com/tanujnotes/Olauncher), the minimal, ad-free launcher for Android.
+A personal vibecoded fork of [**Olauncher | Minimal AF Launcher**](https://github.com/tanujnotes/Olauncher), the minimal, ad-free launcher for Android.
 
 This repository is forked from the original [Olauncher](https://github.com/tanujnotes/Olauncher) project by [Tanuj Notes](https://github.com/tanujnotes) and builds on top of it. All the original Olauncher functionality still applies — this fork only **adds** the features listed below.
 
@@ -23,6 +23,7 @@ All changes are on top of upstream Olauncher (v6.7.19).
 - **Rename home apps** via the long-press menu.
 - **Remove apps** from the home screen via the long-press menu.
 - **Drag & drop reordering** of home screen slots.
+- **Pin apps for a limited time**: long-press an app in the app drawer/search and choose *Pin* to put it at the very top of the home screen for a chosen duration (1 day, 7 days, or a custom amount of days/hours). Pinned apps show a small pin icon in front of their name and disappear automatically when the time runs out. Pinning is refused when the home screen already holds 8 apps/folders; re-pinning an already pinned app extends its time.
 
 ### App drawer / search
 - **Search history**: when the search box is empty, the drawer shows the apps you most recently launched from the search (instead of the full list). Typing a letter switches to normal filtering; clearing the text shows the history again.
@@ -33,3 +34,27 @@ All changes are on top of upstream Olauncher (v6.7.19).
 
 ### Navigation
 - **Tap the empty space** inside a folder to return to the home screen.
+
+## Building
+
+Requires a JDK (17 or newer) and the Android SDK (set `sdk.dir` in `local.properties`).
+
+From the project root:
+
+```bash
+# Debug APK (signed with the debug key, ready to install):
+./gradlew assembleDebug
+# Output: app/build/outputs/apk/debug/app-debug.apk
+
+# Release APK (minified with R8, unsigned):
+./gradlew assembleRelease
+# Output: app/build/outputs/apk/release/app-release-unsigned.apk
+```
+
+The release build is unsigned because this fork has no signing config. To produce a signed release APK, add a `signingConfig` for your keystore in `app/build.gradle` or sign afterwards with `apksigner`.
+
+Install the debug build directly on a connected device with:
+
+```bash
+./gradlew installDebug
+```

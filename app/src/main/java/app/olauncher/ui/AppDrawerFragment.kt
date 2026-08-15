@@ -1,9 +1,11 @@
 package app.olauncher.ui
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.Process
+import android.text.InputType
 import android.text.Spannable
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,8 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.BaseInputConnection
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.activityViewModels
@@ -25,6 +29,7 @@ import app.olauncher.data.Constants
 import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentAppDrawerBinding
 import app.olauncher.helper.deletePinnedShortcut
+import app.olauncher.helper.dpToPx
 import app.olauncher.helper.hideKeyboard
 import app.olauncher.helper.isEinkDisplay
 import app.olauncher.helper.isSystemAnimationsDisabled
@@ -235,6 +240,9 @@ class AppDrawerFragment : BaseFragment() {
                 prefs.setAppRenameLabel(identifier, renameLabel)
                 viewModel.getAppList()
             },
+            appPinListener = { appModel ->
+                showPinDurationDialog(appModel)
+            },
             privateSpaceToggleListener = {
                 viewModel.togglePrivateSpaceLock()
             },
@@ -312,6 +320,72 @@ class AppDrawerFragment : BaseFragment() {
 
         adapter.setAppList(combined)
         adapter.filter.filter(binding.search.query)
+    }
+
+    private fun showPinDurationDialog(appModel: AppModel) {
+        if (prefs.firstEmptyHomePosition() == 0) {
+            requireContext().showToast(getString(R.string.home_screen_full))
+            return
+        }
+        if (isAppAlreadyOnHome(appModel)) {
+            requireContext().showToast(getString(R.string.app_already_on_home_screen))
+            return
+        }
+        val options = arrayOf(
+            getString(R.string.pin_1_day) to 24,
+            getString(R.string.pin_7_days) to 168,
+            getString(R.string.pin_custom) to 0,
+        )
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.pin_for)
+            .setItems(options.map { it.first }.toTypedArray()) { _, which ->
+                if (which == options.lastIndex)
+                    showCustomPinDurationDialog(appModel)
+                else if (viewModel.pinApp(appModel, options[which].second))
+                    findNavController().popBackStack(R.id.mainFragment, false)
+            }
+            .show()
+    }
+
+    private fun showCustomPinDurationDialog(appModel: AppModel) {
+        val daysEdit = EditText(requireContext()).apply {
+            inputType = InputType.TYPE_CLASS_NUMBER
+            hint = getString(R.string.days)
+        }
+        val hoursEdit = EditText(requireContext()).apply {
+            inputType = InputType.TYPE_CLASS_NUMBER
+            hint = getString(R.string.hours)
+        }
+        val layout = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(40.dpToPx(), 0, 40.dpToPx(), 0)
+            addView(daysEdit)
+            addView(hoursEdit)
+        }
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.custom_pin_duration)
+            .setView(layout)
+            .setPositiveButton(R.string.okay) { _, _ ->
+                val totalHours = (daysEdit.text.toString().toIntOrNull() ?: 0) * 24 +
+                    (hoursEdit.text.toString().toIntOrNull() ?: 0)
+                if (totalHours <= 0)
+                    requireContext().showToast(getString(R.string.invalid_pin_duration))
+                else if (viewModel.pinApp(appModel, totalHours))
+                    findNavController().popBackStack(R.id.mainFragment, false)
+            }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .show()
+    }
+
+    private fun isAppAlreadyOnHome(appModel: AppModel): Boolean {
+        for (slot in 1..8) {
+            if (prefs.getAppPackage(slot).isNotEmpty() &&
+                prefs.getAppPackage(slot) == appModel.appPackage &&
+                prefs.getAppUser(slot) == appModel.user.toString() &&
+                prefs.getPinExpiry(slot) <= System.currentTimeMillis()
+            ) return true
+        }
+        return false
     }
 
     private fun getRecyclerViewOnScrollListener(): RecyclerView.OnScrollListener {

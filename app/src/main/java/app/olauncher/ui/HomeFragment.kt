@@ -28,6 +28,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import app.olauncher.MainViewModel
 import app.olauncher.R
@@ -51,6 +52,9 @@ import app.olauncher.helper.showKeyboard
 import app.olauncher.helper.showToast
 import app.olauncher.listener.OnSwipeTouchListener
 import app.olauncher.listener.ViewSwipeTouchListener
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -64,6 +68,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private var draggedSlot = -1
+    private var pinCleanupJob: Job? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -329,8 +334,11 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         if (prefs.isFolder(slot)) {
             val name = prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
             textView.text = "\u25B8 $name"
+            textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+            textView.compoundDrawablePadding = 0
         } else {
             textView.text = prefs.getAppName(slot)
+            setPinIndicator(textView, slot)
         }
     }
 
@@ -395,6 +403,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
     private fun populateHomeScreen(appCountUpdated: Boolean) {
         if (appCountUpdated) hideHomeApps()
+        clearExpiredPins()
         populateDateTime()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
@@ -429,15 +438,41 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             textView.visibility = View.VISIBLE
         }
         binding.tvHomeHint.isVisible = visibleCount == 0 && prefs.firstSettingsOpen.not()
+        schedulePinCleanup()
+    }
+
+    private fun clearExpiredPins() {
+        val now = System.currentTimeMillis()
+        for (slot in 1..8) {
+            val expiry = prefs.getPinExpiry(slot)
+            if (expiry in 1..now) clearHomeApp(slot)
+        }
+    }
+
+    private fun schedulePinCleanup() {
+        pinCleanupJob?.cancel()
+        val now = System.currentTimeMillis()
+        var nextExpiry = Long.MAX_VALUE
+        for (slot in 1..8) {
+            val expiry = prefs.getPinExpiry(slot)
+            if (expiry > now) nextExpiry = minOf(nextExpiry, expiry)
+        }
+        if (nextExpiry == Long.MAX_VALUE) return
+        pinCleanupJob = viewLifecycleOwner.lifecycleScope.launch {
+            delay(nextExpiry - now + 100)
+            if (_binding != null) populateHomeScreen(false)
+        }
     }
 
     private fun populateHomeSlot(textView: TextView, slot: Int): Boolean {
         if (prefs.isFolder(slot)) {
             val name = prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
             textView.text = "\u25B8 $name"
+            textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+            textView.compoundDrawablePadding = 0
             return true
         }
-        return setHomeAppText(
+        val ok = setHomeAppText(
             textView,
             prefs.getAppName(slot),
             prefs.getAppPackage(slot),
@@ -445,6 +480,14 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             prefs.getIsShortcut(slot),
             prefs.getShortcutId(slot),
         )
+        if (ok) setPinIndicator(textView, slot)
+        return ok
+    }
+
+    private fun setPinIndicator(textView: TextView, slot: Int) {
+        val isPinned = prefs.getPinExpiry(slot) > System.currentTimeMillis()
+        textView.setCompoundDrawablesWithIntrinsicBounds(if (isPinned) R.drawable.ic_pin else 0, 0, 0, 0)
+        textView.compoundDrawablePadding = if (isPinned) 6.dpToPx() else 0
     }
 
     private fun setHomeAppText(
@@ -654,12 +697,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             .show()
     }
 
-    private fun firstEmptyHomePosition(): Int {
-        for (i in 1..8) {
-            if (prefs.getAppName(i).isEmpty() && prefs.isFolder(i).not()) return i
-        }
-        return 0
-    }
+    private fun firstEmptyHomePosition(): Int = prefs.firstEmptyHomePosition()
 
     private fun showFolderNameDialog(slot: Int) {
         val isCreating = prefs.isFolder(slot).not()
@@ -728,47 +766,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun clearHomeApp(slot: Int) {
-        when (slot) {
-            1 -> {
-                prefs.appName1 = ""; prefs.appPackage1 = ""; prefs.appUser1 = ""
-                prefs.appActivityClassName1 = ""; prefs.isShortcut1 = false; prefs.shortcutId1 = ""
-            }
-
-            2 -> {
-                prefs.appName2 = ""; prefs.appPackage2 = ""; prefs.appUser2 = ""
-                prefs.appActivityClassName2 = ""; prefs.isShortcut2 = false; prefs.shortcutId2 = ""
-            }
-
-            3 -> {
-                prefs.appName3 = ""; prefs.appPackage3 = ""; prefs.appUser3 = ""
-                prefs.appActivityClassName3 = ""; prefs.isShortcut3 = false; prefs.shortcutId3 = ""
-            }
-
-            4 -> {
-                prefs.appName4 = ""; prefs.appPackage4 = ""; prefs.appUser4 = ""
-                prefs.appActivityClassName4 = ""; prefs.isShortcut4 = false; prefs.shortcutId4 = ""
-            }
-
-            5 -> {
-                prefs.appName5 = ""; prefs.appPackage5 = ""; prefs.appUser5 = ""
-                prefs.appActivityClassName5 = ""; prefs.isShortcut5 = false; prefs.shortcutId5 = ""
-            }
-
-            6 -> {
-                prefs.appName6 = ""; prefs.appPackage6 = ""; prefs.appUser6 = ""
-                prefs.appActivityClassName6 = ""; prefs.isShortcut6 = false; prefs.shortcutId6 = ""
-            }
-
-            7 -> {
-                prefs.appName7 = ""; prefs.appPackage7 = ""; prefs.appUser7 = ""
-                prefs.appActivityClassName7 = ""; prefs.isShortcut7 = false; prefs.shortcutId7 = ""
-            }
-
-            8 -> {
-                prefs.appName8 = ""; prefs.appPackage8 = ""; prefs.appUser8 = ""
-                prefs.appActivityClassName8 = ""; prefs.isShortcut8 = false; prefs.shortcutId8 = ""
-            }
-        }
+        prefs.clearHomeSlot(slot)
     }
 
     private fun openFolder(slot: Int) {
@@ -967,6 +965,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     override fun onDestroyView() {
+        pinCleanupJob?.cancel()
         super.onDestroyView()
         _binding = null
     }

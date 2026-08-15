@@ -145,6 +145,7 @@ class Prefs(context: Context) {
     private val FOLDER_APPS_7 = "FOLDER_APPS_7"
     private val FOLDER_APPS_8 = "FOLDER_APPS_8"
     private val LAUNCH_HISTORY = "LAUNCH_HISTORY"
+    private val PINNED_EXPIRIES = "PINNED_EXPIRIES"
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_FILENAME, 0)
 
@@ -810,6 +811,95 @@ class Prefs(context: Context) {
         setIsFolder(slot, false)
         setFolderName(slot, "")
         saveFolderApps(slot, MutableList(Constants.MAX_APPS_IN_FOLDER) { null })
+        clearPin(slot)
+    }
+
+    fun firstEmptyHomePosition(): Int {
+        for (i in 1..8) {
+            if (getAppName(i).isEmpty() && isFolder(i).not()) return i
+        }
+        return 0
+    }
+
+    fun clearHomeSlot(slot: Int) {
+        when (slot) {
+            1 -> {
+                appName1 = ""; appPackage1 = ""; appUser1 = ""
+                appActivityClassName1 = ""; isShortcut1 = false; shortcutId1 = ""
+            }
+
+            2 -> {
+                appName2 = ""; appPackage2 = ""; appUser2 = ""
+                appActivityClassName2 = ""; isShortcut2 = false; shortcutId2 = ""
+            }
+
+            3 -> {
+                appName3 = ""; appPackage3 = ""; appUser3 = ""
+                appActivityClassName3 = ""; isShortcut3 = false; shortcutId3 = ""
+            }
+
+            4 -> {
+                appName4 = ""; appPackage4 = ""; appUser4 = ""
+                appActivityClassName4 = ""; isShortcut4 = false; shortcutId4 = ""
+            }
+
+            5 -> {
+                appName5 = ""; appPackage5 = ""; appUser5 = ""
+                appActivityClassName5 = ""; isShortcut5 = false; shortcutId5 = ""
+            }
+
+            6 -> {
+                appName6 = ""; appPackage6 = ""; appUser6 = ""
+                appActivityClassName6 = ""; isShortcut6 = false; shortcutId6 = ""
+            }
+
+            7 -> {
+                appName7 = ""; appPackage7 = ""; appUser7 = ""
+                appActivityClassName7 = ""; isShortcut7 = false; shortcutId7 = ""
+            }
+
+            8 -> {
+                appName8 = ""; appPackage8 = ""; appUser8 = ""
+                appActivityClassName8 = ""; isShortcut8 = false; shortcutId8 = ""
+            }
+        }
+        setIsFolder(slot, false)
+        setFolderName(slot, "")
+        saveFolderApps(slot, MutableList(Constants.MAX_APPS_IN_FOLDER) { null })
+        clearPin(slot)
+    }
+
+    fun getPinExpiry(slot: Int): Long {
+        return getPinExpiriesMap()[slot.toString()] ?: 0L
+    }
+
+    fun setPinExpiry(slot: Int, expiry: Long) {
+        val map = getPinExpiriesMap().toMutableMap()
+        if (expiry > 0) map[slot.toString()] = expiry else map.remove(slot.toString())
+        prefs.edit { putString(PINNED_EXPIRIES, JSONObject(map).toString()) }
+    }
+
+    fun clearPin(slot: Int) = setPinExpiry(slot, 0)
+
+    fun swapPinExpiries(slot1: Int, slot2: Int) {
+        val expiry1 = getPinExpiry(slot1)
+        val expiry2 = getPinExpiry(slot2)
+        setPinExpiry(slot1, expiry2)
+        setPinExpiry(slot2, expiry1)
+    }
+
+    private fun getPinExpiriesMap(): Map<String, Long> {
+        val raw = prefs.getString(PINNED_EXPIRIES, "").toString()
+        if (raw.isBlank()) return emptyMap()
+        return try {
+            val obj = JSONObject(raw)
+            val map = mutableMapOf<String, Long>()
+            obj.keys().forEach { key -> map[key] = obj.optLong(key) }
+            map
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyMap()
+        }
     }
 
     fun addLaunchHistory(appModel: AppModel) {
@@ -925,6 +1015,7 @@ class Prefs(context: Context) {
 
         setAppData(slot1, name2, package2, activity2, user2, isShortcut2, shortcutId2, isFolder2, folderName2, folderApps2)
         setAppData(slot2, name1, package1, activity1, user1, isShortcut1, shortcutId1, isFolder1, folderName1, folderApps1)
+        swapPinExpiries(slot1, slot2)
     }
 
     fun swapFolderApps(slot: Int, position1: Int, position2: Int) {
