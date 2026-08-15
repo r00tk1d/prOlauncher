@@ -62,6 +62,7 @@ class AppDrawerAdapter(
     private var autoLaunch = true
     private var isBangSearch = false
     var allowAutoLaunch = true
+    var launchHistory: List<AppModel> = emptyList()
     private val diacriticsRegex = Regex("\\p{InCombiningDiacriticalMarks}+")
     private val separatorsRegex = Regex("[-_+,.`'\\s\\p{Z}]")
     private val appFilter = createAppFilter()
@@ -133,12 +134,17 @@ class AppDrawerAdapter(
         return object : Filter() {
             override fun performFiltering(charSearch: CharSequence?): FilterResults {
                 isBangSearch = charSearch?.startsWith("!") ?: false
-                autoLaunch = allowAutoLaunch && (charSearch?.startsWith(" ")?.not() ?: true)
+                autoLaunch = allowAutoLaunch &&
+                    charSearch?.isNotBlank() == true &&
+                    charSearch?.startsWith(" ")?.not() == true
 
-                val appFilteredList = (if (charSearch.isNullOrBlank()) appsList
-                else appsList.filter { app ->
-                    app !is AppModel.PrivateSpaceHeader && appLabelMatches(app.appLabel, charSearch)
-                } as MutableList<AppModel>)
+                val appFilteredList = when {
+                    charSearch.isNullOrBlank() && flag == Constants.FLAG_LAUNCH_APP -> historyList()
+                    charSearch.isNullOrBlank() -> appsList
+                    else -> appsList.filter { app ->
+                        app !is AppModel.PrivateSpaceHeader && appLabelMatches(app.appLabel, charSearch)
+                    } as MutableList<AppModel>
+                }
 
                 val filterResults = FilterResults()
                 filterResults.values = appFilteredList
@@ -176,6 +182,22 @@ class AppDrawerAdapter(
         if (appLabel.contains(charSearch.trim(), true)) return true
         val query = charSearch.normalizeForSearch()
         return query.isNotEmpty() && appLabel.normalizeForSearch().contains(query, true)
+    }
+
+    private fun historyList(): MutableList<AppModel> {
+        val resolved = launchHistory.mapNotNull { history ->
+            appsList.firstOrNull { sameApp(it, history) }
+        }
+        return if (resolved.isEmpty()) appsList else resolved.toMutableList()
+    }
+
+    private fun sameApp(a: AppModel, b: AppModel): Boolean {
+        if (a.appPackage != b.appPackage || a.user != b.user) return false
+        return when {
+            a is AppModel.PinnedShortcut && b is AppModel.PinnedShortcut -> a.shortcutId == b.shortcutId
+            a is AppModel.App && b is AppModel.App -> true
+            else -> false
+        }
     }
 
     private fun CharSequence.normalizeForSearch(): String =

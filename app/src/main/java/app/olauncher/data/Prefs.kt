@@ -2,6 +2,7 @@ package app.olauncher.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.UserHandle
 import android.view.Gravity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
@@ -143,6 +144,7 @@ class Prefs(context: Context) {
     private val FOLDER_APPS_6 = "FOLDER_APPS_6"
     private val FOLDER_APPS_7 = "FOLDER_APPS_7"
     private val FOLDER_APPS_8 = "FOLDER_APPS_8"
+    private val LAUNCH_HISTORY = "LAUNCH_HISTORY"
 
     private val prefs: SharedPreferences = context.getSharedPreferences(PREFS_FILENAME, 0)
 
@@ -808,6 +810,103 @@ class Prefs(context: Context) {
         setIsFolder(slot, false)
         setFolderName(slot, "")
         saveFolderApps(slot, MutableList(Constants.MAX_APPS_IN_FOLDER) { null })
+    }
+
+    fun addLaunchHistory(appModel: AppModel) {
+        if (appModel is AppModel.PrivateSpaceHeader) return
+        val history = getLaunchHistoryRaw().toMutableList()
+        history.removeAll { existing ->
+            when (existing) {
+                is AppModel.PinnedShortcut -> appModel is AppModel.PinnedShortcut &&
+                    existing.appPackage == appModel.appPackage &&
+                    existing.user == appModel.user &&
+                    existing.shortcutId == appModel.shortcutId
+
+                else -> appModel is AppModel.App &&
+                    existing.appPackage == appModel.appPackage &&
+                    existing.user == appModel.user
+            }
+        }
+        history.add(0, appModel)
+        while (history.size > Constants.MAX_LAUNCH_HISTORY) history.removeAt(history.lastIndex)
+
+        val array = JSONArray()
+        for (app in history) {
+            when (app) {
+                is AppModel.PrivateSpaceHeader -> {}
+                is AppModel.PinnedShortcut -> array.put(JSONObject().apply {
+                    put("isShortcut", true)
+                    put("label", app.appLabel)
+                    put("package", app.appPackage)
+                    put("activity", "")
+                    put("user", app.user.toString())
+                    put("shortcutId", app.shortcutId)
+                })
+
+                is AppModel.App -> array.put(JSONObject().apply {
+                    put("isShortcut", false)
+                    put("label", app.appLabel)
+                    put("package", app.appPackage)
+                    put("activity", app.activityClassName ?: "")
+                    put("user", app.user.toString())
+                    put("shortcutId", "")
+                })
+            }
+        }
+        prefs.edit { putString(LAUNCH_HISTORY, array.toString()) }
+    }
+
+    fun getLaunchHistory(): List<AppModel> {
+        val result = mutableListOf<AppModel>()
+        for (app in getLaunchHistoryRaw()) {
+            when (app) {
+                is AppModel.PrivateSpaceHeader -> {}
+                is AppModel.PinnedShortcut -> result.add(app)
+                is AppModel.App -> result.add(app)
+            }
+        }
+        return result
+    }
+
+    private fun getLaunchHistoryRaw(): List<AppModel> {
+        val raw = prefs.getString(LAUNCH_HISTORY, "").toString()
+        if (raw.isBlank()) return emptyList()
+        val result = mutableListOf<AppModel>()
+        try {
+            val array = JSONArray(raw)
+            for (i in 0 until array.length()) {
+                val obj = array.optJSONObject(i) ?: continue
+                val isShortcut = obj.optBoolean("isShortcut")
+                val user = parseUserHandle(obj.optString("user"))
+                val app = if (isShortcut) {
+                    AppModel.PinnedShortcut(
+                        appLabel = obj.optString("label"),
+                        key = null,
+                        appPackage = obj.optString("package"),
+                        shortcutId = obj.optString("shortcutId"),
+                        user = user,
+                    )
+                } else {
+                    AppModel.App(
+                        appLabel = obj.optString("label"),
+                        key = null,
+                        appPackage = obj.optString("package"),
+                        activityClassName = obj.optString("activity").takeIf { it.isNotBlank() },
+                        user = user,
+                    )
+                }
+                result.add(app)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return result
+    }
+
+    private fun parseUserHandle(userString: String): UserHandle {
+        val id = userString.substringAfter("UserHandle{").substringBefore("}").toIntOrNull()
+        return if (id != null) UserHandle.getUserHandleForUid(id * 100000)
+        else android.os.Process.myUserHandle()
     }
 
     fun swapHomeSlots(slot1: Int, slot2: Int) {

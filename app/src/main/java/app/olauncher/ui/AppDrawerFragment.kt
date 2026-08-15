@@ -150,6 +150,8 @@ class AppDrawerFragment : BaseFragment() {
             flag,
             prefs.appLabelAlignment,
             appClickListener = { appModel ->
+                if (flag == Constants.FLAG_LAUNCH_APP && appModel !is AppModel.PrivateSpaceHeader)
+                    prefs.addLaunchHistory(appModel)
                 if (flag in Constants.FLAG_SET_FOLDER_APP_1..Constants.FLAG_SET_FOLDER_APP_8)
                     viewModel.saveFolderApp(
                         folderSlot,
@@ -258,6 +260,7 @@ class AppDrawerFragment : BaseFragment() {
 
         binding.recyclerView.layoutManager = linearLayoutManager
         binding.recyclerView.adapter = adapter
+        adapter.launchHistory = prefs.getLaunchHistory()
         binding.recyclerView.addOnScrollListener(getRecyclerViewOnScrollListener())
         binding.recyclerView.itemAnimator = null
         if (requireContext().isEinkDisplay().not() && requireContext().isSystemAnimationsDisabled().not())

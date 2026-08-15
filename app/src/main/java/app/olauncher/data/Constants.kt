@@ -88,6 +88,7 @@ object Constants {
     const val FLAG_SET_FOLDER_APP_8 = 28
 
     const val MAX_APPS_IN_FOLDER = 8
+    const val MAX_LAUNCH_HISTORY = 20
 
     const val FLAG_SET_SWIPE_LEFT_APP = 11
     const val FLAG_SET_SWIPE_RIGHT_APP = 12
