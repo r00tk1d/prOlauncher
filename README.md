@@ -58,3 +58,21 @@ Install the debug build directly on a connected device with:
 ```bash
 ./gradlew installDebug
 ```
+
+## Releases
+
+APKs are built automatically by a GitHub Actions workflow (`.github/workflows/build-release.yml`) and published as a GitHub Release.
+
+To publish a new release, push a tag (matching `v*`):
+
+```bash
+git tag v1.0
+git push origin v1.0
+```
+
+You can also trigger the build from the **Actions** tab (workflow *Build APK and create release* → *Run workflow*). Every release contains:
+
+- `app-debug.apk` — debug build, signed with the debug key (ready to install)
+- `app-release-unsigned.apk` — minified release build (unsigned, not directly installable)
+
+To install the debug APK, download `app-debug.apk` from the release page, allow installing apps from unknown sources for your browser/downloader, and open the file.
