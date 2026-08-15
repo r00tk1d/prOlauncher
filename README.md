@@ -1,44 +1,35 @@
-![Olauncher](https://repository-images.githubusercontent.com/278638069/db0acb80-661b-11eb-803e-926cae5dccb4)
+# prOlauncher
 
+A personal fork of [**Olauncher | Minimal AF Launcher**](https://github.com/tanujnotes/Olauncher), the minimal, ad-free launcher for Android.
 
-# Olauncher | Minimal AF Launcher
-AF stands for Ad-Free! :D
+This repository is forked from the original [Olauncher](https://github.com/tanujnotes/Olauncher) project by [Tanuj Notes](https://github.com/tanujnotes) and builds on top of it. All the original Olauncher functionality still applies — this fork only **adds** the features listed below.
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-    alt="Get it on F-Droid"
-    height="80">](https://f-droid.org/packages/app.olauncher)
-[<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-    alt="Get it on Play Store"
-    height="80">](https://play.google.com/store/apps/details?id=app.olauncher)
+- Upstream project: [tanujnotes/Olauncher](https://github.com/tanujnotes/Olauncher)
+- License: [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
-### Install using [F-Droid](https://f-droid.org/packages/app.olauncher), [Play Store](https://play.google.com/store/apps/details?id=app.olauncher) or the [latest APK](https://github.com/tanujnotes/Olauncher/releases/).
+## Added features
 
-- To maintain the simplicity of the launcher, a few niche features are available but hidden.
+All changes are on top of upstream Olauncher (v6.7.19).
 
-- Please check out the **[About](https://tanujnotes.substack.com/p/olauncher-minimal-af-launcher?utm_source=github)** page in the Olauncher settings for a complete list of features and **FAQs**.
+### Folders
+- Create up to 8 folders on the home screen (long-press a slot → *Create folder*).
+- Open a folder in a dedicated full-screen view.
+- Add apps to a folder by long-pressing an app slot inside the folder view.
+- Rename, replace, or remove folders from the long-press menu.
+- Cleaner folder view: empty app slots are hidden, and an empty folder shows a "Tap to add apps" hint.
 
-##
+### Home screen
+- **No preset app count**: the fixed "number of home apps" setting was removed. Apps are added individually (long-press an empty slot → *Add app*, or tap the hint when the home is empty), and empty slots are hidden.
+- **Rename home apps** via the long-press menu.
+- **Remove apps** from the home screen via the long-press menu.
+- **Drag & drop reordering** of home screen slots.
 
-License: [GNU GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)
+### App drawer / search
+- **Search history**: when the search box is empty, the drawer shows the apps you most recently launched from the search (instead of the full list). Typing a letter switches to normal filtering; clearing the text shows the history again.
 
-Contact: [X/Twitter](https://x.com/tanujnotes) • [Reddit](https://reddit.com/user/tanujnotes/) • [Bluesky](https://bsky.app/profile/tanujnotes.bsky.social)
+### Folder apps
+- **Rename apps inside a folder** via the long-press menu.
+- **Drag & drop reordering** of apps inside a folder.
 
-##
-
-### My other apps:
-
-- [Pro Launcher](https://play.google.com/store/apps/details?id=app.prolauncher) - Pro version of Olauncher with extra features like widgets, weather, folders, etc.
-
-- [Note to Self](https://play.google.com/store/apps/details?id=com.makenotetoself) - Free and [open source](https://github.com/jeerovan/ntsapp) notes app with chat like interface and end-to-end encryption.
-
-- [Pentastic](https://play.google.com/store/apps/details?id=app.pentastic) - Minimal todo lists. Free and [open source](https://github.com/tanujnotes/Pentastic).
-
-##
-
-### Help me get a new phone for testing:
-
-[<img src="https://img.buymeacoffee.com/button-api/?emoji=&slug=tanujnotes&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff"
-    alt="Get it on Play Store"
-    height="80">](https://www.buymeacoffee.com/tanujnotes)
-
-Thank you!
+### Navigation
+- **Tap the empty space** inside a folder to return to the home screen.
