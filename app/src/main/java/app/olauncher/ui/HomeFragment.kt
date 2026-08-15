@@ -47,6 +47,7 @@ import app.olauncher.helper.openCameraApp
 import app.olauncher.helper.openDialerApp
 import app.olauncher.helper.openSearch
 import app.olauncher.helper.setPlainWallpaperByTheme
+import app.olauncher.helper.showKeyboard
 import app.olauncher.helper.showToast
 import app.olauncher.listener.OnSwipeTouchListener
 import app.olauncher.listener.ViewSwipeTouchListener
@@ -680,7 +681,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             }
             .setNegativeButton(R.string.cancel) { _, _ -> }
             .show()
-        editText.requestFocus()
+        editText.showKeyboard()
     }
 
     private fun createFolder(slot: Int, name: String) {
@@ -704,7 +705,7 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             }
             .setNegativeButton(R.string.cancel) { _, _ -> }
             .show()
-        editText.requestFocus()
+        editText.showKeyboard()
     }
 
     private fun setHomeAppName(slot: Int, name: String) {

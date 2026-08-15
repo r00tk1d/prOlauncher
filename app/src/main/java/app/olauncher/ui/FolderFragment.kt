@@ -23,6 +23,7 @@ import app.olauncher.data.Prefs
 import app.olauncher.databinding.FragmentFolderBinding
 import app.olauncher.helper.getUserHandleFromString
 import app.olauncher.helper.isPackageInstalled
+import app.olauncher.helper.showKeyboard
 import app.olauncher.listener.ViewSwipeTouchListener
 
 class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListener {
@@ -265,7 +266,7 @@ class FolderFragment : BaseFragment(), View.OnClickListener, View.OnLongClickLis
             }
             .setNegativeButton(R.string.cancel) { _, _ -> }
             .show()
-        editText.requestFocus()
+        editText.showKeyboard()
     }
 
     private fun getInstalledAppCount(): Int {
