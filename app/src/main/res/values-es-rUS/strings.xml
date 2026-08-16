@@ -49,9 +49,7 @@
     <string name="theme_mode">Tema</string>
     <string name="system_default">Sistema</string>
     <string name="dark">Oscuro</string>
-    <string name="light">Claro</string>
-    <string name="welcome_to_olauncher_settings">¡Bienvenido a la configuración!
-        \n\nRecuerda, si tienes alguna pregunta, nuestra página Acerca de tiene la respuesta.</string>    <string name="keyboard_message">Hola, el teclado es la forma más rápida de encontrar y abrir aplicaciones en Olauncher. ¿Podemos pedirle que mantenga esto activado por unos días más y luego decidir? La decisión siempre es suya.</string>
+    <string name="light">Claro</string>    <string name="keyboard_message">Hola, el teclado es la forma más rápida de encontrar y abrir aplicaciones en Olauncher. ¿Podemos pedirle que mantenga esto activado por unos días más y luego decidir? La decisión siempre es suya.</string>
     <string name="digital_wellbeing_message">Si desea establecer límites de tiempo para determinadas aplicaciones, la función Bienestar Digital de Android puede ayudarle a hacerlo.
         \n\nBusque Bienestar Digital en la configuración de su teléfono y habilítelo.</string>
     <string name="app_usage_message">Para mostrar/ocultar el tiempo de pantalla en la pantalla de inicio, permita o deniegue el permiso de uso de la aplicación.

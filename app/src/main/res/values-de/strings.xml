@@ -81,9 +81,7 @@
     <string name="theme_mode">Stil</string>
     <string name="system_default">System</string>
     <string name="dark">Dunkel</string>
-    <string name="light">Hell</string>
-    <string name="welcome_to_olauncher_settings">Willkommen in den Einstellungen!
-        \n\nDenken Sie daran, wenn Sie Fragen haben, unsere Seite „Über“ hat die Antwort.</string>    <string name="keyboard_message">Hallo, die Tastatur ist der schnellste Weg, Apps in Olauncher zu finden und zu starten. Können wir Sie bitten, die Funktion noch ein paar Tage eingeschaltet zu lassen und dann zu entscheiden?
+    <string name="light">Hell</string>    <string name="keyboard_message">Hallo, die Tastatur ist der schnellste Weg, Apps in Olauncher zu finden und zu starten. Können wir Sie bitten, die Funktion noch ein paar Tage eingeschaltet zu lassen und dann zu entscheiden?
         \n\nDie Wahl liegt immer bei Ihnen.</string>
     <string name="digital_wellbeing_message">Wenn Sie Zeitlimits für bestimmte Apps festlegen möchten, kann Ihnen die Digital Wellbeing-Funktion von Android dabei helfen.
         \n\nBitte suchen Sie in Ihren Telefoneinstellungen nach Digital Wellbeing und aktivieren Sie es.</string>

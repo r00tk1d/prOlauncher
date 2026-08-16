@@ -49,9 +49,7 @@
     <string name="theme_mode">Mode tema</string>
     <string name="system_default">Sistem</string>
     <string name="dark">Gelap</string>
-    <string name="light">Terang</string>
-    <string name="welcome_to_olauncher_settings">Selamat datang di pengaturan!
-        \n\nIngat, jika Anda memiliki pertanyaan, halaman Tentang kami memiliki jawabannya.</string>    <string name="keyboard_message">Hai, keyboard adalah cara tercepat untuk menemukan dan meluncurkan aplikasi di Olauncher. Bisakah kami meminta Anda untuk mengaktifkannya selama beberapa hari lagi dan kemudian memutuskan?           Pilihan selalu menjadi milik Anda.</string>
+    <string name="light">Terang</string>    <string name="keyboard_message">Hai, keyboard adalah cara tercepat untuk menemukan dan meluncurkan aplikasi di Olauncher. Bisakah kami meminta Anda untuk mengaktifkannya selama beberapa hari lagi dan kemudian memutuskan?           Pilihan selalu menjadi milik Anda.</string>
     <string name="digital_wellbeing_message">Jika Anda ingin menetapkan batas waktu untuk aplikasi tertentu, fitur Digital Wellbeing Android dapat membantu Anda melakukannya.
         \n\nSilakan cari Digital Wellbeing di pengaturan ponsel Anda dan aktifkan.</string>
     <string name="app_usage_message">Untuk menampilkan/menyembunyikan waktu layar di layar utama, izinkan atau tolak izin penggunaan aplikasi.

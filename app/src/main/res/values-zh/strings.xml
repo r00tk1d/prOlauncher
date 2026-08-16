@@ -82,9 +82,7 @@
     <string name="theme_mode">主题模式</string>
     <string name="system_default">系统</string>
     <string name="dark">黑暗</string>
-    <string name="light">光</string>
-    <string name="welcome_to_olauncher_settings">欢迎来到设置！
-        \n\n请记住，如果您有任何问题，我们的“关于”页面有答案。</string>    <string name="keyboard_message">您好，键盘是在 Olauncher 中查找和启动应用程序的最快方式。我们可以要求您再保留几天?
+    <string name="light">光</string>    <string name="keyboard_message">您好，键盘是在 Olauncher 中查找和启动应用程序的最快方式。我们可以要求您再保留几天?
         \n\n然后再决定吗？选择权永远在你手中。</string>
     <string name="digital_wellbeing_message">如果您想为某些应用程序设置时间限制，Android 的数字健康功能可以帮助您做到这一点。
         \n\n请在手机设置中搜索数字健康并启用它。</string>

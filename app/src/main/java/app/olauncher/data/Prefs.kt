@@ -14,7 +14,6 @@ class Prefs(context: Context) {
 
     private val FIRST_OPEN = "FIRST_OPEN"
     private val FIRST_OPEN_TIME = "FIRST_OPEN_TIME"
-    private val FIRST_SETTINGS_OPEN = "FIRST_SETTINGS_OPEN"
     private val FIRST_HIDE = "FIRST_HIDE"
     private val LOCK_MODE = "LOCK_MODE"
     private val AUTO_SHOW_KEYBOARD = "AUTO_SHOW_KEYBOARD"
@@ -168,10 +167,6 @@ class Prefs(context: Context) {
     var firstOpenTime: Long
         get() = prefs.getLong(FIRST_OPEN_TIME, 0L)
         set(value) = prefs.edit { putLong(FIRST_OPEN_TIME, value).apply() }
-
-    var firstSettingsOpen: Boolean
-        get() = prefs.getBoolean(FIRST_SETTINGS_OPEN, true)
-        set(value) = prefs.edit { putBoolean(FIRST_SETTINGS_OPEN, value).apply() }
 
     var firstHide: Boolean
         get() = prefs.getBoolean(FIRST_HIDE, true)

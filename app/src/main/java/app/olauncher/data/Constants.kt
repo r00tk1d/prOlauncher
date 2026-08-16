@@ -9,7 +9,6 @@ object Constants {
     }
 
     object Dialog {
-        const val ABOUT = "ABOUT"
         const val HIDDEN = "HIDDEN"
         const val KEYBOARD = "KEYBOARD"
         const val DIGITAL_WELLBEING = "DIGITAL_WELLBEING"

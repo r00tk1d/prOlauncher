@@ -77,10 +77,7 @@
     <string name="theme_mode">Theme mode</string>
     <string name="system_default">System</string>
     <string name="dark">Dark</string>
-    <string name="light">Light</string>
-    <string name="welcome_to_olauncher_settings">Welcome to the settings!
-        \n\nRemember, if you have any questions, our About page has the answer.</string>
-    <string name="keyboard_message">Hi, keyboard is the fastest way to find and launch apps in Olauncher. Can we request you to keep this On for a few more days and then decide?
+    <string name="light">Light</string>    <string name="keyboard_message">Hi, keyboard is the fastest way to find and launch apps in Olauncher. Can we request you to keep this On for a few more days and then decide?
         \n\nThe choice is always yours.</string>
     <string name="digital_wellbeing_message">If you want to set time limits for certain apps, Digital Wellbeing feature of Android can help you do it.           Please search for Digital Wellbeing in your phone settings and enable it.</string>
     <string name="app_usage_message">To show/hide your screen time on the home screen, please allow or disallow the app usage permission.

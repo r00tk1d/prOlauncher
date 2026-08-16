@@ -49,9 +49,7 @@
     <string name="theme_mode">Modalità tema</string>
     <string name="system_default">di sistema</string>
     <string name="dark">Scuro</string>
-    <string name="light">Chiaro</string>
-    <string name="welcome_to_olauncher_settings">Benvenuto nelle impostazioni!
-        \n\nRicorda, se hai domande, la nostra pagina Informazioni ha la risposta.</string>    <string name="keyboard_message">Ciao, la tastiera è il modo più veloce per trovare e avviare le app in Olauncher. Possiamo chiederti di metterlo alla prova ancora per qualche giorno e poi decidere?
+    <string name="light">Chiaro</string>    <string name="keyboard_message">Ciao, la tastiera è il modo più veloce per trovare e avviare le app in Olauncher. Possiamo chiederti di metterlo alla prova ancora per qualche giorno e poi decidere?
         \n\nSei sempre tu a scegliere.</string>
     <string name="digital_wellbeing_message">Se desideri impostare limiti di tempo per determinate app, la funzionalità Benessere digitale di Android può aiutarti a farlo.
         \n\nCerca Benessere digitale nelle impostazioni del telefono e attivalo.</string>

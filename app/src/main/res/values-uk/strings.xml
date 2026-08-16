@@ -49,9 +49,7 @@
     <string name="theme_mode">Тема</string>
     <string name="system_default">Системна</string>
     <string name="dark">Темна</string>
-    <string name="light">Світла</string>
-    <string name="welcome_to_olauncher_settings">Ласкаво просимо до налаштувань!
-        \n\nПам\'ятайте, якщо у вас є питання, на нашій сторінці «Про нас» є відповідь.</string>    <string name="keyboard_message">Привіт, клавіатура - це найшвидший спосіб знайти та запустити програми в Olauncher. Чи можемо ми попросити вас залишити це увімкненим ще на кілька днів, а потім прийняти рішення?
+    <string name="light">Світла</string>    <string name="keyboard_message">Привіт, клавіатура - це найшвидший спосіб знайти та запустити програми в Olauncher. Чи можемо ми попросити вас залишити це увімкненим ще на кілька днів, а потім прийняти рішення?
         \n\nВибір завжди за вами.</string>
     <string name="digital_wellbeing_message">Якщо ви хочете встановити часові обмеження для певних програм, функція цифрового добробуту Android може допомогти вам це зробити.
         \n\nЗнайдіть Digital Wellbeing у налаштуваннях телефону та ввімкніть його.</string>

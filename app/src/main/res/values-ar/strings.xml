@@ -82,8 +82,7 @@
     <string name="theme_mode">النمط</string>
     <string name="system_default">نظام</string>
     <string name="dark">مظلم</string>
-    <string name="light">مضيء</string>
-    <string name="welcome_to_olauncher_settings">مرحبًا بك في الإعدادات!\n\nتذكر، إذا كان لديك أي سؤال، فإن صفحة "حول" لدينا تحتوي على الإجابة.</string>    <string name="keyboard_message">مرحبًا ، لوحة المفاتيح هي أسرع طريقة للعثور على التطبيقات وتشغيلها في Olauncher. هل يمكننا أن نطلب منك الاحتفاظ بهذا الأمر لبضعة أيام أخرى ثم اتخاذ القرار؟ الاختيار دائما لك.</string>
+    <string name="light">مضيء</string>    <string name="keyboard_message">مرحبًا ، لوحة المفاتيح هي أسرع طريقة للعثور على التطبيقات وتشغيلها في Olauncher. هل يمكننا أن نطلب منك الاحتفاظ بهذا الأمر لبضعة أيام أخرى ثم اتخاذ القرار؟ الاختيار دائما لك.</string>
     <string name="digital_wellbeing_message">إذا كنت تريد تعيين حدود زمنية لتطبيقات معينة، فيمكن أن تساعدك ميزة الرفاهية الرقمية في Android على القيام بذلك.
         \n\nيرجى البحث عن الرفاهية الرقمية في إعدادات هاتفك وتمكينها.</string>
     <string name="app_usage_message">لعرض/إخفاء وقت استخدام الشاشة على الشاشة الرئيسية، يرجى السماح أو منع إذن استخدام التطبيق.

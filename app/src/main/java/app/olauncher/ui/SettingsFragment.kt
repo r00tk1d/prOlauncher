@@ -164,10 +164,6 @@ class SettingsFragment : BaseFragment(), View.OnClickListener, View.OnLongClickL
     }
 
     private fun initObservers() {
-        if (prefs.firstSettingsOpen) {
-            viewModel.showDialog.postValue(Constants.Dialog.ABOUT)
-            prefs.firstSettingsOpen = false
-        }
         viewModel.isOlauncherDefault.observe(viewLifecycleOwner) {
             if (it) {
                 binding.setLauncher.text = getString(R.string.change_default_launcher)

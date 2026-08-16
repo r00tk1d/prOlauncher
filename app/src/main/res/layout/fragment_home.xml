@@ -239,7 +239,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="96dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/set_as_default_launcher_u"

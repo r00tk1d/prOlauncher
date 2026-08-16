@@ -47,9 +47,7 @@
     <string name="theme_mode">ערכת נושא</string>
     <string name="system_default">מערכת</string>
     <string name="dark">כהה</string>
-    <string name="light">בהירה</string>
-    <string name="welcome_to_olauncher_settings">למטה מופיע קישור לעמוד "מידע כללי", ובו אפשר למצוא תשובות לכל השאלות. לא לשכוח :)
-        \n\nThank you.</string>    <string name="keyboard_message">היי, יותר מהיר למצוא ולפתוח יישומים ב־Olauncher בעזרת ההקלדה. אולי בכל זאת היית רוצה להשאיר את ההגדרה הזאת ולתת לה עוד הזדמנות?
+    <string name="light">בהירה</string>    <string name="keyboard_message">היי, יותר מהיר למצוא ולפתוח יישומים ב־Olauncher בעזרת ההקלדה. אולי בכל זאת היית רוצה להשאיר את ההגדרה הזאת ולתת לה עוד הזדמנות?
         \n\nThe choice is always yours.</string>    <string name="accessibility_service_description">הרשאת הנגישות נחוצה להפעלת הנעילה בהקשה כפולה ולחצן הבית להצגת אפליקציות אחרונות. כל הנתונים שייאספו על ידי Olauncher דרך השירות הזה לא יועברו הלאה ממכשירך.</string>
     <string name="support_olauncher_for_free">אפשר לתמוך ב־Olauncher מבלי לשלם שקל, בעזרת שימוש בקישור ה־Amazon affiliate שלנו.</string>
     <string name="support_olauncher_message">על כל רכישה שתבוצע דרך הקישור שלנו אנחנו נקבל עמלה קטנה. נשמח אם תשמרו את הקישור ותשתמשו בו בקניות מהאינטרנט.\nתודה רבה!</string>

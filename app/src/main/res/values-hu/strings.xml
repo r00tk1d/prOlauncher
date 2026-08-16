@@ -48,9 +48,7 @@
     <string name="theme_mode">Téma mód</string>
     <string name="system_default">Rendszer</string>
     <string name="dark">Sötét</string>
-    <string name="light">Világos</string>
-    <string name="welcome_to_olauncher_settings">Üdvözöljük a beállításokban!
-        \n\nNe feledje, ha bármilyen kérdése van, az „Rólunk” oldalunk tartalmazza a választ.</string>    <!---->
+    <string name="light">Világos</string>    <!---->
     <string name="keyboard_message">Üdvözöljük! A billentyűzet a leggyorsabb módja az alkalmazások megtalálásához és elindításához az Olauncherben. Megkérhetjük, hogy hagyja bekapcsolva még néhány napig, és utána döntsön?
         \n\nA választás mindig az Öné.</string>
     <string name="digital_wellbeing_message">Ha időkorlátokat szeretne beállítani bizonyos alkalmazásokhoz, az Android Digital Wellbeing funkciója segíthet ebben.

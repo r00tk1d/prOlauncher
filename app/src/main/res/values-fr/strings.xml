@@ -49,9 +49,7 @@
     <string name="theme_mode">Thème d\'affichage</string>
     <string name="system_default">Système</string>
     <string name="dark">Sombre</string>
-    <string name="light">Clair</string>
-    <string name="welcome_to_olauncher_settings">Bienvenue dans les paramètres !
-        \n\nN\'oubliez pas, si vous avez des questions, notre page À propos a la réponse.</string>    <string name="keyboard_message">Bonjour, le clavier est le moyen le plus rapide de trouver et de lancer des applications dans Olauncher. Pouvons-nous vous demander de garder cela activé pendant quelques jours de plus, puis de décider? Le choix vous appartient toujours.</string>
+    <string name="light">Clair</string>    <string name="keyboard_message">Bonjour, le clavier est le moyen le plus rapide de trouver et de lancer des applications dans Olauncher. Pouvons-nous vous demander de garder cela activé pendant quelques jours de plus, puis de décider? Le choix vous appartient toujours.</string>
     <string name="digital_wellbeing_message">Si vous souhaitez définir des limites de temps pour certaines applications, la fonctionnalité Digital Wellbeing d\'Android peut vous aider à le faire.
         \n\nVeuillez rechercher Digital Wellbeing dans les paramètres de votre téléphone et l\'activer.</string>
     <string name="app_usage_message">Pour afficher/masquer le temps d\'écran sur l\'écran d\'accueil, autorisez ou refusez l\'autorisation d\'utilisation de l\'application.

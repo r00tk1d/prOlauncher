@@ -48,9 +48,7 @@
     <string name="theme_mode">Thema modus</string>
     <string name="system_default">Systeem</string>
     <string name="dark">Donker</string>
-    <string name="light">Licht</string>
-    <string name="welcome_to_olauncher_settings">Welkom bij de instellingen!
-        \n\nOnthoud, als je vragen hebt, heeft onze Over-pagina het antwoord.</string>    <!---->
+    <string name="light">Licht</string>    <!---->
     <string name="keyboard_message">Hoi, het toetsenbord is de snelste manier om apps te vinden en te starten in Olauncher. Mag ik je vragen dit nog een paar dagen ingeschakeld te laten en daarna te beslissen?
         \n\nDe keuze is altijd aan jou.</string>
     <string name="digital_wellbeing_message">Als je tijdslimieten voor bepaalde apps wilt instellen, kan de Digital Wellbeing-functie van Android je daarbij helpen.

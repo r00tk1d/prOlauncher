@@ -82,9 +82,7 @@
     <string name="theme_mode">テーマモード</string>
     <string name="system_default">システム</string>
     <string name="dark">ダーク</string>
-    <string name="light">ライト</string>
-    <string name="welcome_to_olauncher_settings">設定へようこそ！
-        \n\n質問がある場合は、私たちの「About」ページに答えがありますので、覚えておいてください。</string>    <string name="keyboard_message">こんにちは、キーボードは Olauncher でアプリを見つけて起動する最も速い方法です。もう数日間これをオンにしてから判断していただくようお願いできますか?選択は常にあなた次第です。</string>
+    <string name="light">ライト</string>    <string name="keyboard_message">こんにちは、キーボードは Olauncher でアプリを見つけて起動する最も速い方法です。もう数日間これをオンにしてから判断していただくようお願いできますか?選択は常にあなた次第です。</string>
     <string name="digital_wellbeing_message">特定のアプリに時間制限を設定したい場合は、Android の Digital Wellbeing 機能を使用すると便利です。
         \n\n携帯電話の設定で Digital Wellbeing を検索し、有効にしてください。</string>
     <string name="app_usage_message">ホーム画面で画面時間を表示/非表示するには、アプリの使用権限を許可または拒否してください。
