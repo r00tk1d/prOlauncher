@@ -194,11 +194,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun initObservers() {
-        if (prefs.firstSettingsOpen) {
-            binding.firstRunTips.visibility = View.VISIBLE
-            binding.setDefaultLauncher.visibility = View.GONE
-        } else binding.firstRunTips.visibility = View.GONE
-
         viewModel.refreshHome.observe(viewLifecycleOwner) {
             populateHomeScreen(it)
         }
@@ -211,7 +206,6 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 prefs.homeBottomAlignment = false
                 setHomeAlignment()
             }
-            if (binding.firstRunTips.isVisible) return@Observer
             binding.setDefaultLauncher.isVisible = it.not() && prefs.hideSetDefaultLauncher.not()
         })
         viewModel.homeAppAlignment.observe(viewLifecycleOwner) {
@@ -453,7 +447,9 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             visibleCount++
             textView.visibility = View.VISIBLE
         }
-        binding.tvHomeHint.isVisible = visibleCount == 0 && prefs.firstSettingsOpen.not()
+        val homeEmpty = visibleCount == 0
+        binding.tvHomeHint.isVisible = homeEmpty
+        binding.firstRunTips.isVisible = homeEmpty
         schedulePinCleanup()
     }
 

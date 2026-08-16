@@ -10,22 +10,10 @@ object Constants {
 
     object Dialog {
         const val ABOUT = "ABOUT"
-        const val WALLPAPER = "WALLPAPER"
-        const val REVIEW = "REVIEW"
-        const val RATE = "RATE"
-        const val SHARE = "SHARE"
         const val HIDDEN = "HIDDEN"
         const val KEYBOARD = "KEYBOARD"
         const val DIGITAL_WELLBEING = "DIGITAL_WELLBEING"
         const val PRO_MESSAGE = "PRO_MESSAGE"
-    }
-
-    object UserState {
-        const val START = "START"
-        const val WALLPAPER = "WALLPAPER"
-        const val REVIEW = "REVIEW"
-        const val RATE = "RATE"
-        const val SHARE = "SHARE"
     }
 
     object DateTime {
@@ -103,8 +91,6 @@ object Constants {
 
     const val REQUEST_CODE_ENABLE_ADMIN = 666
     const val REQUEST_CODE_LAUNCHER_SELECTOR = 678
-
-    const val HINT_RATE_US = 15
 
     const val LONG_PRESS_DELAY_MS = 500L
     const val ONE_DAY_IN_MILLIS = 86400000L

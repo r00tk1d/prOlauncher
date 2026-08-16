@@ -42,13 +42,11 @@
     <string name="change_default_launcher">Change default launcher</string>
     <string name="privacy">Privacy</string>
     <string name="share">Share</string>
-    <string name="share_now">Share now</string>
     <string name="rate">Rate</string>
-    <string name="rate_now">Rate now</string>
     <string name="follow">Follow</string>
     <string name="email">Email</string>
     <string name="donate">Donate</string>
-    <string name="swipe_up_for_apps">1. Swipe up for all apps\n2. Long press anywhere for settings</string>
+    <string name="swipe_up_for_apps">1. Swipe up for all apps\n2. Long press anywhere for settings\n3. Long press on app or folder to add or modify apps and folders\n4. Drag and drop to reorder\n5. Long press in search on app to pin an app for a limited time</string>
     <string name="apps_on_home_screen">Apps on home screen</string>
     <string name="daily_wallpaper_update">Daily new wallpaper</string>
     <string name="left">Left</string>
@@ -82,12 +80,6 @@
     <string name="light">Light</string>
     <string name="welcome_to_olauncher_settings">Welcome to the settings!
         \n\nRemember, if you have any questions, our About page has the answer.</string>
-    <string name="rate_us_message">Hi, you won\'t see this message again.
-        \n\nIf you\'re finding Olauncher useful, could you please leave a 5-star review? It\'ll mean the world to us. Thank you!</string>
-    <string name="share_message">We need your help! We believe everyone should know about Olauncher and its benefits, but we can\'t do it alone.
-        \n\nCould you please share Olauncher with your friends, family, and followers? Thank you for your support! ❤</string>
-    <!--    <string name="share_message">Your monthly reminder - you should use your phone, not the other way round. Stay strong. You\'re doing great!-->
-    <!--         \n\nIf you have a moment to spare, could you please share Olauncher with others? Olauncher needs people. More importantly, people need Olauncher.</string>-->
     <string name="keyboard_message">Hi, keyboard is the fastest way to find and launch apps in Olauncher. Can we request you to keep this On for a few more days and then decide?
         \n\nThe choice is always yours.</string>
     <string name="digital_wellbeing_message">If you want to set time limits for certain apps, Digital Wellbeing feature of Android can help you do it.           Please search for Digital Wellbeing in your phone settings and enable it.</string>
@@ -95,8 +87,6 @@
         \n\nNote: No app usage data is collected. Everything is processed on your device.</string>
     <string name="pro_message">Olauncher also has a pro version called Pro Launcher. It has extra features like weather, widgets, fonts, folders, AMOLED wallpapers, and so on.
         \n\nIt\'s also the best way to support the developers of Olauncher. Check it out!</string>
-    <string name="wallpaper_message">Olauncher offers beautiful new wallpapers daily. Give your homescreen a fresh new look every day, for free!
-        \n\nWant to try it?</string>
     <string name="accessibility_service_description">The accessibility permission is required to enable the gesture - double tap to lock . Any data acquired by Olauncher via this service will not leave your device.</string>
     <string name="support_olauncher_for_free">Support Olauncher for free by using our Amazon affiliate link.</string>
     <string name="support_olauncher_message">Every time you buy something using our link, we get a small commission. Please save the link and use it whenever you shop online.\nThank you!</string>
@@ -155,10 +145,6 @@
     <string name="about_olauncher">About and FAQs</string>
     <string name="screen_time">Screen time</string>
     <string name="learn_more">Learn more</string>
-    <string name="did_you_know">Did you know?</string>
-    <string name="leave_a_review">Leave a review</string>
-    <string name="review_message">Olauncher is free and always will be. It has no ads, collects no data, and reduces your screen time, resulting in a healthier life.
-        \n\nWe hope you enjoy it. Tell us what you think.</string>
     <string name="alignment_changed">Alignment changed ✅</string>
     <string name="home_screen">Home screen</string>
     <string name="hey">Hey</string>
