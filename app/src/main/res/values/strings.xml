@@ -176,8 +176,8 @@
     <string name="add_app">Add app</string>
     <string name="replace_app">Replace app</string>
     <string name="remove_app">Remove app</string>
-    <string name="add">Add</string>
-    <string name="modify">Modify</string>
+    <string name="add">Add slot</string>
+    <string name="modify">Modify Slot</string>
     <string name="folder_name_hint">Folder name</string>
     <string name="rename_app">Rename app</string>
     <string name="app_name_hint">App name</string>

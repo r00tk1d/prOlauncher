@@ -14,7 +14,7 @@ All changes are on top of upstream Olauncher (v6.7.19).
 ### Folders
 - Create up to 10 folders on the home screen (long-press a slot → *Add folder*). Creating a folder from an app slot keeps the app in place and places the new folder in the first empty slot.
 - Tap a folder to open it in a dedicated full-screen view.
-- Add apps to a folder by long-pressing an app slot inside the folder view.
+- Add apps to a folder by long-pressing the folder on the home screen → *Add app*, or by long-pressing an empty app slot inside the folder view.
 - Rename, replace, or remove folders from the long-press menu.
 - Cleaner folder view: empty app slots are hidden, and an empty folder shows a "Tap to add apps" hint.
 
@@ -23,7 +23,7 @@ All changes are on top of upstream Olauncher (v6.7.19).
 - **Rename home apps** via the long-press menu.
 - **Remove apps** from the home screen via the long-press menu.
 - **Drag & drop reordering** of home screen slots.
-- **Sectioned long-press menu**: the home slot menu groups options under *Add* (Add app, Add folder) and *Modify* (Replace app, Rename app, Remove app) headers; the same applies to the folder-apps menu.
+- **Sectioned long-press menu**: the home slot menu groups options under *Add slot* (Add app, Add folder) and *Modify Slot* (Replace app, Rename app, Remove app) headers; the same applies to the folder-apps menu and to folders (long-press a folder → *Add app* to add an app into it).
 - **Pin apps for a limited time**: long-press an app in the app drawer/search and choose *Pin* to put it at the very top of the home screen for a chosen duration (1 day, 7 days, or a custom amount of days/hours). Pinned apps show a small pin icon in front of their name and disappear automatically when the time runs out. Pinning is refused when the home screen already holds 10 apps/folders; re-pinning an already pinned app extends its time.
 
 ### App drawer / search

@@ -693,6 +693,13 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
         }
 
         if (isFolderSlot) {
+            addHeader(getString(R.string.add))
+            val emptyFolderPosition = firstEmptyFolderPosition(slot)
+            if (emptyFolderPosition != -1) {
+                addItem(getString(R.string.add_app)) {
+                    showAppListForFolder(slot, emptyFolderPosition)
+                }
+            }
             addHeader(getString(R.string.modify))
             addItem(getString(R.string.rename_folder)) { showFolderNameDialog(slot) }
             addItem(getString(R.string.remove_folder)) { removeFolder(slot) }
@@ -736,6 +743,37 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
     }
 
     private fun firstEmptyHomePosition(): Int = prefs.firstEmptyHomePosition()
+
+    private fun firstEmptyFolderPosition(slot: Int): Int {
+        val apps = prefs.getFolderApps(slot)
+        for (i in apps.indices) {
+            val app = apps[i]
+            if (app == null || app.appPackage.isEmpty()) return i
+        }
+        return -1
+    }
+
+    private fun showAppListForFolder(slot: Int, position: Int) {
+        viewModel.getAppList(true)
+        try {
+            findNavController().navigate(
+                R.id.action_mainFragment_to_appListFragment,
+                bundleOf(
+                    Constants.Key.FLAG to (Constants.FLAG_SET_FOLDER_APP_1 + position),
+                    Constants.Key.FOLDER_SLOT to slot
+                )
+            )
+        } catch (e: Exception) {
+            findNavController().navigate(
+                R.id.appListFragment,
+                bundleOf(
+                    Constants.Key.FLAG to (Constants.FLAG_SET_FOLDER_APP_1 + position),
+                    Constants.Key.FOLDER_SLOT to slot
+                )
+            )
+            e.printStackTrace()
+        }
+    }
 
     private fun showFolderNameDialog(slot: Int) {
         val isCreating = prefs.isFolder(slot).not()
