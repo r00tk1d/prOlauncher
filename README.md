@@ -12,29 +12,14 @@ This repository is forked from the original [Olauncher](https://github.com/tanuj
 All changes are on top of upstream Olauncher (v6.7.19).
 
 ### Folders
-- Create up to 10 folders on the home screen (long-press a slot → *Add folder*). Creating a folder from an app slot keeps the app in place and places the new folder in the first empty slot.
-- Tap a folder to open it in a dedicated full-screen view.
-- Add apps to a folder by long-pressing the folder on the home screen → *Add app*, or by long-pressing an empty app slot inside the folder view.
-- Rename, replace, or remove folders from the long-press menu.
-- Cleaner folder view: empty app slots are hidden, and an empty folder shows a "Tap to add apps" hint.
-
-### Home screen
-- **No preset app count**: the fixed "number of home apps" setting was removed. Apps are added individually (long-press an empty slot → *Add app*, or tap the hint when the home is empty), and empty slots are hidden.
-- **Rename home apps** via the long-press menu.
-- **Remove apps** from the home screen via the long-press menu.
-- **Drag & drop reordering** of home screen slots.
-- **Sectioned long-press menu**: the home slot menu groups options under *Add slot* (Add app, Add folder) and *Modify Slot* (Replace app, Rename app, Remove app) headers; the same applies to the folder-apps menu and to folders (long-press a folder → *Add app* to add an app into it).
-- **Pin apps for a limited time**: long-press an app in the app drawer/search and choose *Pin* to put it at the very top of the home screen for a chosen duration (1 day, 7 days, or a custom amount of days/hours). Pinned apps show a small pin icon in front of their name and disappear automatically when the time runs out. Pinning is refused when the home screen already holds 10 apps/folders; re-pinning an already pinned app extends its time.
-
-### App drawer / search
+- **Folders**: Create up to 10 folders on the home screen (long-press a slot → *Add folder*). Creating a folder from an app slot keeps the app in place and places the new folder in the first empty slot. Add apps to a folder by long-pressing the folder on the home screen → *Add app*, or by long-pressing an empty app slot inside the folder view.
 - **Search history**: when the search box is empty, the drawer shows the apps you most recently launched from the search (instead of the full list). Typing a letter switches to normal filtering; clearing the text shows the history again.
+- **Pin apps for a limited time**: long-press an app in the app drawer/search and choose *Pin* to put it at the very top of the home screen for a chosen duration (1 day, 7 days, or a custom amount of days/hours). Pinned apps show a small pin icon in front of their name and disappear automatically when the time runs out. Pinning is refused when the home screen already holds 10 apps/folders; re-pinning an already pinned app extends its time.
+- **Drag & drop reordering** of home screen slots.
+- **No preset app count**: the fixed "number of home apps" setting was removed. Apps are added individually (long-press an empty slot → *Add app*, or tap the hint when the home is empty), and empty slots are hidden.
+- **10 instead of 8 slots**
+- **Sectioned long-press menu**: the home slot menu groups options under *Add slot* (Add app, Add folder) and *Modify Slot* (Replace app, Rename app, Remove app) headers; the same applies to the folder-apps menu and to folders (long-press a folder → *Add app* to add an app into it).
 
-### Folder apps
-- **Rename apps inside a folder** via the long-press menu.
-- **Drag & drop reordering** of apps inside a folder.
-
-### Navigation
-- **Tap the empty space** inside a folder to return to the home screen.
 
 ## Building
 
