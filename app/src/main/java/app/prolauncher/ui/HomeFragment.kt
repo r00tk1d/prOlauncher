@@ -1,0 +1,1046 @@
+package app.prolauncher.ui
+
+import android.animation.LayoutTransition
+import android.app.admin.DevicePolicyManager
+import android.app.AlertDialog
+import android.content.ClipData
+import android.content.Context
+import android.content.Intent
+import android.content.pm.LauncherApps
+import android.content.res.Configuration
+import android.os.BatteryManager
+import android.os.Build
+import android.os.Bundle
+import android.view.DragEvent
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowInsets
+import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.core.view.setPadding
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import app.prolauncher.MainViewModel
+import app.prolauncher.R
+import app.prolauncher.data.AppModel
+import app.prolauncher.data.Constants
+import app.prolauncher.data.Prefs
+import app.prolauncher.databinding.FragmentHomeBinding
+import app.prolauncher.helper.appUsagePermissionGranted
+import app.prolauncher.helper.dpToPx
+import app.prolauncher.helper.expandNotificationDrawer
+import app.prolauncher.helper.getChangedAppTheme
+import app.prolauncher.helper.getUserHandleFromString
+import app.prolauncher.helper.isPackageInstalled
+import app.prolauncher.helper.openAlarmApp
+import app.prolauncher.helper.openCalendar
+import app.prolauncher.helper.openCameraApp
+import app.prolauncher.helper.openDialerApp
+import app.prolauncher.helper.openSearch
+import app.prolauncher.helper.setPlainWallpaperByTheme
+import app.prolauncher.helper.showKeyboard
+import app.prolauncher.helper.showToast
+import app.prolauncher.listener.OnSwipeTouchListener
+import app.prolauncher.listener.ViewSwipeTouchListener
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListener {
+
+    private lateinit var prefs: Prefs
+    private lateinit var viewModel: MainViewModel
+    private lateinit var deviceManager: DevicePolicyManager
+
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+    private var draggedSlot = -1
+    private var pinCleanupJob: Job? = null
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        prefs = Prefs(requireContext())
+        viewModel = activity?.run {
+            ViewModelProvider(this)[MainViewModel::class.java]
+        } ?: throw Exception("Invalid Activity")
+
+        deviceManager = context?.getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+
+        initObservers()
+        setHomeAlignment(prefs.homeAlignment)
+        initSwipeTouchListener()
+        initClickListeners()
+        initDragListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        populateHomeScreen(false)
+        viewModel.isOlauncherDefault()
+        if (prefs.showStatusBar) showStatusBar()
+        else hideStatusBar()
+    }
+
+    override fun onClick(view: View) {
+        when (view.id) {
+            R.id.lock -> {}
+            // Home button for recents feature disabled
+            // R.id.recents -> {}
+            R.id.clock -> openClockApp()
+            R.id.date -> openCalendarApp()
+            R.id.setDefaultLauncher -> viewModel.resetLauncherLiveData.call()
+            R.id.tvScreenTime -> openScreenTimeDigitalWellbeing()
+            R.id.tvHomeHint -> showAppList(Constants.FLAG_SET_HOME_APP_1 + firstEmptyHomePosition() - 1, true)
+
+            else -> {
+                try { // Launch app
+                    val appLocation = view.tag.toString().toInt()
+                    if (prefs.isFolder(appLocation))
+                        openFolder(appLocation)
+                    else
+                        homeAppClicked(appLocation)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private fun openClockApp() {
+        if (prefs.clockAppPackage.isBlank())
+            openAlarmApp(requireContext())
+        else
+            launchApp(
+                "Clock",
+                prefs.clockAppPackage,
+                prefs.clockAppClassName,
+                prefs.clockAppUser
+            )
+    }
+
+    private fun openCalendarApp() {
+        if (prefs.calendarAppPackage.isBlank())
+            openCalendar(requireContext())
+        else
+            launchApp(
+                "Calendar",
+                prefs.calendarAppPackage,
+                prefs.calendarAppClassName,
+                prefs.calendarAppUser
+            )
+    }
+
+    override fun onLongClick(view: View): Boolean {
+        when (view.id) {
+            R.id.homeApp1 -> showSlotMenu(1)
+            R.id.homeApp2 -> showSlotMenu(2)
+            R.id.homeApp3 -> showSlotMenu(3)
+            R.id.homeApp4 -> showSlotMenu(4)
+            R.id.homeApp5 -> showSlotMenu(5)
+            R.id.homeApp6 -> showSlotMenu(6)
+            R.id.homeApp7 -> showSlotMenu(7)
+            R.id.homeApp8 -> showSlotMenu(8)
+            R.id.homeApp9 -> showSlotMenu(9)
+            R.id.homeApp10 -> showSlotMenu(10)
+            R.id.clock -> {
+                showAppList(Constants.FLAG_SET_CLOCK_APP)
+                prefs.clockAppPackage = ""
+                prefs.clockAppClassName = ""
+                prefs.clockAppUser = ""
+            }
+
+            R.id.date -> {
+                showAppList(Constants.FLAG_SET_CALENDAR_APP)
+                prefs.calendarAppPackage = ""
+                prefs.calendarAppClassName = ""
+                prefs.calendarAppUser = ""
+            }
+
+            R.id.tvScreenTime -> {
+                showAppList(Constants.FLAG_SET_SCREEN_TIME_APP)
+                prefs.screenTimeAppPackage = ""
+                prefs.screenTimeAppClassName = ""
+                prefs.screenTimeAppUser = ""
+            }
+
+            R.id.setDefaultLauncher -> {
+                prefs.hideSetDefaultLauncher = true
+                binding.setDefaultLauncher.visibility = View.GONE
+                if (viewModel.isOlauncherDefault.value != true) {
+                    requireContext().showToast(R.string.set_as_default_launcher)
+                    findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+                }
+            }
+        }
+        return true
+    }
+
+    private fun initObservers() {
+        viewModel.refreshHome.observe(viewLifecycleOwner) {
+            populateHomeScreen(it)
+        }
+        viewModel.isOlauncherDefault.observe(viewLifecycleOwner, Observer {
+            if (it != true) {
+                if (prefs.dailyWallpaper && prefs.appTheme == AppCompatDelegate.MODE_NIGHT_YES) {
+                    prefs.dailyWallpaper = false
+                    viewModel.cancelWallpaperWorker()
+                }
+                prefs.homeBottomAlignment = false
+                setHomeAlignment()
+            }
+            binding.setDefaultLauncher.isVisible = it.not() && prefs.hideSetDefaultLauncher.not()
+        })
+        viewModel.homeAppAlignment.observe(viewLifecycleOwner) {
+            setHomeAlignment(it)
+        }
+        viewModel.toggleDateTime.observe(viewLifecycleOwner) {
+            populateDateTime()
+        }
+        viewModel.screenTimeValue.observe(viewLifecycleOwner) {
+            it?.let { binding.tvScreenTime.text = it }
+        }
+        // Home button for recents feature disabled
+        // viewModel.showRecentApps.observe(viewLifecycleOwner) {
+        //     binding.recents.performClick()
+        // }
+    }
+
+    private fun initSwipeTouchListener() {
+        val context = requireContext()
+        binding.mainLayout.setOnTouchListener(getSwipeGestureListener(context))
+        binding.homeApp1.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp1))
+        binding.homeApp2.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp2))
+        binding.homeApp3.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp3))
+        binding.homeApp4.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp4))
+        binding.homeApp5.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp5))
+        binding.homeApp6.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp6))
+        binding.homeApp7.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp7))
+        binding.homeApp8.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp8))
+        binding.homeApp9.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp9))
+        binding.homeApp10.setOnTouchListener(getViewSwipeTouchListener(context, binding.homeApp10))
+    }
+
+    private fun initClickListeners() {
+        binding.lock.setOnClickListener(this)
+        // Home button for recents feature disabled
+        // binding.recents.setOnClickListener(this)
+        binding.clock.setOnClickListener(this)
+        binding.date.setOnClickListener(this)
+        binding.clock.setOnLongClickListener(this)
+        binding.date.setOnLongClickListener(this)
+        binding.setDefaultLauncher.setOnClickListener(this)
+        binding.setDefaultLauncher.setOnLongClickListener(this)
+        binding.tvScreenTime.setOnClickListener(this)
+        binding.tvScreenTime.setOnLongClickListener(this)
+        binding.tvHomeHint.setOnClickListener(this)
+
+        // These fire only on d-pad/keyboard events; touch is consumed by ViewSwipeTouchListener
+        binding.homeApp1.setOnClickListener(this)
+        binding.homeApp2.setOnClickListener(this)
+        binding.homeApp3.setOnClickListener(this)
+        binding.homeApp4.setOnClickListener(this)
+        binding.homeApp5.setOnClickListener(this)
+        binding.homeApp6.setOnClickListener(this)
+        binding.homeApp7.setOnClickListener(this)
+        binding.homeApp8.setOnClickListener(this)
+        binding.homeApp9.setOnClickListener(this)
+        binding.homeApp10.setOnClickListener(this)
+        binding.homeApp1.setOnLongClickListener(this)
+        binding.homeApp2.setOnLongClickListener(this)
+        binding.homeApp3.setOnLongClickListener(this)
+        binding.homeApp4.setOnLongClickListener(this)
+        binding.homeApp5.setOnLongClickListener(this)
+        binding.homeApp6.setOnLongClickListener(this)
+        binding.homeApp7.setOnLongClickListener(this)
+        binding.homeApp8.setOnLongClickListener(this)
+        binding.homeApp9.setOnLongClickListener(this)
+        binding.homeApp10.setOnLongClickListener(this)
+    }
+
+    private fun initDragListeners() {
+        binding.homeApp1.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp2.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp3.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp4.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp5.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp6.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp7.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp8.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp9.setOnDragListener(getHomeSlotDragListener())
+        binding.homeApp10.setOnDragListener(getHomeSlotDragListener())
+    }
+
+    private fun getHomeSlotDragListener(): View.OnDragListener {
+        return View.OnDragListener { view, event ->
+            when (event.action) {
+                DragEvent.ACTION_DRAG_STARTED -> true
+
+                DragEvent.ACTION_DRAG_ENTERED -> {
+                    val target = view.tag.toString().toInt()
+                    if (draggedSlot != -1 && draggedSlot != target) {
+                        prefs.swapHomeSlots(draggedSlot, target)
+                        refreshHomeSlotText(draggedSlot)
+                        refreshHomeSlotText(target)
+                        draggedSlot = target
+                    }
+                    true
+                }
+
+                DragEvent.ACTION_DROP -> {
+                    true
+                }
+
+                DragEvent.ACTION_DRAG_ENDED -> {
+                    draggedSlot = -1
+                    binding.root.post { binding.root.layoutTransition = LayoutTransition() }
+                    true
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    private fun homeSlotView(slot: Int): TextView {
+        return when (slot) {
+            1 -> binding.homeApp1
+            2 -> binding.homeApp2
+            3 -> binding.homeApp3
+            4 -> binding.homeApp4
+            5 -> binding.homeApp5
+            6 -> binding.homeApp6
+            7 -> binding.homeApp7
+            8 -> binding.homeApp8
+            9 -> binding.homeApp9
+            10 -> binding.homeApp10
+            else -> throw IllegalArgumentException("Invalid home slot: $slot")
+        }
+    }
+
+    private fun refreshHomeSlotText(slot: Int) {
+        val textView = homeSlotView(slot)
+        if (prefs.isFolder(slot)) {
+            val name = prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
+            textView.text = "\u25B8 $name"
+            textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+            textView.compoundDrawablePadding = 0
+        } else {
+            textView.text = prefs.getAppName(slot)
+            setPinIndicator(textView, slot)
+        }
+    }
+
+    private fun setHomeAlignment(horizontalGravity: Int = prefs.homeAlignment) {
+        val verticalGravity = if (prefs.homeBottomAlignment) Gravity.BOTTOM else Gravity.CENTER_VERTICAL
+        binding.homeAppsLayout.gravity = horizontalGravity or verticalGravity
+        binding.dateTimeLayout.gravity = horizontalGravity
+        binding.homeApp1.gravity = horizontalGravity
+        binding.homeApp2.gravity = horizontalGravity
+        binding.homeApp3.gravity = horizontalGravity
+        binding.homeApp4.gravity = horizontalGravity
+        binding.homeApp5.gravity = horizontalGravity
+        binding.homeApp6.gravity = horizontalGravity
+        binding.homeApp7.gravity = horizontalGravity
+        binding.homeApp8.gravity = horizontalGravity
+        binding.homeApp9.gravity = horizontalGravity
+        binding.homeApp10.gravity = horizontalGravity
+    }
+
+    private fun populateDateTime() {
+        binding.dateTimeLayout.isVisible = prefs.dateTimeVisibility != Constants.DateTime.OFF
+        binding.clock.isVisible = Constants.DateTime.isTimeVisible(prefs.dateTimeVisibility)
+        binding.date.isVisible = Constants.DateTime.isDateVisible(prefs.dateTimeVisibility)
+
+//        var dateText = SimpleDateFormat("EEE, d MMM", Locale.getDefault()).format(Date())
+        val dateFormat = SimpleDateFormat("EEE, d MMM", Locale.getDefault())
+        var dateText = dateFormat.format(Date())
+
+        if (!prefs.showStatusBar) {
+            val battery = (requireContext().getSystemService(Context.BATTERY_SERVICE) as BatteryManager)
+                .getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY)
+            if (battery > 0)
+                dateText = getString(R.string.day_battery, dateText, battery)
+        }
+        binding.date.text = dateText.replace(".,", ",")
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun populateScreenTime() {
+        if (requireContext().appUsagePermissionGranted().not()) return
+
+        viewModel.getTodaysScreenTime()
+        binding.tvScreenTime.visibility = View.VISIBLE
+
+        val isLandscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        val horizontalMargin = if (isLandscape) 64.dpToPx() else 10.dpToPx()
+        val marginTop = if (isLandscape) {
+            if (prefs.dateTimeVisibility == Constants.DateTime.DATE_ONLY) 36.dpToPx() else 56.dpToPx()
+        } else {
+            if (prefs.dateTimeVisibility == Constants.DateTime.DATE_ONLY) 45.dpToPx() else 72.dpToPx()
+        }
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            topMargin = marginTop
+            marginStart = horizontalMargin
+            marginEnd = horizontalMargin
+            gravity = if (prefs.homeAlignment == Gravity.END) Gravity.START else Gravity.END
+        }
+        binding.tvScreenTime.layoutParams = params
+        binding.tvScreenTime.setPadding(10.dpToPx())
+    }
+
+    private fun populateHomeScreen(appCountUpdated: Boolean) {
+        if (appCountUpdated) hideHomeApps()
+        clearExpiredPins()
+        populateDateTime()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            populateScreenTime()
+
+        val slotViews = listOf(
+            binding.homeApp1,
+            binding.homeApp2,
+            binding.homeApp3,
+            binding.homeApp4,
+            binding.homeApp5,
+            binding.homeApp6,
+            binding.homeApp7,
+            binding.homeApp8,
+            binding.homeApp9,
+            binding.homeApp10,
+        )
+        var visibleCount = 0
+        for (i in slotViews.indices) {
+            val textView = slotViews[i]
+            val slot = i + 1
+            if (prefs.getAppName(slot).isEmpty() && prefs.isFolder(slot).not()) {
+                textView.text = ""
+                textView.visibility = View.GONE
+                continue
+            }
+            if (!populateHomeSlot(textView, slot)) {
+                clearHomeApp(slot)
+                textView.text = ""
+                textView.visibility = View.GONE
+                continue
+            }
+            visibleCount++
+            textView.visibility = View.VISIBLE
+        }
+        val homeEmpty = visibleCount == 0
+        binding.tvHomeHint.isVisible = homeEmpty
+        binding.firstRunTips.isVisible = homeEmpty
+        schedulePinCleanup()
+    }
+
+    private fun clearExpiredPins() {
+        val now = System.currentTimeMillis()
+        for (slot in 1..Constants.MAX_HOME_APPS) {
+            val expiry = prefs.getPinExpiry(slot)
+            if (expiry in 1..now) clearHomeApp(slot)
+        }
+    }
+
+    private fun schedulePinCleanup() {
+        pinCleanupJob?.cancel()
+        val now = System.currentTimeMillis()
+        var nextExpiry = Long.MAX_VALUE
+        for (slot in 1..Constants.MAX_HOME_APPS) {
+            val expiry = prefs.getPinExpiry(slot)
+            if (expiry > now) nextExpiry = minOf(nextExpiry, expiry)
+        }
+        if (nextExpiry == Long.MAX_VALUE) return
+        pinCleanupJob = viewLifecycleOwner.lifecycleScope.launch {
+            delay(nextExpiry - now + 100)
+            if (_binding != null) populateHomeScreen(false)
+        }
+    }
+
+    private fun populateHomeSlot(textView: TextView, slot: Int): Boolean {
+        if (prefs.isFolder(slot)) {
+            val name = prefs.getFolderName(slot).ifBlank { getString(R.string.folder) }
+            textView.text = "\u25B8 $name"
+            textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+            textView.compoundDrawablePadding = 0
+            return true
+        }
+        val ok = setHomeAppText(
+            textView,
+            prefs.getAppName(slot),
+            prefs.getAppPackage(slot),
+            prefs.getAppUser(slot),
+            prefs.getIsShortcut(slot),
+            prefs.getShortcutId(slot),
+        )
+        if (ok) setPinIndicator(textView, slot)
+        return ok
+    }
+
+    private fun setPinIndicator(textView: TextView, slot: Int) {
+        val isPinned = prefs.getPinExpiry(slot) > System.currentTimeMillis()
+        textView.setCompoundDrawablesWithIntrinsicBounds(if (isPinned) R.drawable.ic_pin else 0, 0, 0, 0)
+        textView.compoundDrawablePadding = if (isPinned) 6.dpToPx() else 0
+    }
+
+    private fun setHomeAppText(
+        textView: TextView,
+        appName: String,
+        packageName: String,
+        userString: String,
+        isShortcut: Boolean,
+        shortcutId: String?,
+    ): Boolean {
+        // Get user handle for the app/shortcut
+        val userHandle = getUserHandleFromString(requireContext(), userString)
+
+        // If it's a shortcut, verify it still exists
+        if (isShortcut) {
+            val launcherApps = requireContext().getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+
+            // Query for the specific shortcut
+            val query = LauncherApps.ShortcutQuery().apply {
+                setPackage(packageName)
+                setQueryFlags(LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED)
+            }
+
+            try {
+                val shortcuts = launcherApps.getShortcuts(query, userHandle)
+                // Check if our shortcut still exists
+                if (shortcuts?.any { it.id == shortcutId } == true) {
+                    textView.text = appName
+                    return true
+                }
+                textView.text = ""
+                return false
+            } catch (e: Exception) {
+                e.printStackTrace()
+                textView.text = ""
+                return false
+            }
+        }
+
+        // Regular app check
+        if (isPackageInstalled(requireContext(), packageName, userString)) {
+            textView.text = appName
+            return true
+        }
+        textView.text = ""
+        return false
+    }
+
+    private fun hideHomeApps() {
+        binding.homeApp1.visibility = View.GONE
+        binding.homeApp2.visibility = View.GONE
+        binding.homeApp3.visibility = View.GONE
+        binding.homeApp4.visibility = View.GONE
+        binding.homeApp5.visibility = View.GONE
+        binding.homeApp6.visibility = View.GONE
+        binding.homeApp7.visibility = View.GONE
+        binding.homeApp8.visibility = View.GONE
+        binding.homeApp9.visibility = View.GONE
+        binding.homeApp10.visibility = View.GONE
+    }
+
+    private fun launchAppOrShortcut(
+        appName: String,
+        packageName: String,
+        activityClassName: String?,
+        shortcutId: String?,
+        isShortcut: Boolean,
+        userString: String,
+        fallback: (() -> Unit)? = null,
+    ) {
+        if (appName.isEmpty()) {
+            showLongPressToast()
+            return
+        }
+        if (isShortcut && !shortcutId.isNullOrEmpty()) {
+            launchShortcut(
+                packageName = packageName,
+                shortcutId = shortcutId,
+                shortcutLabel = appName,
+                userString = userString
+            )
+        } else if (packageName.isNotEmpty()) {
+            launchApp(
+                appName = appName,
+                packageName = packageName,
+                activityClassName = activityClassName,
+                userString = userString
+            )
+        } else {
+            fallback?.invoke()
+        }
+    }
+
+    private fun launchShortcut(shortcutId: String, packageName: String, shortcutLabel: String, userString: String) {
+        viewModel.selectedApp(
+            AppModel.PinnedShortcut(
+                shortcutId = shortcutId,
+                appLabel = shortcutLabel,
+                user = getUserHandleFromString(requireContext(), userString),
+                key = null,
+                appPackage = packageName,
+                isNew = false,
+            ),
+            Constants.FLAG_LAUNCH_APP
+        )
+    }
+
+    private fun launchApp(appName: String, packageName: String, activityClassName: String?, userString: String) {
+        viewModel.selectedApp(
+            AppModel.App(
+                appLabel = appName,
+                key = null,
+                appPackage = packageName,
+                activityClassName = activityClassName,
+                isNew = false,
+                user = getUserHandleFromString(requireContext(), userString)
+            ),
+            Constants.FLAG_LAUNCH_APP
+        )
+    }
+
+    private fun homeAppClicked(location: Int) {
+        launchAppOrShortcut(
+            appName = prefs.getAppName(location),
+            packageName = prefs.getAppPackage(location),
+            activityClassName = prefs.getAppActivityClassName(location),
+            shortcutId = prefs.getShortcutId(location),
+            isShortcut = prefs.getIsShortcut(location),
+            userString = prefs.getAppUser(location)
+        )
+    }
+
+    private fun openSwipeRightApp() {
+        if (!prefs.swipeRightEnabled) return
+        launchAppOrShortcut(
+            appName = prefs.appNameSwipeRight,
+            packageName = prefs.appPackageSwipeRight,
+            activityClassName = prefs.appActivityClassNameRight,
+            shortcutId = prefs.shortcutIdSwipeRight,
+            isShortcut = prefs.isShortcutSwipeRight,
+            userString = prefs.appUserSwipeRight,
+            fallback = { openDialerApp(requireContext()) }
+        )
+    }
+
+    private fun openSwipeLeftApp() {
+        if (!prefs.swipeLeftEnabled) return
+        launchAppOrShortcut(
+            appName = prefs.appNameSwipeLeft,
+            packageName = prefs.appPackageSwipeLeft,
+            activityClassName = prefs.appActivityClassNameSwipeLeft,
+            shortcutId = prefs.shortcutIdSwipeLeft,
+            isShortcut = prefs.isShortcutSwipeLeft,
+            userString = prefs.appUserSwipeLeft,
+            fallback = { openCameraApp(requireContext()) }
+        )
+    }
+
+    private fun showAppList(flag: Int, includeHiddenApps: Boolean = false) {
+        viewModel.getAppList(includeHiddenApps)
+        try {
+            findNavController().navigate(
+                R.id.action_mainFragment_to_appListFragment,
+                bundleOf(Constants.Key.FLAG to flag)
+            )
+        } catch (e: Exception) {
+            findNavController().navigate(
+                R.id.appListFragment,
+                bundleOf(Constants.Key.FLAG to flag)
+            )
+            e.printStackTrace()
+        }
+    }
+
+    private fun showSlotMenu(slot: Int) {
+        val isFolderSlot = prefs.isFolder(slot)
+        val hasApp = prefs.getAppName(slot).isNotEmpty()
+
+        val items = mutableListOf<SectionedMenuItem>()
+
+        fun addHeader(label: String) {
+            items.add(SectionedMenuItem(label, isHeader = true))
+        }
+
+        fun addItem(label: String, action: () -> Unit) {
+            items.add(SectionedMenuItem(label, isHeader = false, action = action))
+        }
+
+        if (isFolderSlot) {
+            addHeader(getString(R.string.add))
+            val emptyFolderPosition = firstEmptyFolderPosition(slot)
+            if (emptyFolderPosition != -1) {
+                addItem(getString(R.string.add_app)) {
+                    showAppListForFolder(slot, emptyFolderPosition)
+                }
+            }
+            addHeader(getString(R.string.modify))
+            addItem(getString(R.string.rename_folder)) { showFolderNameDialog(slot) }
+            addItem(getString(R.string.remove_folder)) { removeFolder(slot) }
+        } else {
+            addHeader(getString(R.string.add))
+            val emptySlot = firstEmptyHomePosition()
+            if (emptySlot != 0) {
+                addItem(getString(R.string.add_app)) {
+                    showAppList(Constants.FLAG_SET_HOME_APP_1 + emptySlot - 1, true)
+                }
+            }
+            addItem(getString(R.string.create_folder)) {
+                if (hasApp) {
+                    val folderSlot = firstEmptyHomePosition()
+                    if (folderSlot != 0) showFolderNameDialog(folderSlot)
+                    else requireContext().showToast(getString(R.string.home_screen_full))
+                } else {
+                    showFolderNameDialog(slot)
+                }
+            }
+            if (hasApp) {
+                addHeader(getString(R.string.modify))
+                addItem(getString(R.string.replace_app)) {
+                    showAppList(Constants.FLAG_SET_HOME_APP_1 + slot - 1, true)
+                }
+                addItem(getString(R.string.rename_app)) {
+                    showAppNameDialog(slot)
+                }
+                addItem(getString(R.string.remove_app)) {
+                    clearHomeApp(slot)
+                    populateHomeScreen(false)
+                }
+            }
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setAdapter(SectionedMenuAdapter(requireContext(), items)) { _, which ->
+                items[which].action?.invoke()
+            }
+            .show()
+    }
+
+    private fun firstEmptyHomePosition(): Int = prefs.firstEmptyHomePosition()
+
+    private fun firstEmptyFolderPosition(slot: Int): Int {
+        val apps = prefs.getFolderApps(slot)
+        for (i in apps.indices) {
+            val app = apps[i]
+            if (app == null || app.appPackage.isEmpty()) return i
+        }
+        return -1
+    }
+
+    private fun showAppListForFolder(slot: Int, position: Int) {
+        viewModel.getAppList(true)
+        try {
+            findNavController().navigate(
+                R.id.action_mainFragment_to_appListFragment,
+                bundleOf(
+                    Constants.Key.FLAG to (Constants.FLAG_SET_FOLDER_APP_1 + position),
+                    Constants.Key.FOLDER_SLOT to slot
+                )
+            )
+        } catch (e: Exception) {
+            findNavController().navigate(
+                R.id.appListFragment,
+                bundleOf(
+                    Constants.Key.FLAG to (Constants.FLAG_SET_FOLDER_APP_1 + position),
+                    Constants.Key.FOLDER_SLOT to slot
+                )
+            )
+            e.printStackTrace()
+        }
+    }
+
+    private fun showFolderNameDialog(slot: Int) {
+        val isCreating = prefs.isFolder(slot).not()
+        val editText = EditText(requireContext()).apply {
+            if (isCreating) setText(getString(R.string.folder)) else setText(prefs.getFolderName(slot))
+            setSelectAllOnFocus(true)
+            hint = getString(R.string.folder_name_hint)
+        }
+        AlertDialog.Builder(requireContext())
+            .setTitle(if (isCreating) R.string.create_folder else R.string.rename_folder)
+            .setView(editText)
+            .setPositiveButton(R.string.okay) { _, _ ->
+                val name = editText.text.toString().trim().ifBlank { getString(R.string.folder) }
+                if (isCreating) createFolder(slot, name) else {
+                    prefs.setFolderName(slot, name)
+                    populateHomeScreen(false)
+                }
+            }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .show()
+        editText.showKeyboard()
+    }
+
+    private fun createFolder(slot: Int, name: String) {
+        clearHomeApp(slot)
+        prefs.setFolderName(slot, name)
+        prefs.setIsFolder(slot, true)
+        populateHomeScreen(false)
+    }
+
+    private fun showAppNameDialog(slot: Int) {
+        val editText = EditText(requireContext()).apply {
+            setText(prefs.getAppName(slot))
+            setSelectAllOnFocus(true)
+            hint = getString(R.string.app_name_hint)
+        }
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.rename_app)
+            .setView(editText)
+            .setPositiveButton(R.string.okay) { _, _ ->
+                setHomeAppName(slot, editText.text.toString().trim())
+            }
+            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .show()
+        editText.showKeyboard()
+    }
+
+    private fun setHomeAppName(slot: Int, name: String) {
+        if (name.isBlank()) return
+        when (slot) {
+            1 -> prefs.appName1 = name
+            2 -> prefs.appName2 = name
+            3 -> prefs.appName3 = name
+            4 -> prefs.appName4 = name
+            5 -> prefs.appName5 = name
+            6 -> prefs.appName6 = name
+            7 -> prefs.appName7 = name
+            8 -> prefs.appName8 = name
+            9 -> prefs.appName9 = name
+            10 -> prefs.appName10 = name
+        }
+        populateHomeScreen(false)
+    }
+
+    private fun removeFolder(slot: Int) {
+        prefs.clearFolder(slot)
+        populateHomeScreen(false)
+    }
+
+    private fun clearHomeApp(slot: Int) {
+        prefs.clearHomeSlot(slot)
+    }
+
+    private fun openFolder(slot: Int) {
+        try {
+            findNavController().navigate(
+                R.id.action_mainFragment_to_folderFragment,
+                bundleOf(Constants.Key.FOLDER_SLOT to slot)
+            )
+        } catch (e: Exception) {
+            findNavController().navigate(
+                R.id.folderFragment,
+                bundleOf(Constants.Key.FOLDER_SLOT to slot)
+            )
+            e.printStackTrace()
+        }
+    }
+
+    private fun swipeDownAction() {
+        when (prefs.swipeDownAction) {
+            Constants.SwipeDownAction.SEARCH -> openSearch(requireContext())
+            else -> expandNotificationDrawer(requireContext())
+        }
+    }
+
+    private fun lockPhone() {
+        requireActivity().runOnUiThread {
+            try {
+                deviceManager.lockNow()
+            } catch (e: SecurityException) {
+                requireContext().showToast(getString(R.string.please_turn_on_double_tap_to_unlock), Toast.LENGTH_LONG)
+                findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+            } catch (e: Exception) {
+                requireContext().showToast(getString(R.string.launcher_failed_to_lock_device), Toast.LENGTH_LONG)
+                prefs.lockModeOn = false
+            }
+        }
+    }
+
+    private fun showStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            requireActivity().window.insetsController?.show(WindowInsets.Type.statusBars())
+        else
+            @Suppress("DEPRECATION", "InlinedApi")
+            requireActivity().window.decorView.apply {
+                systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            }
+    }
+
+    private fun hideStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            requireActivity().window.insetsController?.hide(WindowInsets.Type.statusBars())
+        else {
+            @Suppress("DEPRECATION")
+            requireActivity().window.decorView.apply {
+                systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE or View.SYSTEM_UI_FLAG_FULLSCREEN
+            }
+        }
+    }
+
+    private fun changeAppTheme() {
+        if (prefs.dailyWallpaper.not()) return
+        val changedAppTheme = getChangedAppTheme(requireContext(), prefs.appTheme)
+        prefs.appTheme = changedAppTheme
+        if (prefs.dailyWallpaper) {
+            setPlainWallpaperByTheme(requireContext(), changedAppTheme)
+            viewModel.setWallpaperWorker()
+        }
+        requireActivity().recreate()
+    }
+
+    private fun openScreenTimeDigitalWellbeing() {
+        if (prefs.screenTimeAppPackage.isNotBlank()) {
+            launchApp(
+                "Screen Time",
+                prefs.screenTimeAppPackage,
+                prefs.screenTimeAppClassName,
+                prefs.screenTimeAppUser
+            )
+            return
+        }
+        val intent = Intent()
+        try {
+            intent.setClassName(
+                Constants.DIGITAL_WELLBEING_PACKAGE_NAME,
+                Constants.DIGITAL_WELLBEING_ACTIVITY
+            )
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            try {
+                intent.setClassName(
+                    Constants.DIGITAL_WELLBEING_SAMSUNG_PACKAGE_NAME,
+                    Constants.DIGITAL_WELLBEING_SAMSUNG_ACTIVITY
+                )
+                startActivity(intent)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun showLongPressToast() = requireContext().showToast(getString(R.string.long_press_to_select_app))
+
+    private fun textOnClick(view: View) = onClick(view)
+
+    private fun textOnLongClick(view: View) = onLongClick(view)
+
+    private fun getSwipeGestureListener(context: Context): View.OnTouchListener {
+        return object : OnSwipeTouchListener(context) {
+            override fun onSwipeLeft() {
+                super.onSwipeLeft()
+                openSwipeLeftApp()
+            }
+
+            override fun onSwipeRight() {
+                super.onSwipeRight()
+                openSwipeRightApp()
+            }
+
+            override fun onSwipeUp() {
+                super.onSwipeUp()
+                showAppList(Constants.FLAG_LAUNCH_APP)
+            }
+
+            override fun onSwipeDown() {
+                super.onSwipeDown()
+                swipeDownAction()
+            }
+
+            override fun onLongClick() {
+                super.onLongClick()
+                try {
+                    findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+                    viewModel.firstOpen(false)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            override fun onDoubleClick() {
+                super.onDoubleClick()
+                if (!prefs.lockModeOn) return
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                    binding.lock.performClick()
+                else
+                    lockPhone()
+            }
+
+            override fun onClick() {
+                super.onClick()
+                viewModel.checkForMessages.call()
+            }
+        }
+    }
+
+    private fun getViewSwipeTouchListener(context: Context, view: View): View.OnTouchListener {
+        return object : ViewSwipeTouchListener(context, view) {
+            override fun onSwipeLeft() {
+                super.onSwipeLeft()
+                openSwipeLeftApp()
+            }
+
+            override fun onSwipeRight() {
+                super.onSwipeRight()
+                openSwipeRightApp()
+            }
+
+            override fun onSwipeUp() {
+                super.onSwipeUp()
+                showAppList(Constants.FLAG_LAUNCH_APP)
+            }
+
+            override fun onSwipeDown() {
+                super.onSwipeDown()
+                swipeDownAction()
+            }
+
+            override fun onLongClick(view: View) {
+                super.onLongClick(view)
+                textOnLongClick(view)
+            }
+
+            override fun onLongPressMove(view: View) {
+                super.onLongPressMove(view)
+                draggedSlot = view.tag.toString().toInt()
+                val data = ClipData.newPlainText("slot", draggedSlot.toString())
+                view.startDragAndDrop(data, View.DragShadowBuilder(view), draggedSlot, 0)
+                binding.root.layoutTransition = null
+            }
+
+            override fun onClick(view: View) {
+                super.onClick(view)
+                textOnClick(view)
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        pinCleanupJob?.cancel()
+        super.onDestroyView()
+        _binding = null
+    }
+}

@@ -90,7 +90,7 @@ The output should show your device as `device` (not `unauthorized` or `offline`)
 5. Launch the app and watch the logs while you test:
 
 ```bash
-adb logcat --pid=$(adb shell pidof -s app.olauncher)
+adb logcat --pid=$(adb shell pidof -s app.prolauncher)
 # Ctrl-C to stop
 ```
 
