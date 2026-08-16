@@ -67,16 +67,50 @@ keytool -genkeypair -v \
 
 Keep the keystore and passwords safe — anyone who has them can sign apps as you. Without a keystore, the release build falls back to an unsigned `app-release-unsigned.apk`.
 
-## Releases
+## Testing on a connected phone
+
+1. On your phone, enable **Developer options** (Settings → About phone → tap "Build number" 7 times) and turn on **USB debugging** (Settings → Developer options → USB debugging).
+2. Connect the phone with a USB cable and allow USB debugging on the "Allow USB debugging?" prompt (check "Always allow").
+3. Verify the phone is visible to `adb`:
+
+```bash
+adb devices
+# ~/Android/Sdk/platform-tools/adb if adb is not on your PATH
+```
+
+The output should show your device as `device` (not `unauthorized` or `offline`). If it says `unauthorized`, unplug/replug and accept the prompt again.
+
+4. Build and install the debug build directly on the phone:
+
+```bash
+./gradlew installDebug
+```
+
+5. Launch the app and watch the logs while you test:
+
+```bash
+adb logcat --pid=$(adb shell pidof -s app.olauncher)
+# Ctrl-C to stop
+```
+
+To reinstall after a code change, just run `./gradlew installDebug` again. The launcher replaces your current home screen — use the Recents button to navigate back to your old launcher while testing.
+
+## Releases/Install
 
 APKs are built automatically by a GitHub Actions workflow (`.github/workflows/build-release.yml`) and published as a GitHub Release.
 
-To publish a new release, push a tag (matching `v*`):
+To publish a new release, push a tag (matching `v*`). This creates and pushes the next tag (`v<version>-pro.<n>`), derived from the `versionName` in `app/build.gradle` and the highest existing `-pro.n` tag:
 
 ```bash
-git tag v1.0
-git push origin v1.0
+BASE=$(sed -n 's/.*versionName "v\([0-9.]*\)".*/\1/p' app/build.gradle)
+LAST_PRO=$(git tag --sort=-v:refname | grep -m1 "^v${BASE}-pro\.")
+if [ -n "$LAST_PRO" ]; then NEXT=$((${LAST_PRO##*.} + 1)); else NEXT=1; fi
+TAG="v${BASE}-pro.${NEXT}"
+git tag "$TAG"
+git push origin "$TAG"
 ```
+
+Run `echo "$TAG"` first to preview the tag name without pushing it.
 
 You can also trigger the build from the **Actions** tab (workflow *Build APK and create release* → *Run workflow*). Every release contains:
 
