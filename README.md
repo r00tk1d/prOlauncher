@@ -11,7 +11,6 @@ This repository is forked from the original [Olauncher](https://github.com/tanuj
 
 All changes are on top of upstream Olauncher (v6.7.19).
 
-### Folders
 - **Folders**: Create up to 10 folders on the home screen (long-press a slot → *Add folder*). Creating a folder from an app slot keeps the app in place and places the new folder in the first empty slot. Add apps to a folder by long-pressing the folder on the home screen → *Add app*, or by long-pressing an empty app slot inside the folder view.
 - **Search history**: when the search box is empty, the drawer shows the apps you most recently launched from the search (instead of the full list). Typing a letter switches to normal filtering; clearing the text shows the history again.
 - **Pin apps for a limited time**: long-press an app in the app drawer/search and choose *Pin* to put it at the very top of the home screen for a chosen duration (1 day, 7 days, or a custom amount of days/hours). Pinned apps show a small pin icon in front of their name and disappear automatically when the time runs out. Pinning is refused when the home screen already holds 10 apps/folders; re-pinning an already pinned app extends its time.
