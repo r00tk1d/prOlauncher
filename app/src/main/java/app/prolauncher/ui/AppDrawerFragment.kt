@@ -424,7 +424,9 @@ class AppDrawerFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         cachedIsCjkKeyboard = null
-        binding.search.showKeyboard(prefs.autoShowKeyboard)
+        val isAddingApp = flag in Constants.FLAG_SET_HOME_APP_1..Constants.FLAG_SET_HOME_APP_10
+            || flag in Constants.FLAG_SET_FOLDER_APP_1..Constants.FLAG_SET_FOLDER_APP_10
+        binding.search.showKeyboard(isAddingApp || prefs.autoShowKeyboard)
     }
 
     override fun onStop() {
