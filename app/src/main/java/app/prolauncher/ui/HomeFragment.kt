@@ -698,6 +698,11 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                     showAppListForFolder(slot, emptyFolderPosition)
                 }
             }
+            addItem(getString(R.string.create_folder)) {
+                val folderSlot = firstEmptyHomePosition()
+                if (folderSlot != 0) showFolderNameDialog(folderSlot)
+                else requireContext().showToast(getString(R.string.home_screen_full))
+            }
             addHeader(getString(R.string.modify))
             addItem(getString(R.string.rename_folder)) { showFolderNameDialog(slot) }
             addItem(getString(R.string.remove_folder)) { removeFolder(slot) }

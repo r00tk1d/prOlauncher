@@ -17,7 +17,7 @@ All changes are on top of upstream Olauncher (v6.7.19).
 - **Drag & drop reordering** of home screen slots.
 - **No preset app count**: the fixed "number of home apps" setting was removed. Apps are added individually (long-press an empty slot → *Add app*, or tap the hint when the home is empty), and empty slots are hidden.
 - **10 instead of 8 slots**
-- **Sectioned long-press menu**: the home slot menu groups options under *Add slot* (Add app, Add folder) and *Modify Slot* (Replace app, Rename app, Remove app) headers; the same applies to the folder-apps menu and to folders (long-press a folder → *Add app* to add an app into it).
+- **Sectioned long-press menu**: the home slot menu groups options under *Add slot* (Add app, Add folder) and *Modify Slot* (Replace app, Rename app, Remove app) headers; the same applies to the folder-apps menu and to folders (long-press a folder → *Add app* to add an app into it, *Add folder* to create a new folder on the home screen).
 - **No nag prompts**: the wallpaper, review, rate, and share dialogs have been removed.
 - **Trimmed settings screen**: the settings screen no longer shows the *More features* (pro upsell), *About Olauncher*, *Screen time*, and *Daily wallpaper update* rows, and the footer links (privacy/share/rate/GitHub/Twitter), footer text, and the *Double-tap to lock* (screen lock) row have been removed. The underlying features (e.g. daily wallpaper, double-tap-to-lock) still work if previously configured. The "Welcome to the settings" popup was also removed.
 
