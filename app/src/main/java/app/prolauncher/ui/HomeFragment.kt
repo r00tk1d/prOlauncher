@@ -16,6 +16,8 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.WindowInsets
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -806,14 +808,24 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
             setSelectAllOnFocus(true)
             hint = getString(R.string.app_name_hint)
         }
-        AlertDialog.Builder(requireContext())
+        val dialog = AlertDialog.Builder(requireContext())
             .setTitle(R.string.rename_app)
             .setView(editText)
             .setPositiveButton(R.string.okay) { _, _ ->
                 setHomeAppName(slot, editText.text.toString().trim())
             }
             .setNegativeButton(R.string.cancel) { _, _ -> }
-            .show()
+            .create()
+        dialog.show()
+        val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+        positiveButton.isEnabled = editText.text.toString().trim().isNotBlank()
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                positiveButton.isEnabled = s.toString().trim().isNotBlank()
+            }
+        })
         editText.showKeyboard()
     }
 
