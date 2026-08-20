@@ -427,6 +427,9 @@ class AppDrawerFragment : BaseFragment() {
         val isAddingApp = flag in Constants.FLAG_SET_HOME_APP_1..Constants.FLAG_SET_HOME_APP_10
             || flag in Constants.FLAG_SET_FOLDER_APP_1..Constants.FLAG_SET_FOLDER_APP_10
         binding.search.showKeyboard(isAddingApp || prefs.autoShowKeyboard)
+        binding.recyclerView.post {
+            binding.recyclerView.scrollToPosition(0)
+        }
     }
 
     override fun onStop() {
