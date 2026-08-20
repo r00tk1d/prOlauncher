@@ -692,10 +692,10 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
 
         if (isFolderSlot) {
             addHeader(getString(R.string.add))
-            val emptyFolderPosition = firstEmptyFolderPosition(slot)
-            if (emptyFolderPosition != -1) {
+            val emptySlot = firstEmptyHomePosition()
+            if (emptySlot != 0) {
                 addItem(getString(R.string.add_app)) {
-                    showAppListForFolder(slot, emptyFolderPosition)
+                    showAppList(Constants.FLAG_SET_HOME_APP_1 + emptySlot - 1, true)
                 }
             }
             addItem(getString(R.string.create_folder)) {
@@ -704,6 +704,12 @@ class HomeFragment : BaseFragment(), View.OnClickListener, View.OnLongClickListe
                 else requireContext().showToast(getString(R.string.home_screen_full))
             }
             addHeader(getString(R.string.modify))
+            val emptyFolderPosition = firstEmptyFolderPosition(slot)
+            if (emptyFolderPosition != -1) {
+                addItem(getString(R.string.add_app_inside_folder)) {
+                    showAppListForFolder(slot, emptyFolderPosition)
+                }
+            }
             addItem(getString(R.string.rename_folder)) { showFolderNameDialog(slot) }
             addItem(getString(R.string.remove_folder)) { removeFolder(slot) }
         } else {

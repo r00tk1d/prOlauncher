@@ -157,6 +157,7 @@
     <string name="remove_folder">Remove folder</string>
     <string name="open_folder">Open folder</string>
     <string name="add_app">Add app</string>
+    <string name="add_app_inside_folder">Add app inside folder</string>
     <string name="replace_app">Replace app</string>
     <string name="remove_app">Remove app</string>
     <string name="add">Add slot</string>
