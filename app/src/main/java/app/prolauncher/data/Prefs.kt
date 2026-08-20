@@ -193,7 +193,7 @@ class Prefs(context: Context) {
         set(value) = prefs.edit { putString(DAILY_WALLPAPER_URL, value).apply() }
 
     var homeAlignment: Int
-        get() = prefs.getInt(HOME_ALIGNMENT, Gravity.START)
+        get() = prefs.getInt(HOME_ALIGNMENT, Gravity.CENTER)
         set(value) = prefs.edit { putInt(HOME_ALIGNMENT, value).apply() }
 
     var homeBottomAlignment: Boolean
